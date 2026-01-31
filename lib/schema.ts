@@ -54,5 +54,44 @@ export async function initializeSchema() {
       uploaded_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(company_slug, year, month)
     );
+
+    CREATE TABLE IF NOT EXISTS emission_by_process (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      work_center TEXT NOT NULL,
+      description TEXT,
+      production_mt NUMERIC,
+      electricity_intensity NUMERIC NOT NULL DEFAULT 0,
+      lpg_intensity NUMERIC NOT NULL DEFAULT 0,
+      diesel_intensity NUMERIC NOT NULL DEFAULT 0,
+      total_intensity NUMERIC NOT NULL DEFAULT 0,
+      scope1_intensity NUMERIC NOT NULL DEFAULT 0,
+      scope2_intensity NUMERIC NOT NULL DEFAULT 0,
+      calculated_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(company_slug, year, month, work_center)
+    );
+
+    CREATE TABLE IF NOT EXISTS emission_by_product (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      product_id TEXT NOT NULL,
+      work_center_count INTEGER NOT NULL DEFAULT 0,
+      matched_work_center_count INTEGER NOT NULL DEFAULT 0,
+      electricity_intensity NUMERIC NOT NULL DEFAULT 0,
+      lpg_intensity NUMERIC NOT NULL DEFAULT 0,
+      diesel_intensity NUMERIC NOT NULL DEFAULT 0,
+      total_intensity NUMERIC NOT NULL DEFAULT 0,
+      scope1_intensity NUMERIC NOT NULL DEFAULT 0,
+      scope2_intensity NUMERIC NOT NULL DEFAULT 0,
+      calculated_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(company_slug, year, month, product_id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_emission_by_product_lookup
+      ON emission_by_product (company_slug, year, month, total_intensity DESC);
   `);
 }

@@ -4,6 +4,7 @@ import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
 import { uploadToGCS } from "@/lib/storage";
 import { getConsumptionParser } from "@/lib/parsers/consumption";
+import { triggerEmissionCalculation } from "@/lib/emissions/engine";
 
 // POST /api/consumption/upload
 //
@@ -93,10 +94,17 @@ export async function POST(request: NextRequest) {
 
     const workCenterCount = Object.keys(consumptionData).length;
 
+    // Fire-and-forget: calculate emissions in background.
+    // Don't await — the upload response returns immediately.
+    triggerEmissionCalculation(companySlug, year, month).catch((err) => {
+      console.error(`[emissions] Calculation failed for ${companySlug} ${year}/${month}:`, err);
+    });
+
     return NextResponse.json({
       message: `Consumption data for ${month}/${year} uploaded successfully`,
       workCentersFound: workCenterCount,
       workCenters: Object.keys(consumptionData),
+      emissionCalculationTriggered: true,
     });
   } catch (error) {
     console.error("Consumption upload failed:", error);
