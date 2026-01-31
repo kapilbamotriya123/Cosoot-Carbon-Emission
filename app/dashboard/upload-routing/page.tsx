@@ -11,8 +11,11 @@ const COMPANIES = [
 export default function UploadRoutingPage() {
   const [companySlug, setCompanySlug] = useState(COMPANIES[0].slug);
   const [file, setFile] = useState<File | null>(null);
-  const [status, setStatus] = useState<"idle" | "uploading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "uploading" | "parsing" | "success" | "error">("idle");
   const [result, setResult] = useState<string>("");
+  // Upload progress as a percentage (0-100). Only tracks the upload phase;
+  // once the file is fully sent, we switch to "parsing" status while the server processes it.
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,30 +23,54 @@ export default function UploadRoutingPage() {
 
     setStatus("uploading");
     setResult("");
+    setUploadProgress(0);
 
     const formData = new FormData();
     formData.append("file", file);
     formData.append("companySlug", companySlug);
 
     try {
-      const res = await fetch("/api/routing/upload", {
-        method: "POST",
-        body: formData,
+      // Using XMLHttpRequest instead of fetch() because fetch doesn't support
+      // upload progress events. XHR fires progress events as bytes are sent,
+      // which lets us show a percentage bar for large files (25-30MB).
+      const data = await new Promise<Record<string, unknown>>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const percent = Math.round((event.loaded / event.total) * 100);
+            setUploadProgress(percent);
+            // Once upload hits 100%, server is now parsing the file
+            if (percent === 100) {
+              setStatus("parsing");
+            }
+          }
+        };
+
+        xhr.onload = () => {
+          try {
+            const responseData = JSON.parse(xhr.responseText);
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve(responseData);
+            } else {
+              reject(new Error(responseData.error || "Upload failed"));
+            }
+          } catch {
+            reject(new Error("Invalid response from server"));
+          }
+        };
+
+        xhr.onerror = () => reject(new Error("Network error — is the server running?"));
+
+        xhr.open("POST", "/api/routing/upload");
+        xhr.send(formData);
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setStatus("error");
-        setResult(data.error || "Upload failed");
-        return;
-      }
 
       setStatus("success");
       setResult(JSON.stringify(data, null, 2));
-    } catch {
+    } catch (err) {
       setStatus("error");
-      setResult("Network error — is the server running?");
+      setResult(err instanceof Error ? err.message : "Unknown error");
     }
   }
 
@@ -88,11 +115,25 @@ export default function UploadRoutingPage() {
         {/* Submit */}
         <button
           type="submit"
-          disabled={!file || status === "uploading"}
+          disabled={!file || status === "uploading" || status === "parsing"}
           className="px-6 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-700 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-white dark:text-black dark:hover:bg-zinc-200"
         >
-          {status === "uploading" ? "Uploading..." : "Upload & Parse"}
+          {status === "uploading"
+            ? `Uploading... ${uploadProgress}%`
+            : status === "parsing"
+              ? "Processing file on server..."
+              : "Upload & Parse"}
         </button>
+
+        {/* Progress bar — visible during upload and server-side parsing */}
+        {(status === "uploading" || status === "parsing") && (
+          <div className="w-full bg-zinc-200 rounded-full h-2 dark:bg-zinc-700">
+            <div
+              className="bg-zinc-900 h-2 rounded-full transition-all duration-300 dark:bg-white"
+              style={{ width: `${status === "parsing" ? 100 : uploadProgress}%` }}
+            />
+          </div>
+        )}
       </form>
 
       {/* Result display */}

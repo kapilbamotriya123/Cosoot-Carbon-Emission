@@ -108,15 +108,39 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 ---
 
+### Decision 6: Product Emission Intensity — Sum of Work Center Intensities
+
+**Date:** 2026-01-31
+
+**Choice:** Calculate product emission intensity by summing the emission intensities of each work center the product passes through (Approach A).
+
+**Formula:** `product_intensity = Σ intensity(WC_i)` where `intensity(WC) = (consumption / production) × constants`
+
+**Alternatives considered:**
+- **Approach A (chosen — sum of intensities):** Sum each work center's intensity independently. `(kwh1/prod1 × k) + (kwh2/prod2 × k) + ...`
+- **Approach B (pooled ratio):** Pool all consumption and production, then divide. `(kwh1+kwh2+...) / (prod1+prod2+...) × k`
+
+**Example showing the difference (WSLT1: 2721kWh/1250MT, WTM1: 7299kWh/36.7MT):**
+- Approach A: 0.120231 tCO₂/tonne (dominated by the high-intensity low-volume step)
+- Approach B: 0.004652 tCO₂/tonne (averaged out by pooling)
+
+**Reasoning:** Client explicitly specified Approach A. It's the more conservative estimate — reflects that the product physically passed through each work center and "consumed" that step's energy intensity. Neither approach is truly accurate without proper allocation (knowing what fraction of each work center's output belongs to this product), but Approach A is what was asked for.
+
+**Tradeoffs accepted:** Overstates intensity for products passing through low-volume, high-energy work centers. Can be refined later if the client provides allocation data.
+
+**Status:** Active
+
+---
+
 ## Learning Notes
 
-### 2026-01-30 - Emission Intensity Calculation
+### 2026-01-31 - Emission Intensity: Sum of Intensities vs Pooled Ratio
 
-**Context:** Designing the emission calculation engine.
+**Context:** Deciding how to calculate per-product emission intensity when a product passes through multiple shared work centers.
 
-**What I learned:** Emission intensity per product isn't simply "emissions of work centers used by that product." Since one work center serves multiple products, you have to: (1) find all work centers for the product, (2) sum their total emissions, (3) divide by total production across all those work centers. This gives a weighted average rather than attributing all of a work center's emissions to one product.
+**What I learned:** There are fundamentally different ways to aggregate emission intensity across work centers, and they give very different results. Summing individual intensities (A) vs pooling consumption/production (B) can differ by 25x depending on the data. The "correct" approach depends on what question you're asking — A says "what's the total emission burden per tonne at each step," B says "what's the average emission rate across all steps." True accuracy would require knowing what fraction of each work center's output is attributable to this specific product (allocation), which we don't have.
 
-**Why it matters:** This aggregation logic is the core business logic. Getting it wrong means incorrect emission reports for clients.
+**Why it matters:** This is the core business logic. Understanding WHY the numbers differ (and that both are approximations) is essential for defending the methodology to clients and knowing when the numbers look wrong.
 
 ---
 
