@@ -22,12 +22,20 @@ export default async function DashboardPage() {
         <p className="text-gray-600 mb-6">
           Welcome, {user.firstName ?? user.emailAddresses[0]?.emailAddress}.
         </p>
-        <Link
-          href="/dashboard/upload-routing"
-          className="inline-block px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
-        >
-          Upload BOM / Routing Data
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            href="/dashboard/upload-routing"
+            className="inline-block px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          >
+            Upload BOM / Routing Data
+          </Link>
+          <Link
+            href="/dashboard/upload-consumption"
+            className="inline-block px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          >
+            Upload Consumption Data
+          </Link>
+        </div>
       </main>
     </div>
   );

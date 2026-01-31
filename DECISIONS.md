@@ -76,6 +76,38 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 ---
 
+### Decision 4: Company Slug as Primary Key
+
+**Date:** 2026-01-30
+
+**Choice:** Use the company slug (e.g. `meta_engitech_pune`) as the primary key in the `companies` table instead of an auto-increment integer ID.
+
+**Reasoning:** The slug is inherently unique (it maps 1:1 to a company), is human-readable in queries and logs, and eliminates the need for a join or lookup when referencing companies from other tables. Foreign keys like `company_slug TEXT REFERENCES companies(slug)` are self-documenting.
+
+**Tradeoffs accepted:** Slightly larger foreign key columns (TEXT vs INTEGER). Negligible at our scale.
+
+**Status:** Active
+
+---
+
+### Decision 5: Consumption Data — Work-Center-Keyed JSONB
+
+**Date:** 2026-01-31
+
+**Choice:** Store monthly consumption data as a JSONB object keyed by work center code (e.g. `{"WSLT1": {...}, "WSLT2": {...}}`), not as an array.
+
+**Alternatives considered:**
+- Array of work center objects: Simpler to iterate, but requires filtering/finding to access a specific work center
+- One DB row per work center per month: More relational, but adds complexity and many rows
+
+**Reasoning:** Keyed by work center code means `data.WSLT1` gives instant access to a specific work center's data — no searching through arrays. This matches how the data will be consumed in the calculation engine (look up work centers by code from the routing data). The `consumption_data` table uses a `UNIQUE(company_slug, year, month)` constraint so each month has exactly one record per company.
+
+**Tradeoffs accepted:** Can't easily query across work centers using SQL (e.g. "find all work centers with production > 1000") without JSONB path operators. Acceptable because we'll do that kind of logic in application code anyway.
+
+**Status:** Active
+
+---
+
 ## Learning Notes
 
 ### 2026-01-30 - Emission Intensity Calculation
@@ -88,9 +120,27 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 ---
 
+### 2026-01-30 - CREATE TABLE IF NOT EXISTS Doesn't Alter Existing Tables
+
+**Context:** Changed the schema from `company_id INTEGER` to `company_slug TEXT` but the old tables still existed in the database.
+
+**What I learned:** `CREATE TABLE IF NOT EXISTS` only creates the table if it doesn't exist — it does NOT alter an existing table to match your new column definitions. If the table already exists with the old schema, the statement silently succeeds and the old schema stays. Had to DROP the old tables to apply the new schema.
+
+**Why it matters:** This is a common gotcha. In production, you'd use proper migrations (ALTER TABLE or a migration tool like Prisma Migrate / Flyway) instead of DROP + recreate.
+
+---
+
 ## Mistakes & Corrections
 
-*None yet — project just started.*
+### 2026-01-30 - DROP TABLE in initializeSchema() called on every request
+
+**What happened:** Added `DROP TABLE` to `initializeSchema()` as a one-time migration fix, but `initializeSchema()` was called on every upload request. This meant every upload would wipe all existing data.
+
+**Root cause:** Mixing migration logic (one-time schema changes) with initialization logic (safe to run repeatedly).
+
+**Fix:** Removed the DROP statement after confirming the migration worked. `initializeSchema()` now only uses `CREATE TABLE IF NOT EXISTS`, which is safe to call on every request.
+
+**Lesson:** Keep migrations separate from schema initialization. Migrations are one-time operations; initialization should be idempotent (safe to run repeatedly with the same result).
 
 ---
 

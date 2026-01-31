@@ -27,12 +27,6 @@ import { pool } from "./db";
 // }
 
 export async function initializeSchema() {
-  // TODO: Remove this DROP after first successful run — it's a one-time
-  // migration from the old schema (which used company_id INTEGER)
-  await pool.query(`
-    DROP TABLE IF EXISTS routing_data, companies;
-  `);
-
   await pool.query(`
     CREATE TABLE IF NOT EXISTS companies (
       slug TEXT PRIMARY KEY,
@@ -48,6 +42,17 @@ export async function initializeSchema() {
       original_file_url TEXT,
       uploaded_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(company_slug)
+    );
+
+    CREATE TABLE IF NOT EXISTS consumption_data (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      data JSONB NOT NULL,
+      original_file_url TEXT,
+      uploaded_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(company_slug, year, month)
     );
   `);
 }
