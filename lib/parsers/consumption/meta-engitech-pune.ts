@@ -49,7 +49,13 @@ export const parseMetaEngitechPuneConsumption: ConsumptionParser = async (
 
   // Build column map from header row (row 3)
   const colMap = buildColumnMap(worksheet.getRow(3));
-  const COL = resolveColumns(colMap, EXPECTED_HEADERS);
+  const COL = resolveColumns(colMap, EXPECTED_HEADERS, {
+    aliases: {
+      totalEnergyKWh: ["Energy in KWh"],
+      dateValue: ["Date"],
+    },
+    optional: new Set(["energyMSEB", "energySolar"]),
+  });
 
   // Validate format: first data row (row 4) sequence should be 1
   const firstSequenceCell = worksheet.getRow(4).getCell(COL.sequence).value;
@@ -89,8 +95,8 @@ export const parseMetaEngitechPuneConsumption: ConsumptionParser = async (
       productionMT: toNumberOrNull(row.getCell(COL.productionMT).value),
       uomProduction: String(row.getCell(COL.uomProduction).value ?? "").trim(),
       totalEnergyKWh: toNumberOrNull(row.getCell(COL.totalEnergyKWh).value),
-      energyMSEBKWh: toNumberOrNull(row.getCell(COL.energyMSEB).value),
-      energySolarKWh: toNumberOrNull(row.getCell(COL.energySolar).value),
+      energyMSEBKWh: COL.energyMSEB ? toNumberOrNull(row.getCell(COL.energyMSEB).value) : null,
+      energySolarKWh: COL.energySolar ? toNumberOrNull(row.getCell(COL.energySolar).value) : null,
       uomElectEnergy: String(row.getCell(COL.uomElect).value ?? "").trim(),
       lpgConsumptionKg: toNumberOrNull(row.getCell(COL.lpgKg).value),
       uomLPG: String(row.getCell(COL.uomLPG).value ?? "").trim(),

@@ -20,19 +20,42 @@ export function buildColumnMap(headerRow: ExcelJS.Row): Record<string, number> {
  * Given expected header names, resolve them to column indices.
  * Throws if any required headers are missing.
  * Keys in `expected` are field names, values are header text (will be lowercased + space-collapsed).
+ *
+ * `aliases` maps field names to an array of alternative header texts to try if the primary isn't found.
+ * `optional` is a set of field names that won't cause an error if missing (resolved index = 0).
  */
 export function resolveColumns(
   colMap: Record<string, number>,
-  expected: Record<string, string>
+  expected: Record<string, string>,
+  opts?: {
+    aliases?: Record<string, string[]>;
+    optional?: Set<string>;
+  }
 ): Record<string, number> {
   const resolved: Record<string, number> = {};
   const missing: string[] = [];
+  const aliases = opts?.aliases ?? {};
+  const optional = opts?.optional ?? new Set<string>();
 
   for (const [field, headerName] of Object.entries(expected)) {
     const normalized = headerName.trim().replace(/\s+/g, " ").toLowerCase();
-    const idx = colMap[normalized];
+    let idx = colMap[normalized];
+
+    // Try aliases if primary header not found
+    if (idx === undefined && aliases[field]) {
+      for (const alt of aliases[field]) {
+        const altNorm = alt.trim().replace(/\s+/g, " ").toLowerCase();
+        idx = colMap[altNorm];
+        if (idx !== undefined) break;
+      }
+    }
+
     if (idx === undefined) {
-      missing.push(`${field} (expected: "${headerName}")`);
+      if (optional.has(field)) {
+        resolved[field] = 0; // sentinel: column not present
+      } else {
+        missing.push(`${field} (expected: "${headerName}")`);
+      }
     } else {
       resolved[field] = idx;
     }
