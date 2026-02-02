@@ -276,6 +276,74 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 ---
 
+### Decision 17: UI Framework — shadcn/ui
+
+**Date:** 2026-02-02
+
+**Choice:** shadcn/ui (new-york style, neutral base color, lucide icons) for all frontend components.
+
+**Alternatives considered:**
+- Radix UI directly: Lower level, more work to style consistently
+- Material UI: Heavy, opinionated design system, harder to customize
+- Headless UI + custom Tailwind: More work to build accessible components from scratch
+- Ant Design: Enterprise-focused but heavy, React 19 compatibility concerns
+
+**Reasoning:** shadcn/ui gives us copy-paste components that are built on Radix primitives (accessible by default), styled with Tailwind (matches our existing setup), and fully customizable since the source lives in our repo. The sidebar component specifically handles responsive behavior (collapsible on desktop, sheet on mobile) out of the box — exactly what we need for the dashboard layout. Lightweight because we only install the components we use.
+
+**Status:** Active
+
+---
+
+### Decision 18: React Flow for Product Flow Visualization
+
+**Date:** 2026-02-02
+
+**Choice:** React Flow (`@xyflow/react`) for the node-based product flow diagram.
+
+**Alternatives considered:**
+- D3.js: Lower level, maximum control, but significantly more work for node-based UIs. Better for custom chart types, overkill for node graphs.
+- vis.js: Good for network graphs but less React-native, older API.
+- Custom SVG: Maximum control but enormous effort for pan/zoom/layout.
+
+**Reasoning:** React Flow is purpose-built for node-based UIs in React. Built-in pan/zoom, minimap, custom nodes, and excellent React integration. Used by Stripe and other production apps. MIT license. Will pair with dagre/elkjs for auto-layout of directed graphs.
+
+**Status:** Active (to be installed in Phase 3)
+
+---
+
+### Decision 19: Company Context via URL Search Params
+
+**Date:** 2026-02-02
+
+**Choice:** Selected company stored in URL search params (`?company=meta_engitech_pune`), not React context, localStorage, or cookies.
+
+**Alternatives considered:**
+- React Context: Loses state on refresh, requires hydration handling in Next.js
+- localStorage: Same hydration issues, not shareable/bookmarkable
+- Server-side session/cookie: More infrastructure, requires auth
+
+**Reasoning:** URL params are the simplest approach that's bookmarkable, shareable, and has zero hydration issues with Next.js server components. When a user selects a company, the URL updates. All data-fetching pages read from URL params. Works with both server and client components.
+
+**Status:** Active
+
+---
+
+### Decision 20: Pre-computed Node Layouts Stored in DB
+
+**Date:** 2026-02-02
+
+**Choice:** Product flow node positions and edges will be pre-computed and stored in a `product_flow_nodes` DB table, not generated on every page load.
+
+**Alternatives considered:**
+- Compute on page load: Simple but slow for products with many work centers, and layout would shift on every load
+- Static JSON files: No dynamic updates when new products appear
+
+**Reasoning:** Node layout computation (via dagre) is deterministic but non-trivial. Pre-computing once on upload and storing the result means instant page loads. For Shakambhari where 95% of products are the same month-to-month, we detect new products on upload and only generate layouts for those. Stored as JSONB (nodes array + edges array) per product per company.
+
+**Status:** Active (to be implemented in Phase 3)
+
+---
+
 ## Learning Notes
 
 ### 2026-01-31 - Emission Intensity: Sum of Intensities vs Pooled Ratio
@@ -285,6 +353,22 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 **What I learned:** There are fundamentally different ways to aggregate emission intensity across work centers, and they give very different results. Summing individual intensities (A) vs pooling consumption/production (B) can differ by 25x depending on the data. The "correct" approach depends on what question you're asking — A says "what's the total emission burden per tonne at each step," B says "what's the average emission rate across all steps." True accuracy would require knowing what fraction of each work center's output is attributable to this specific product (allocation), which we don't have.
 
 **Why it matters:** This is the core business logic. Understanding WHY the numbers differ (and that both are approximations) is essential for defending the methodology to clients and knowing when the numbers look wrong.
+
+---
+
+### 2026-02-02 - Carbon Mass Balance vs Fuel Consumption Models
+
+**Context:** Building the Shakambhari emission calculation engine. Had to understand why Shakambhari's approach is fundamentally different from Meta Engitech's.
+
+**What I learned:** There are two common approaches to carbon emission accounting in manufacturing:
+
+1. **Fuel consumption model** (Meta Engitech): You know the energy sources (electricity, LPG, diesel) consumed per work center. You multiply consumption by standard emission factors (IPCC/CEA constants). Simple and well-documented, but only covers energy-related emissions.
+
+2. **Carbon mass balance model** (Shakambhari): You track carbon entering the process (in raw materials) and carbon leaving (in products and byproducts). The difference = carbon emitted to atmosphere. Formula: `Net emission = Σ(input carbon) − Σ(output carbon)`. Convert carbon to CO₂ via the molecular weight ratio: `CO₂ = C × 44/12`.
+
+The mass balance approach is more comprehensive for process emissions (e.g., carbon in coke that gets burned off during smelting isn't captured by tracking just electricity/LPG/diesel). But it requires knowing the carbon content of every material, which varies by supplier and batch — hence why those values need to be client-configurable.
+
+**Why it matters:** These two models aren't interchangeable. Using the wrong model would give meaningless numbers. Understanding which model fits which industry is key to building correct calculation engines for new clients.
 
 ---
 

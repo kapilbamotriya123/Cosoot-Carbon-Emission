@@ -67,24 +67,44 @@ Store calculated results as JSONB in PostgreSQL.
 - One row per (company_slug, date, work_center, product_id, order_no)
 - Upsert: re-uploading same dates replaces existing records
 
-### Phase 8: Shakambhari — Emission Calculation (Pending)
-- Emission factors not yet available from client
-- Net emission per source = (consumed_qty - byproduct_qty) × emission_factor
-- Emission factor mapping: component material → factor (to be stored separately)
-- Scopes: classification depends on source type (not fixed like Meta Engitech)
-- Formulas may change monthly — factors stored separately from code
-- Results will go in Shakambhari-specific emission tables (schema TBD)
+### Phase 8: Shakambhari — Emission Calculation Engine ✅
+- **Carbon mass balance approach** — fundamentally different from Meta Engitech's fuel consumption model
+- Each source classified as: `input`, `byproduct`, `main_product`, or `electricity`
+- **Material formula:** CE = quantity × carbonContent, CO2e = CE × 44/12 (molecular weight ratio)
+- **Electricity formula:** CO2e = kWh × 0.000598 tCO₂/kWh (CEA grid factor, stored as configurable constant)
+- **Main product** uses `production_qty` from parent record (not from sources array), treated as output
+- **Net emission:** Scope 1 = Σ(input CO2e) − Σ(main product CO2e + byproduct CO2e). Scope 2 = electricity CO2e. Total = Scope 1 + Scope 2
+- Carbon content values stored in `lib/emissions/shakambhari/constants.ts` (placeholder values — to be moved to DB table when client provides real values)
+- Missing carbon content → warning (not error), material treated as 0 emission
+- Results stored in `emission_results_shakambhari` table — one row per production record with JSONB source breakdowns
+- Auto-triggered on production upload (fire-and-forget, per affected month)
+- Also callable manually via `POST /api/emissions/shakambhari/calculate`
+- Engine files: `lib/emissions/shakambhari/{constants,types,calculate,engine}.ts`
+
+### Phase 9: Frontend Dashboard & Visualization
+- **UI Framework:** shadcn/ui (new-york style, neutral, lucide icons) — installed and configured
+- **Dashboard shell:** Sidebar (1/5 width) + top bar + content area layout using shadcn Sidebar component
+- **Company selector:** URL search param (`?company=slug`), admin can switch, regular users locked
+- **Data pages:** By Product, By Process, Summary — tables with pagination, company-aware
+- **Product flow visualization:** React Flow (`@xyflow/react`) with pre-computed node layouts stored in DB
+  - Meta Engitech: generate nodes for all products from routing data, store once
+  - Shakambhari: detect new products on monthly upload, generate only for new ones, reuse existing
+- **Node layout:** dagre for directed graph auto-layout (left → right: inputs → work centers → product)
+- **New API endpoints:** Shakambhari by-product, by-process, summary queries
+- **Role-based UI:** Admin sections (uploads) conditionally shown in sidebar. Enforcement deferred until auth re-enabled.
+- **See:** `FRONTEND_PLAN.md` for detailed execution plan
 
 ---
 
 ## Data Flow
 
+### Meta Engitech Flow
 ```
 Excel Upload (BOM/routing)          Excel Upload (monthly consumption)
         │                                       │
         ▼                                       ▼
   Server-side parse                      Server-side parse
-  (xlsx library)                         (xlsx library)
+  (exceljs library)                      (exceljs library)
         │                                       │
         ▼                                       ▼
   Store in GCP Cloud Storage          Store in GCP Cloud Storage
@@ -96,14 +116,43 @@ Excel Upload (BOM/routing)          Excel Upload (monthly consumption)
                                                 │
                                                 ▼
                                       Emission Calculation
-                                      (3 formulas applied)
+                                      (fuel consumption × constants)
                                                 │
                                                 ▼
-                                      Store results as JSONB
-                                      in PostgreSQL
+                                      Store results in PostgreSQL
+                                      (emission_by_process/product_meta_engitech)
                                                 │
                                                 ▼
                                           Dashboard
+```
+
+### Shakambhari Flow
+```
+Excel Upload (production data — routing + consumption in one file)
+        │
+        ▼
+  Server-side parse (exceljs)
+  Group rows by product, extract sources as JSONB
+        │
+        ├──▶ Store in GCP Cloud Storage (backup)
+        │
+        ▼
+  Store in PostgreSQL (production_data_shakambhari)
+  One row per (date, work_center, product_id, order_no)
+        │
+        ▼
+  Emission Calculation (auto-triggered per affected month)
+  Classify each source → input/byproduct/main_product/electricity
+  Material: CE = qty × carbonContent, CO2e = CE × 44/12
+  Electricity: CO2e = kWh × 0.000598
+  Net = Input CO2e − Output CO2e + Electricity CO2e
+        │
+        ▼
+  Store results in PostgreSQL (emission_results_shakambhari)
+  Aggregates as NUMERIC columns + source breakdowns as JSONB
+        │
+        ▼
+    Dashboard (shadcn/ui + React Flow)
 ```
 
 ---

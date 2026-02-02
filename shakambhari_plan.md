@@ -552,7 +552,7 @@ The parser was throwing `Missing columns` errors on April files because it requi
 
 ---
 
-## Verification (Pending)
+## Phase 7 Verification (Pending)
 - [ ] npm run build — ✅ no type errors after all changes
 - [ ] Hit /api/setup — verify old tables renamed + new table created
 - [ ] Meta Engitech still works — hit /api/emissions/by-process?companySlug=meta_engitech_pune&year=2025&month=5 (or whatever month has data)
@@ -564,3 +564,158 @@ The parser was throwing `Missing columns` errors on April files because it requi
 - [ ] JSONB queryability — SELECT product_name, jsonb_array_length(sources) FROM production_data_shakambhari LIMIT 5
 - [ ] Upload April consumption CSV — verify it parses with null MSEB/Solar values
 - [ ] Upload May consumption CSV — verify MSEB/Solar values are populated
+
+---
+
+## Phase 8: Shakambhari — Emission Calculation Engine
+
+### Status: ✅ COMPLETE — Build passes with zero type errors
+
+**Completed:** 2026-02-02
+
+### Context
+
+This phase builds the emission calculation engine for Shakambhari. Unlike Meta Engitech (which uses fuel consumption factors — electricity/LPG/diesel per work center), Shakambhari uses a **carbon mass balance** approach: carbon enters via raw material inputs, some stays in the main product and byproducts, and the difference is emitted to the atmosphere.
+
+### Calculation Model
+
+**For each production record (one product on one date at one work center):**
+
+Each source in the `sources` JSONB array is classified into one of 4 categories:
+
+| Category | How Identified | Formula |
+|----------|---------------|---------|
+| **input** | `consumedQty > 0`, UOM = "TO" | CE = consumedQty × carbonContent, CO2e = CE × 44/12 |
+| **byproduct** | `byproductQty > 0`, UOM = "TO" | CE = byproductQty × carbonContent, CO2e = CE × 44/12 |
+| **main_product** | `compMat === parent productId`, both qty = 0 | CE = production_qty × carbonContent, CO2e = CE × 44/12 |
+| **electricity** | `compUom = "KWH"` (e.g. Mix Power) | CO2e = consumedQty × 0.000598 (tCO₂/kWh) |
+
+**Aggregate per product:**
+- `totalInputCO2e` = Σ input source CO₂e
+- `totalOutputCO2e` = Σ (main product + byproduct) CO₂e
+- `electricityCO2e` = Σ electricity CO₂e (Scope 2)
+- `netScope1CO2e` = totalInputCO2e − totalOutputCO2e (process emissions — carbon that didn't stay in product/byproduct)
+- `netTotalCO2e` = netScope1CO2e + electricityCO2e
+
+**Key constants:**
+- `CO2_PER_CARBON = 44/12` — molecular weight ratio of CO₂ to C
+- `ELECTRICITY_EF = 0.598/1000` — 0.000598 tCO₂/kWh (CEA India grid factor)
+- `CARBON_CONTENT_MAP` — per-material carbon content (mass fraction, 0 to 1)
+
+### Carbon Content
+
+Carbon content values are stored in `lib/emissions/shakambhari/constants.ts` as a `Record<compMat, { compName, carbonContent }>`. **Current values are placeholders** in realistic ranges. The client has not yet provided final values.
+
+**Future plan:** Move to a `carbon_content` DB table with `(compMat, compName, carbonContent, validFrom, validTo)` so the client can update values per date range via a UI. Only `engine.ts` changes — it fetches from DB instead of importing constants. The `calculate.ts` functions remain pure.
+
+### Missing Carbon Content Handling
+
+When a material's `compMat` is not found in the carbon content map:
+- Calculation continues (does NOT throw)
+- Material treated as 0 emission
+- A warning is added: `"Missing carbon content for {compMat} ({compName}) in product X on date Y at WC Z"`
+- API response includes both `resultCount` and `warnings[]`
+
+### Auto-Trigger on Upload
+
+Production upload (`POST /api/production/upload`) now automatically triggers emission calculation after data is stored (fire-and-forget, same pattern as Meta Engitech consumption upload). Since a single Shakambhari upload can span multiple months, the trigger fires for each unique `(year, month)` in the uploaded data.
+
+### DB Table: `emission_results_shakambhari`
+
+```sql
+CREATE TABLE IF NOT EXISTS emission_results_shakambhari (
+  id SERIAL PRIMARY KEY,
+  company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  year INTEGER NOT NULL,
+  month INTEGER NOT NULL,
+  work_center TEXT NOT NULL,
+  product_id TEXT NOT NULL,
+  product_name TEXT,
+  order_no TEXT NOT NULL,
+  production_qty NUMERIC NOT NULL DEFAULT 0,
+  production_uom TEXT DEFAULT 'TO',
+  total_input_co2e NUMERIC NOT NULL DEFAULT 0,
+  total_output_co2e NUMERIC NOT NULL DEFAULT 0,
+  electricity_co2e NUMERIC NOT NULL DEFAULT 0,
+  net_scope1_co2e NUMERIC NOT NULL DEFAULT 0,
+  net_total_co2e NUMERIC NOT NULL DEFAULT 0,
+  source_breakdowns JSONB NOT NULL DEFAULT '[]',
+  calculated_at TIMESTAMPTZ DEFAULT NOW(),
+  UNIQUE(company_slug, date, work_center, product_id, order_no)
+);
+```
+
+- Aggregate NUMERIC columns for fast SQL queries (SUM, GROUP BY, ORDER BY)
+- `source_breakdowns` JSONB stores per-source detail for drill-down
+- UNIQUE mirrors `production_data_shakambhari` — one result per production record
+- Indexed on `(company_slug, year, month)` and `(company_slug, year, month, net_total_co2e DESC)`
+
+### JSONB `source_breakdowns` Shape
+
+```json
+[
+  {
+    "compMat": "11000044",
+    "compName": "Lam Coke",
+    "compUom": "TO",
+    "quantity": 24.5,
+    "category": "input",
+    "carbonContent": 0.82,
+    "carbonEmission": 20.09,
+    "co2e": 73.663
+  },
+  {
+    "compMat": "70000002",
+    "compName": "Mix Power",
+    "compUom": "KWH",
+    "quantity": 172939,
+    "category": "electricity",
+    "carbonContent": null,
+    "carbonEmission": 0,
+    "co2e": 103.418
+  }
+]
+```
+
+### Files Created/Modified
+
+| # | Action | File | What |
+|---|--------|------|------|
+| 1 | CREATE | `lib/emissions/shakambhari/constants.ts` | ELECTRICITY_EF, CO2_PER_CARBON, CARBON_CONTENT_MAP (placeholder values) |
+| 2 | CREATE | `lib/emissions/shakambhari/types.ts` | SourceEmissionResult, ProductEmissionResult, ShakambhariEmissionResults |
+| 3 | CREATE | `lib/emissions/shakambhari/calculate.ts` | Pure functions: classifySource, calculateSourceEmission, calculateProductEmission, calculateAll |
+| 4 | CREATE | `lib/emissions/shakambhari/engine.ts` | triggerShakambhariEmissionCalculation — DB fetch, calculate, write results (unnest) |
+| 5 | CREATE | `app/api/emissions/shakambhari/calculate/route.ts` | POST endpoint for manual calculation trigger |
+| 6 | MODIFY | `lib/schema.ts` | Added emission_results_shakambhari table + indexes |
+| 7 | MODIFY | `app/api/production/upload/route.ts` | Added fire-and-forget emission calculation trigger per affected month |
+| 8 | MODIFY | `DECISIONS.md` | Added decisions 13-16 |
+| 9 | MODIFY | `V1_FLOW.md` | Updated Phase 8 from "Pending" to complete, added Shakambhari data flow diagram |
+
+### API Endpoints
+
+**Manual calculation trigger:**
+```
+POST /api/emissions/shakambhari/calculate
+Body: { "companySlug": "shakambhari", "year": 2025, "month": 2 }
+Response: { "message": "...", "resultCount": 3, "warnings": ["Missing carbon content for ..."] }
+```
+
+**Auto-trigger:** Fires automatically after `POST /api/production/upload` — no separate call needed.
+
+### Decisions Logged
+
+- **Decision 13:** One row per production record with JSONB source breakdowns (aggregates as NUMERIC for SQL queryability)
+- **Decision 14:** Subdirectory namespace `lib/emissions/shakambhari/` (different model from Meta Engitech)
+- **Decision 15:** Missing carbon content → warnings, not errors (calculate what we can, flag the rest)
+- **Decision 16:** Carbon content hardcoded in file for now (temporary — will migrate to DB table with validFrom/validTo)
+
+### Phase 8 Verification
+- [ ] `npm run build` — zero type errors ✅
+- [ ] POST `/api/emissions/shakambhari/calculate` with `{ companySlug: "shakambhari", year: 2025, month: 2 }`
+  - Verify response has `resultCount` matching production records
+  - Verify `warnings` lists materials missing carbon content
+- [ ] Query DB: `SELECT product_name, net_total_co2e, net_scope1_co2e, electricity_co2e FROM emission_results_shakambhari LIMIT 5`
+- [ ] Verify source_breakdowns: `SELECT product_name, jsonb_array_length(source_breakdowns) FROM emission_results_shakambhari LIMIT 5`
+- [ ] Re-upload production Excel — verify emission results are recalculated (count stays same)
+- [ ] Upload new month's data — verify only that month's emissions are recalculated
