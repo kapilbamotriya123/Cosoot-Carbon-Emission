@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
           SUM(scope1_intensity) AS "totalScope1Intensity",
           SUM(scope2_intensity) AS "totalScope2Intensity",
           SUM(production_mt) AS "totalProductionMT"
-         FROM emission_by_process
+         FROM emission_by_process_meta_engitech
          WHERE company_slug = $1 AND year = $2 AND month = $3`,
         [companySlug, yearNum, monthNum]
       ),
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
           AVG(total_intensity) AS "avgProductIntensity",
           MAX(total_intensity) AS "maxProductIntensity",
           MIN(total_intensity) AS "minProductIntensity"
-         FROM emission_by_product
+         FROM emission_by_product_meta_engitech
          WHERE company_slug = $1 AND year = $2 AND month = $3`,
         [companySlug, yearNum, monthNum]
       ),

@@ -6,28 +6,32 @@ import { pool } from "./db";
 // Schema design:
 // - companies: Links a company slug to its Clerk user ID
 // - routing_data: Stores the BOM/routing data per company as JSONB
-//
-// The JSONB structure for routing_data.data will look like:
-// {
-//   "products": [
-//     {
-//       "productId": "TS35303000001F",
-//       "rows": [
-//         {
-//           "materialType": "BOM Comp",
-//           "materials": "SLS3530142501",
-//           "material": "SLS3530142501",
-//           "workCenter": "WSLT1",
-//           "operationShortText": "Big Slitter-2 (U-1)"
-//         },
-//         ...
-//       ]
-//     }
-//   ]
-// }
+// - consumption_data: Monthly consumption data per company as JSONB
+// - emission_by_process_meta_engitech: Per-work-center emissions (Meta Engitech specific)
+// - emission_by_product_meta_engitech: Per-product emissions (Meta Engitech specific)
+// - production_data_shakambhari: Daily production + consumption data for Shakambhari
 
 export async function initializeSchema() {
   await pool.query(`
+    -- Rename Meta Engitech emission tables to be company-specific
+    -- (guarded: only runs if old table names still exist)
+    DO $$
+    BEGIN
+      IF EXISTS (SELECT 1 FROM information_schema.tables
+                 WHERE table_name = 'emission_by_process' AND table_schema = 'public') THEN
+        ALTER TABLE emission_by_process RENAME TO emission_by_process_meta_engitech;
+      END IF;
+      IF EXISTS (SELECT 1 FROM information_schema.tables
+                 WHERE table_name = 'emission_by_product' AND table_schema = 'public') THEN
+        ALTER TABLE emission_by_product RENAME TO emission_by_product_meta_engitech;
+      END IF;
+      IF EXISTS (SELECT 1 FROM pg_indexes
+                 WHERE indexname = 'idx_emission_by_product_lookup') THEN
+        ALTER INDEX idx_emission_by_product_lookup
+          RENAME TO idx_emission_by_product_meta_engitech_lookup;
+      END IF;
+    END $$;
+
     CREATE TABLE IF NOT EXISTS companies (
       slug TEXT PRIMARY KEY,
       clerk_user_id TEXT,
@@ -55,7 +59,7 @@ export async function initializeSchema() {
       UNIQUE(company_slug, year, month)
     );
 
-    CREATE TABLE IF NOT EXISTS emission_by_process (
+    CREATE TABLE IF NOT EXISTS emission_by_process_meta_engitech (
       id SERIAL PRIMARY KEY,
       company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
       year INTEGER NOT NULL,
@@ -73,7 +77,7 @@ export async function initializeSchema() {
       UNIQUE(company_slug, year, month, work_center)
     );
 
-    CREATE TABLE IF NOT EXISTS emission_by_product (
+    CREATE TABLE IF NOT EXISTS emission_by_product_meta_engitech (
       id SERIAL PRIMARY KEY,
       company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
       year INTEGER NOT NULL,
@@ -91,7 +95,30 @@ export async function initializeSchema() {
       UNIQUE(company_slug, year, month, product_id)
     );
 
-    CREATE INDEX IF NOT EXISTS idx_emission_by_product_lookup
-      ON emission_by_product (company_slug, year, month, total_intensity DESC);
+    CREATE INDEX IF NOT EXISTS idx_emission_by_product_meta_engitech_lookup
+      ON emission_by_product_meta_engitech (company_slug, year, month, total_intensity DESC);
+
+    CREATE TABLE IF NOT EXISTS production_data_shakambhari (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
+      date DATE NOT NULL,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      work_center TEXT NOT NULL,
+      product_id TEXT NOT NULL,
+      product_name TEXT,
+      order_no TEXT NOT NULL,
+      production_version TEXT,
+      production_qty NUMERIC NOT NULL DEFAULT 0,
+      production_uom TEXT DEFAULT 'TO',
+      plant TEXT,
+      sources JSONB NOT NULL DEFAULT '[]',
+      original_file_url TEXT,
+      uploaded_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(company_slug, date, work_center, product_id, order_no)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_prod_shak_lookup
+      ON production_data_shakambhari (company_slug, year, month);
   `);
 }

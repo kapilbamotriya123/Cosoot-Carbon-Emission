@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
         scope1_intensity AS "scope1Intensity",
         scope2_intensity AS "scope2Intensity",
         calculated_at AS "calculatedAt"
-       FROM emission_by_process
+       FROM emission_by_process_meta_engitech
        WHERE company_slug = $1 AND year = $2 AND month = $3
        ORDER BY total_intensity DESC`,
       [companySlug, parseInt(year), parseInt(month)]

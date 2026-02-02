@@ -35,6 +35,12 @@ export default async function DashboardPage() {
           >
             Upload Consumption Data
           </Link>
+          <Link
+            href="/dashboard/upload-production"
+            className="inline-block px-4 py-2 bg-zinc-900 text-white rounded-lg hover:bg-zinc-700 dark:bg-white dark:text-black dark:hover:bg-zinc-200"
+          >
+            Upload Production Data
+          </Link>
         </div>
       </main>
     </div>

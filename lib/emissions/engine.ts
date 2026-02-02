@@ -78,7 +78,7 @@ async function writeByProcessResults(
     await client.query("BEGIN");
 
     await client.query(
-      `DELETE FROM emission_by_process
+      `DELETE FROM emission_by_process_meta_engitech
        WHERE company_slug = $1 AND year = $2 AND month = $3`,
       [companySlug, year, month]
     );
@@ -101,7 +101,7 @@ async function writeByProcessResults(
     }
 
     await client.query(
-      `INSERT INTO emission_by_process
+      `INSERT INTO emission_by_process_meta_engitech
         (company_slug, year, month, work_center, description, production_mt,
          electricity_intensity, lpg_intensity, diesel_intensity,
          total_intensity, scope1_intensity, scope2_intensity)
@@ -136,7 +136,7 @@ async function writeByProductResults(
 
     // Delete old results for this month
     await client.query(
-      `DELETE FROM emission_by_product
+      `DELETE FROM emission_by_product_meta_engitech
        WHERE company_slug = $1 AND year = $2 AND month = $3`,
       [companySlug, year, month]
     );
@@ -171,7 +171,7 @@ async function writeByProductResults(
     }
 
     await client.query(
-      `INSERT INTO emission_by_product
+      `INSERT INTO emission_by_product_meta_engitech
         (company_slug, year, month, product_id, work_center_count,
          matched_work_center_count, electricity_intensity, lpg_intensity,
          diesel_intensity, total_intensity, scope1_intensity, scope2_intensity)

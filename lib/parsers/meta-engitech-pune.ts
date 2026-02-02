@@ -1,6 +1,7 @@
 import ExcelJS from "exceljs";
 import { Readable } from "stream";
 import type { Product, RoutingData, RoutingParser, RoutingRow } from "./types";
+import { resolveColumns } from "./utils";
 
 /**
  * Parser for Meta Engitech Pune's BOM/routing Excel format.
@@ -9,43 +10,38 @@ import type { Product, RoutingData, RoutingParser, RoutingRow } from "./types";
  * loading the entire workbook into memory. A 30MB Excel can consume
  * 200-300MB RAM with the non-streaming approach; streaming keeps it flat.
  *
- * Expected columns:
- *   A: Material Type ("BOM Comp" or "FG")
- *   B: Materials (material ID)
- *   C: Plant (not used)
- *   D: Material (material ID, used for product identification)
- *   E: Work Center
- *   F: Operation Short Text
+ * Headers are resolved by name (case-insensitive, whitespace-collapsed)
+ * so the parser is resilient to column reordering.
  *
  * Products are separated by empty rows. Each product group ends with an "FG"
  * row — the FG row's Material (column D) is the finished product ID.
- *
- * Example:
- *   Row 2: BOM Comp | SLS3530142501 | 1100 | SLS3530142501 | WSLT1  | Big Slitter-2
- *   Row 3: BOM Comp | S353001F      | 1100 | S353001F      | WTM2   | Tube Mill-2
- *   ...
- *   Row 7: FG       | TS3530300...  | 1150 | TS3530300...  | QWKC   | Quality Inspection
- *   Row 8: (empty)
- *   Row 9: BOM Comp | ... (next product starts)
  */
+
+const EXPECTED_HEADERS = {
+  materialType: "Material Type",
+  materials: "Materials",
+  material: "Material",
+  workCenter: "Work Center",
+  operationShortText: "Operation Short Text",
+};
+
 export const parseMetaEngitechPune: RoutingParser = async (buffer: ArrayBuffer) => {
   const products: Product[] = [];
   let currentGroup: RoutingRow[] = [];
   let currentProductId: string | null = null;
 
   // Convert ArrayBuffer to a Node.js Readable stream for the streaming reader.
-  // This avoids ExcelJS loading the entire buffer into its own internal model.
   const stream = new Readable();
   stream.push(Buffer.from(buffer));
   stream.push(null); // signals end of stream
 
   const workbookReader = new ExcelJS.stream.xlsx.WorkbookReader(stream, {
-    // "emit" means worksheets/rows are streamed as events, not held in memory
     worksheets: "emit",
     entries: "emit",
   });
 
   let worksheetFound = false;
+  let COL: Record<string, number> | null = null;
 
   for await (const worksheet of workbookReader) {
     // Only process the first worksheet
@@ -54,13 +50,31 @@ export const parseMetaEngitechPune: RoutingParser = async (buffer: ArrayBuffer) 
 
     for await (const row of worksheet) {
       const rowNumber = row.number;
-      if (rowNumber === 1) continue; // skip header
 
-      const materialType = String(row.getCell(1).value ?? "").trim();
-      const materials = String(row.getCell(2).value ?? "").trim();
-      const material = String(row.getCell(4).value ?? "").trim();
-      const workCenter = String(row.getCell(5).value ?? "").trim();
-      const operationShortText = String(row.getCell(6).value ?? "").trim();
+      // Row 1: build column map from header row
+      if (rowNumber === 1) {
+        // Streaming rows support row.values which returns a sparse array [undefined, val1, val2, ...]
+        const headerValues = row.values as (string | undefined)[];
+        const colMap: Record<string, number> = {};
+        headerValues.forEach((val, idx) => {
+          if (val) {
+            const name = String(val).trim().replace(/\s+/g, " ").toLowerCase();
+            colMap[name] = idx;
+          }
+        });
+        COL = resolveColumns(colMap, EXPECTED_HEADERS);
+        continue;
+      }
+
+      if (!COL) {
+        throw new Error("Header row not found — expected headers in row 1");
+      }
+
+      const materialType = String(row.getCell(COL.materialType).value ?? "").trim();
+      const materials = String(row.getCell(COL.materials).value ?? "").trim();
+      const material = String(row.getCell(COL.material).value ?? "").trim();
+      const workCenter = String(row.getCell(COL.workCenter).value ?? "").trim();
+      const operationShortText = String(row.getCell(COL.operationShortText).value ?? "").trim();
 
       // Empty row = product boundary
       const isEmpty = !materialType && !materials && !material && !workCenter;

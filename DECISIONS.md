@@ -132,6 +132,74 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 ---
 
+### Decision 7: Granular Rows with JSONB Sources for Shakambhari
+
+**Date:** 2026-01-31
+
+**Choice:** One row per (company_slug, date, work_center, product_id, order_no), with consumption sources as a JSONB array.
+
+**Alternatives considered:**
+- One blob per date: Simpler insert, but no SQL WHERE on product/work center columns
+- One row per source: Fully relational, but creates far more rows and complicates grouping
+
+**Reasoning:** Granular rows allow SQL WHERE on structured columns (date, work_center, product_id) while JSONB sources keep the variable number of components flexible. Natural append/upsert via the UNIQUE constraint.
+
+**Status:** Active
+
+---
+
+### Decision 8: No Separate Routing Upload for Shakambhari
+
+**Date:** 2026-01-31
+
+**Choice:** Shakambhari does not have a separate routing/BOM upload step. Product → work center mapping is embedded in the production data file.
+
+**Reasoning:** Unlike Meta Engitech where routing is semi-permanent and consumption is monthly, Shakambhari's single Excel file contains both production quantities and consumption sources per product per day.
+
+**Status:** Active
+
+---
+
+### Decision 9: Separate /api/production/upload Route
+
+**Date:** 2026-01-31
+
+**Choice:** Created a new `/api/production/upload` endpoint rather than extending `/api/consumption/upload`.
+
+**Reasoning:** Shakambhari's data shape is fundamentally different — daily vs monthly, embedded routing, different emission sources, no year/month URL params (dates extracted from data). Sharing an endpoint would require excessive conditional logic.
+
+**Status:** Active
+
+---
+
+### Decision 10: Renamed Meta Engitech Emission Tables
+
+**Date:** 2026-01-31
+
+**Choice:** Renamed `emission_by_process` → `emission_by_process_meta_engitech` and `emission_by_product` → `emission_by_product_meta_engitech`.
+
+**Reasoning:** The generic table names had Meta Engitech-specific columns (electricity/LPG/diesel intensity). Clear naming prevents confusion when adding Shakambhari emission tables later, which will have different column structures.
+
+**Status:** Active
+
+---
+
+### Decision 11: Header-Based Column Lookup in All Parsers
+
+**Date:** 2026-01-31
+
+**Choice:** All Excel parsers now resolve columns by header name instead of hardcoded column indices. Shared utility in `lib/parsers/utils.ts`.
+
+**Alternatives considered:**
+- Keep hardcoded indices: Simpler but breaks if client reorders columns
+- Per-parser header logic: Duplicates the matching code
+
+**Reasoning:** Header-based lookup is resilient to column reordering. The shared `buildColumnMap` + `resolveColumns` utilities handle case-insensitive matching and whitespace normalization, reducing per-parser boilerplate.
+
+**Status:** Active
+
+---
+
 ## Learning Notes
 
 ### 2026-01-31 - Emission Intensity: Sum of Intensities vs Pooled Ratio

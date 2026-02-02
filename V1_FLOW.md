@@ -57,6 +57,24 @@ Store calculated results as JSONB in PostgreSQL.
 - View all company data
 - Trigger recalculations if needed
 
+### Phase 7: Shakambhari — Production Data Upload
+- Single Excel file contains routing + consumption (no separate uploads)
+- Daily data (not monthly like Meta Engitech)
+- Header-based parsing (column lookup by name, not index)
+- Parser groups rows by product (PROD MAT populated = new product group)
+- Sources stored in JSONB array per record
+- Stored in `production_data_shakambhari` table
+- One row per (company_slug, date, work_center, product_id, order_no)
+- Upsert: re-uploading same dates replaces existing records
+
+### Phase 8: Shakambhari — Emission Calculation (Pending)
+- Emission factors not yet available from client
+- Net emission per source = (consumed_qty - byproduct_qty) × emission_factor
+- Emission factor mapping: component material → factor (to be stored separately)
+- Scopes: classification depends on source type (not fixed like Meta Engitech)
+- Formulas may change monthly — factors stored separately from code
+- Results will go in Shakambhari-specific emission tables (schema TBD)
+
 ---
 
 ## Data Flow

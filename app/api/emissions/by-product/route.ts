@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     // Get total count and paginated results in parallel
     const [countResult, dataResult] = await Promise.all([
       pool.query(
-        `SELECT COUNT(*) FROM emission_by_product
+        `SELECT COUNT(*) FROM emission_by_product_meta_engitech
          WHERE company_slug = $1 AND year = $2 AND month = $3`,
         [companySlug, yearNum, monthNum]
       ),
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
           scope1_intensity AS "scope1Intensity",
           scope2_intensity AS "scope2Intensity",
           calculated_at AS "calculatedAt"
-         FROM emission_by_product
+         FROM emission_by_product_meta_engitech
          WHERE company_slug = $1 AND year = $2 AND month = $3
          ORDER BY total_intensity DESC
          LIMIT $4 OFFSET $5`,
