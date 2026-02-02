@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { initializeSchema } from "@/lib/schema";
 
@@ -7,11 +6,6 @@ import { initializeSchema } from "@/lib/schema";
 // use a migration tool (like node-pg-migrate), but for our scale
 // and schemaless approach, this is fine.
 export async function POST() {
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     await initializeSchema();
     return NextResponse.json({ message: "Schema initialized successfully" });

@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
@@ -14,18 +13,13 @@ import { getProductionParser } from "@/lib/parsers/production";
 // No year/month params — dates are extracted from the parsed data.
 //
 // Flow:
-//   1. Validate the request (auth, required fields)
+//   1. Validate the request (required fields)
 //   2. Upload original file to GCP Cloud Storage (backup)
 //   3. Parse the Excel using the company-specific production parser
 //   4. Upsert the company in the companies table
 //   5. Transaction: delete existing records for affected dates, then insert new ones
 
 export async function POST(request: NextRequest) {
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     await initializeSchema();
 
@@ -58,7 +52,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO companies (slug, display_name, clerk_user_id)
        VALUES ($1, $2, $3)
        ON CONFLICT (slug) DO UPDATE SET clerk_user_id = $3`,
-      [companySlug, companySlug, userId]
+      [companySlug, companySlug, "anonymous"]
     );
 
     // Transaction: delete-then-insert for affected dates

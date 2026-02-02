@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
@@ -12,19 +11,13 @@ import { getParser } from "@/lib/parsers";
 //   - companySlug: Which company this file belongs to (e.g. "meta_engitech_pune")
 //
 // Flow:
-//   1. Validate the request (auth, file exists, company slug provided)
+//   1. Validate the request (file exists, company slug provided)
 //   2. Upload original file to GCP Cloud Storage (backup)
 //   3. Parse the Excel using the company-specific parser
 //   4. Upsert the company in the companies table
 //   5. Upsert the parsed routing data in the routing_data table
 
 export async function POST(request: NextRequest) {
-  // Step 1: Auth check
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   try {
     // Ensure tables exist (safe to call multiple times — CREATE TABLE IF NOT EXISTS)
     await initializeSchema();
@@ -66,7 +59,7 @@ export async function POST(request: NextRequest) {
       `INSERT INTO companies (slug, display_name, clerk_user_id)
        VALUES ($1, $2, $3)
        ON CONFLICT (slug) DO UPDATE SET clerk_user_id = $3`,
-      [companySlug, companySlug, userId]
+      [companySlug, companySlug, "anonymous"]
     );
 
     // Step 6: Upsert routing data

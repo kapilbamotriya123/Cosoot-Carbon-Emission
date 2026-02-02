@@ -1,26 +1,14 @@
-import { UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-export default async function DashboardPage() {
-  const user = await currentUser();
-
-  // This shouldn't happen because middleware protects this route,
-  // but it's a safety net (defense in depth)
-  if (!user) {
-    redirect("/sign-in");
-  }
-
+export default function DashboardPage() {
   return (
     <div className="min-h-screen p-8">
       <header className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Cosoot Dashboard</h1>
-        <UserButton />
       </header>
       <main>
         <p className="text-gray-600 mb-6">
-          Welcome, {user.firstName ?? user.emailAddresses[0]?.emailAddress}.
+          Welcome to Cosoot.
         </p>
         <div className="flex gap-4">
           <Link
