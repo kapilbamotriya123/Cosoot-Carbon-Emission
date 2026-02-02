@@ -49,7 +49,7 @@ export default function UploadProductionPage() {
   }
 
   return (
-    <div className="min-h-screen p-8 max-w-2xl mx-auto">
+    <div className="max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">Upload Production Data</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">

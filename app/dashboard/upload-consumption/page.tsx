@@ -72,7 +72,7 @@ export default function UploadConsumptionPage() {
   const yearOptions = Array.from({ length: 6 }, (_, i) => currentYear - i);
 
   return (
-    <div className="min-h-screen p-8 max-w-2xl mx-auto">
+    <div className="max-w-2xl">
       <h1 className="text-2xl font-bold mb-6">
         Upload Monthly Consumption Data
       </h1>
