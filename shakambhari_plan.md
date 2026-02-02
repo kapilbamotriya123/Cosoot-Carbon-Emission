@@ -1,4 +1,9 @@
 Shakambhari Production Data — Parsing, Storage & Table Rename
+
+## Status: ✅ ALL 13 STEPS COMPLETE — Build passes with zero type errors
+
+**Completed:** 2026-02-02
+
 Context for Future Sessions
 This plan covers Phase 7 of Cosoot V1: adding Shakambhari as the second company. Shakambhari's data is fundamentally different from Meta Engitech — single file with daily production + consumption data (no separate routing/consumption uploads), many emission sources (not just electricity/LPG/diesel), and net emission = consumed - byproduct.
 
@@ -524,13 +529,38 @@ Complete File List (Build Order)
 16	MODIFY	DECISIONS.md	Add decisions 7-11
 Dependencies: 1 must come before 2,3,11. Step 4 must come before 5-8. Steps 9,10 before 11. Step 11 before 12. Otherwise parallelizable.
 
-Verification
-npm run build — no type errors after all changes
-Hit /api/setup — verify old tables renamed + new table created
-Meta Engitech still works — hit /api/emissions/by-process?companySlug=meta_engitech_pune&year=2025&month=5 (or whatever month has data)
-Upload Shakambhari Excel via /dashboard/upload-production:
-Select Shakambhari, upload the .xlsx file
-Verify response: record count, date range, products, work centers
-Check DB — SELECT count(*), min(date), max(date) FROM production_data_shakambhari
-Re-upload same file — verify count stays the same (upsert works, no duplicates)
-JSONB queryability — SELECT product_name, jsonb_array_length(sources) FROM production_data_shakambhari LIMIT 5
+---
+
+## Post-Implementation Follow-Up
+
+### Fix: Meta Engitech Consumption Parser — Variable Column Layouts (2026-02-02)
+
+**Problem discovered:** Meta Engitech's consumption CSVs have two different column layouts across months:
+- **April format:** `Energy in KWh` (single column), `Date` — no MSEB/Solar breakdown
+- **May format:** `Total Energy in KWh`, `Energy MSEB KWh`, `Energy Solar KWh`, `DateVAlue`
+
+The parser was throwing `Missing columns` errors on April files because it required all headers.
+
+**Fix applied:**
+- Extended `resolveColumns` in `lib/parsers/utils.ts` with optional `aliases` and `optional` parameters
+- `totalEnergyKWh` accepts `"Energy in KWh"` as alias for `"Total Energy in KWh"`
+- `dateValue` accepts `"Date"` as alias for `"DateVAlue"`
+- `energyMSEB` and `energySolar` marked as optional — set to `null` when columns don't exist
+- Column index `0` used as sentinel for "not present" (ExcelJS columns are 1-indexed)
+
+**Decision logged:** DECISIONS.md Decision 12
+
+---
+
+## Verification (Pending)
+- [ ] npm run build — ✅ no type errors after all changes
+- [ ] Hit /api/setup — verify old tables renamed + new table created
+- [ ] Meta Engitech still works — hit /api/emissions/by-process?companySlug=meta_engitech_pune&year=2025&month=5 (or whatever month has data)
+- [ ] Upload Shakambhari Excel via /dashboard/upload-production:
+  - Select Shakambhari, upload the .xlsx file
+  - Verify response: record count, date range, products, work centers
+- [ ] Check DB — SELECT count(*), min(date), max(date) FROM production_data_shakambhari
+- [ ] Re-upload same file — verify count stays the same (upsert works, no duplicates)
+- [ ] JSONB queryability — SELECT product_name, jsonb_array_length(sources) FROM production_data_shakambhari LIMIT 5
+- [ ] Upload April consumption CSV — verify it parses with null MSEB/Solar values
+- [ ] Upload May consumption CSV — verify MSEB/Solar values are populated

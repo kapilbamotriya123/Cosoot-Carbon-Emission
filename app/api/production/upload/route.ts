@@ -3,6 +3,7 @@ import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
 import { uploadToGCS } from "@/lib/storage";
 import { getProductionParser } from "@/lib/parsers/production";
+import { triggerShakambhariEmissionCalculation } from "@/lib/emissions/shakambhari/engine";
 
 // POST /api/production/upload
 //
@@ -132,6 +133,21 @@ export async function POST(request: NextRequest) {
     const uniqueWorkCenters = [...new Set(records.map((r) => r.workCenter))];
     const allDates = records.map((r) => r.date).sort();
 
+    // Fire-and-forget: calculate emissions for each affected month.
+    // A single upload can span multiple months, so trigger each one.
+    const uniqueMonths = [
+      ...new Set(records.map((r) => `${r.year}-${r.month}`)),
+    ];
+    for (const ym of uniqueMonths) {
+      const [y, m] = ym.split("-").map(Number);
+      triggerShakambhariEmissionCalculation(companySlug, y, m).catch((err) => {
+        console.error(
+          `[shakambhari-emissions] Calculation failed for ${companySlug} ${y}/${m}:`,
+          err
+        );
+      });
+    }
+
     return NextResponse.json({
       message: "Production data uploaded successfully",
       recordCount: records.length,
@@ -141,6 +157,7 @@ export async function POST(request: NextRequest) {
       },
       productsFound: uniqueProductIds,
       workCentersFound: uniqueWorkCenters,
+      emissionCalculationTriggered: uniqueMonths.length,
     });
   } catch (error) {
     console.error("Production upload failed:", error);

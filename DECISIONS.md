@@ -200,6 +200,82 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 ---
 
+### Decision 12: Aliases and Optional Headers in resolveColumns
+
+**Date:** 2026-02-02
+
+**Choice:** Extended `resolveColumns` to support `aliases` (alternative header names) and `optional` fields (columns that may not exist). Applied to the Meta Engitech consumption parser: `"Energy in KWh"` is accepted as an alias for `"Total Energy in KWh"`, `"Date"` for `"DateVAlue"`, and `energyMSEB`/`energySolar` are optional (null when absent).
+
+**Problem:** Meta Engitech's consumption CSVs have two column layouts across months — April has a single `Energy in KWh` column and `Date`, while May has `Total Energy in KWh` split into `Energy MSEB KWh` + `Energy Solar KWh`, and `DateVAlue`. The parser was throwing on April files because it required all headers.
+
+**Alternatives considered:**
+- Two separate parsers (one per format): Works but duplicates most logic for a small difference
+- Require the newer format: Shifts burden to the client to re-export old data
+
+**Reasoning:** Same parser handles both layouts gracefully. The total energy value is the same regardless of whether MSEB/Solar are split out — we just store nulls when the breakdown isn't available. `resolveColumns` stays backward-compatible (the new `opts` parameter is optional).
+
+**Status:** Active
+
+---
+
+### Decision 13: Shakambhari Emission Results — One Row per Production Record with JSONB Source Breakdowns
+
+**Date:** 2026-02-02
+
+**Choice:** `emission_results_shakambhari` stores one row per `(company_slug, date, work_center, product_id, order_no)`. Aggregate values (net_co2e, scope1, scope2, electricity) as NUMERIC columns. Per-source calculation detail in a `source_breakdowns` JSONB column.
+
+**Alternatives considered:**
+- Separate rows per source: 5-15x more rows (75k-225k/month), and dashboard queries always need GROUP BY for aggregates
+- Pure JSONB blob for everything: Can't ORDER BY or SUM aggregates with standard SQL
+
+**Reasoning:** Matches production_data_shakambhari granularity. Real NUMERIC columns enable fast SQL queries for dashboards (SUM, GROUP BY month, ORDER BY net_total_co2e). JSONB source detail allows drill-down without a separate table.
+
+**Status:** Active
+
+---
+
+### Decision 14: Shakambhari Emission Engine — Subdirectory Namespace
+
+**Date:** 2026-02-02
+
+**Choice:** All Shakambhari emission files live under `lib/emissions/shakambhari/` (constants, types, calculate, engine) rather than being suffixed files in `lib/emissions/`.
+
+**Reasoning:** Shakambhari's model (carbon content per material, input-output mass balance) is fundamentally different from Meta Engitech's (fuel consumption per work center, fixed 3 sources). Sharing a directory with different-named exports would create confusing imports. Subdirectory keeps each company's emission logic self-contained.
+
+**Status:** Active
+
+---
+
+### Decision 15: Missing Carbon Content — Warnings, Not Errors
+
+**Date:** 2026-02-02
+
+**Choice:** When a material's carbon content is not found in the constants map, the calculation continues with 0 emission for that material and adds a warning to the response. The API returns both `resultCount` and `warnings[]`.
+
+**Alternatives considered:**
+- Throw error: Blocks all calculation for one missing material
+- Silently skip: Produces incorrect totals without any indication
+
+**Reasoning:** During ramp-up, not all materials will have carbon content values. Calculate what we can, surface what we can't. The warnings make it clear which results are incomplete.
+
+**Status:** Active
+
+---
+
+### Decision 16: Carbon Content Hardcoded in Constants File (Temporary)
+
+**Date:** 2026-02-02
+
+**Choice:** Carbon content values stored in `lib/emissions/shakambhari/constants.ts` as a `Record<compMat, { compName, carbonContent }>`. Placeholder values in realistic ranges for now.
+
+**Future path:** Create a `carbon_content` DB table with `(compMat, compName, carbonContent, validFrom, validTo)` so the client can update values per date range via UI. Only `engine.ts` changes — it fetches from DB instead of importing constants, passes the map to `calculate.ts`.
+
+**Reasoning:** Client hasn't provided final values yet. File-based constants let us build and test the full pipeline now. The calculate functions are pure (receive data, return results) so swapping the data source later is a one-file change.
+
+**Status:** Active (temporary — will migrate to DB)
+
+---
+
 ## Learning Notes
 
 ### 2026-01-31 - Emission Intensity: Sum of Intensities vs Pooled Ratio

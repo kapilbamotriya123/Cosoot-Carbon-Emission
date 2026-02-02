@@ -10,6 +10,7 @@ import { pool } from "./db";
 // - emission_by_process_meta_engitech: Per-work-center emissions (Meta Engitech specific)
 // - emission_by_product_meta_engitech: Per-product emissions (Meta Engitech specific)
 // - production_data_shakambhari: Daily production + consumption data for Shakambhari
+// - emission_results_shakambhari: Per-product per-date emission calculation results
 
 export async function initializeSchema() {
   await pool.query(`
@@ -120,5 +121,38 @@ export async function initializeSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_prod_shak_lookup
       ON production_data_shakambhari (company_slug, year, month);
+
+    CREATE TABLE IF NOT EXISTS emission_results_shakambhari (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT REFERENCES companies(slug) ON DELETE CASCADE,
+      date DATE NOT NULL,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      work_center TEXT NOT NULL,
+      product_id TEXT NOT NULL,
+      product_name TEXT,
+      order_no TEXT NOT NULL,
+      production_qty NUMERIC NOT NULL DEFAULT 0,
+      production_uom TEXT DEFAULT 'TO',
+
+      -- Aggregate emission values (tCO₂e)
+      total_input_co2e NUMERIC NOT NULL DEFAULT 0,
+      total_output_co2e NUMERIC NOT NULL DEFAULT 0,
+      electricity_co2e NUMERIC NOT NULL DEFAULT 0,
+      net_scope1_co2e NUMERIC NOT NULL DEFAULT 0,
+      net_total_co2e NUMERIC NOT NULL DEFAULT 0,
+
+      -- Per-source calculation detail (array of SourceEmissionResult)
+      source_breakdowns JSONB NOT NULL DEFAULT '[]',
+
+      calculated_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(company_slug, date, work_center, product_id, order_no)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_emission_shak_lookup
+      ON emission_results_shakambhari (company_slug, year, month);
+
+    CREATE INDEX IF NOT EXISTS idx_emission_shak_net
+      ON emission_results_shakambhari (company_slug, year, month, net_total_co2e DESC);
   `);
 }
