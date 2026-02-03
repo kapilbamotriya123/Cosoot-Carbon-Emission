@@ -96,7 +96,8 @@ export function EmissionsByProcess({ company, year, period }: EmissionsByProcess
     emissions: item.emissions,
   }));
 
-  // Format YoY change
+  // Format YoY/QoQ change
+  const comparisonLabel = period === 'FULL_YEAR' ? 'YOY' : 'QoQ';
   const formatYoY = (change: { percent: number; absolute: number } | null) => {
     if (!change) return "N/A";
     const sign = change.absolute >= 0 ? "+" : "";
@@ -136,7 +137,7 @@ export function EmissionsByProcess({ company, year, period }: EmissionsByProcess
                 <TableHead>Work Center</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead className="text-right">Emissions</TableHead>
-                <TableHead className="text-right">YOY Change (%)</TableHead>
+                <TableHead className="text-right">{comparisonLabel} Change (%)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

@@ -47,7 +47,7 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-  const pageSize = 50;
+  const pageSize = 10;
 
   useEffect(() => {
     async function fetchData() {
@@ -115,14 +115,14 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
     );
   }
 
-  // Prepare chart data (top 10 products)
-  const chartData = data.data.slice(0, 10).map((item) => ({
+  // Prepare chart data (products on current page)
+  const chartData = data.data.map((item) => ({
     name: item.productName || item.productId,
     emissions: item.emissionIntensity,
-    fill: "#f97316",
   }));
 
-  // Format YoY change
+  // Format YoY/QoQ change
+  const comparisonLabel = period === 'FULL_YEAR' ? 'YoY' : 'QoQ';
   const formatYoY = (change: { percent: number; absolute: number } | null) => {
     if (!change) return "N/A";
     const sign = change.absolute >= 0 ? "+" : "";
@@ -134,7 +134,9 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
       {/* Chart */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Emissions by Product</h2>
-        <p className="text-sm text-muted-foreground mb-4">Top 10 products by emission intensity</p>
+        <p className="text-sm text-muted-foreground mb-4">
+          Page {page} of {data.pagination.totalPages} ({data.pagination.totalItems} total products)
+        </p>
         <ResponsiveContainer width="100%" height={350}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -146,6 +148,52 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
             <Bar dataKey="emissions" fill="#f97316" />
           </BarChart>
         </ResponsiveContainer>
+
+        {/* Pagination Controls */}
+        {data.pagination.totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6 pt-4 border-t">
+            <div className="text-sm text-muted-foreground">
+              Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, data.pagination.totalItems)} of {data.pagination.totalItems} products
+            </div>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(1)}
+                disabled={page === 1}
+              >
+                <ChevronsLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <div className="flex items-center px-3 text-sm">
+                Page {page} of {data.pagination.totalPages}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(page + 1)}
+                disabled={page === data.pagination.totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setPage(data.pagination.totalPages)}
+                disabled={page === data.pagination.totalPages}
+              >
+                <ChevronsRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </Card>
 
       {/* Table */}
@@ -165,7 +213,7 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
                 <TableHead>Product ID</TableHead>
                 {data.data[0]?.productName && <TableHead>Product Name</TableHead>}
                 <TableHead className="text-right">Emissions (tCO₂e/t)</TableHead>
-                <TableHead className="text-right">YOY Change (%)</TableHead>
+                <TableHead className="text-right">{comparisonLabel} Change (%)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -226,52 +274,6 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
             </TableBody>
           </Table>
         </div>
-
-        {/* Pagination */}
-        {data.pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-muted-foreground">
-              Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, data.pagination.totalItems)} of {data.pagination.totalItems} products
-            </div>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPage(1)}
-                disabled={page === 1}
-              >
-                <ChevronsLeft className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </Button>
-              <div className="flex items-center px-3 text-sm">
-                Page {page} of {data.pagination.totalPages}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPage(page + 1)}
-                disabled={page === data.pagination.totalPages}
-              >
-                <ChevronRight className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setPage(data.pagination.totalPages)}
-                disabled={page === data.pagination.totalPages}
-              >
-                <ChevronsRight className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
       </Card>
     </div>
   );

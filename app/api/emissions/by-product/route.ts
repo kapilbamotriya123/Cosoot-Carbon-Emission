@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
     const timePeriod = period || 'FULL_YEAR';
     const timeRange = parseTimeRange(timePeriod);
 
-    const result = await getProductEmissions(pool, company!, year, timeRange);
+    const result = await getProductEmissions(pool, company!, year, timePeriod, timeRange);
 
     // Pagination
     const startIndex = (page - 1) * pageSize;

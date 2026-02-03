@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     const timePeriod = period || 'FULL_YEAR';
     const timeRange = parseTimeRange(timePeriod);
 
-    const result = await getProcessEmissions(pool, company!, year, timeRange);
+    const result = await getProcessEmissions(pool, company!, year, timePeriod, timeRange);
 
     return NextResponse.json({
       success: true,

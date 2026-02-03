@@ -107,7 +107,8 @@ export function EmissionsByScope({ company, year, period }: EmissionsByScopeProp
   // Calculate total
   const totalEmissions = data.current.scope1 + data.current.scope2;
 
-  // Format YoY change
+  // Format YoY/QoQ change
+  const comparisonLabel = period === 'FULL_YEAR' ? 'YOY' : 'QoQ';
   const formatYoY = (change: { percent: number; absolute: number } | null) => {
     if (!change) return "N/A";
     const sign = change.absolute >= 0 ? "+" : "";
@@ -144,7 +145,7 @@ export function EmissionsByScope({ company, year, period }: EmissionsByScopeProp
               <TableHead className="w-[100px]">Ranking</TableHead>
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Emissions</TableHead>
-              <TableHead className="text-right">YOY Change (%)</TableHead>
+              <TableHead className="text-right">{comparisonLabel} Change (%)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

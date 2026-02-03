@@ -143,3 +143,70 @@ export function groupByQuarter<T extends { year: string; month: string }>(
 export function isMonthInRange(month: number, range: TimeRange): boolean {
   return range.months.includes(month);
 }
+
+/**
+ * Get previous quarter for sequential quarter-over-quarter comparison
+ * Q1 → Q4 of previous year
+ * Q2 → Q1 of current year
+ * Q3 → Q2 of current year
+ * Q4 → Q3 of current year
+ * FULL_YEAR → FULL_YEAR of previous year
+ *
+ * @param year - Current year as string
+ * @param period - Current period (Q1-Q4 or FULL_YEAR)
+ * @returns Object with previous year and period
+ */
+export function getPreviousQuarter(
+  year: string,
+  period: TimePeriod
+): { year: string; period: TimePeriod } {
+  const yearNum = parseInt(year);
+
+  switch (period) {
+    case 'Q1':
+      return { year: (yearNum - 1).toString(), period: 'Q4' };
+    case 'Q2':
+      return { year: year, period: 'Q1' };
+    case 'Q3':
+      return { year: year, period: 'Q2' };
+    case 'Q4':
+      return { year: year, period: 'Q3' };
+    case 'FULL_YEAR':
+      return { year: (yearNum - 1).toString(), period: 'FULL_YEAR' };
+  }
+}
+
+/**
+ * Get comparison label based on period
+ * FULL_YEAR → "YOY"
+ * Q1-Q4 → "QoQ"
+ *
+ * @param period - Time period
+ * @returns "YOY" or "QoQ"
+ */
+export function getComparisonLabel(period: TimePeriod): string {
+  return period === 'FULL_YEAR' ? 'YOY' : 'QoQ';
+}
+
+/**
+ * Get full comparison description
+ * Examples:
+ * - "2025 vs 2024" (FULL_YEAR)
+ * - "Q1 2025 vs Q4 2024" (Q1)
+ * - "Q2 2025 vs Q1 2025" (Q2)
+ *
+ * @param year - Current year
+ * @param period - Current period
+ * @returns Human-readable comparison description
+ */
+export function getComparisonDescription(
+  year: string,
+  period: TimePeriod
+): string {
+  if (period === 'FULL_YEAR') {
+    return `${year} vs ${parseInt(year) - 1}`;
+  }
+
+  const prev = getPreviousQuarter(year, period);
+  return `${period} ${year} vs ${prev.period} ${prev.year}`;
+}

@@ -38,11 +38,12 @@ export async function GET(request: NextRequest) {
     const timePeriod = period || 'FULL_YEAR';
     const timeRange = parseTimeRange(timePeriod);
 
-    // Get emissions with YoY comparison
+    // Get emissions with YoY/QoQ comparison
     const data = await getSourceEmissionsWithYoY(
       pool,
       company!,
       year,
+      timePeriod,
       timeRange
     );
 

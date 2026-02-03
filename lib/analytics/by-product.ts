@@ -3,7 +3,7 @@
  */
 
 import { Pool } from 'pg';
-import { TimeRange, calculateYoYChange, YoYChange } from './utils';
+import { TimeRange, TimePeriod, calculateYoYChange, YoYChange, getPreviousQuarter, parseTimeRange } from './utils';
 
 export interface ProductEmission {
   productId: string;
@@ -26,10 +26,14 @@ export interface ProductEmissionsResponse {
 export async function calculateProductEmissionsMetaEngitech(
   pool: Pool,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ProductEmission[]> {
   const { months } = timeRange;
-  const previousYear = (parseInt(year) - 1).toString();
+
+  // Get previous period for comparison (QoQ if quarter, YoY if full year)
+  const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
+  const prevTimeRange = parseTimeRange(prevPeriod);
 
   // Get current year data
   const currentQuery = `
@@ -62,12 +66,12 @@ export async function calculateProductEmissionsMetaEngitech(
 
   let previousResult;
   try {
-    previousResult = await pool.query(previousQuery, [previousYear, months]);
+    previousResult = await pool.query(previousQuery, [prevYear, prevTimeRange.months]);
   } catch (error) {
     previousResult = { rows: [] };
   }
 
-  // Create a map of previous year emissions
+  // Create a map of previous period emissions
   const previousMap = new Map<string, number>();
   previousResult.rows.forEach((row) => {
     previousMap.set(row.product_id, parseFloat(row.avg_intensity || '0'));
@@ -97,10 +101,14 @@ export async function calculateProductEmissionsMetaEngitech(
 export async function calculateProductEmissionsShakambhari(
   pool: Pool,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ProductEmission[]> {
   const { months } = timeRange;
-  const previousYear = (parseInt(year) - 1).toString();
+
+  // Get previous period for comparison (QoQ if quarter, YoY if full year)
+  const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
+  const prevTimeRange = parseTimeRange(prevPeriod);
 
   // Get current year data from pre-calculated emission_results_shakambhari
   const currentQuery = `
@@ -161,7 +169,7 @@ export async function calculateProductEmissionsShakambhari(
 
   let previousResult;
   try {
-    previousResult = await pool.query(previousQuery, [previousYear, months]);
+    previousResult = await pool.query(previousQuery, [prevYear, prevTimeRange.months]);
   } catch (error) {
     previousResult = { rows: [] };
   }
@@ -210,13 +218,14 @@ export async function getProductEmissions(
   pool: Pool,
   company: string,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ProductEmissionsResponse> {
   const isMetaEngitech = company === 'meta_engitech_pune';
 
   const data = isMetaEngitech
-    ? await calculateProductEmissionsMetaEngitech(pool, year, timeRange)
-    : await calculateProductEmissionsShakambhari(pool, year, timeRange);
+    ? await calculateProductEmissionsMetaEngitech(pool, year, period, timeRange)
+    : await calculateProductEmissionsShakambhari(pool, year, period, timeRange);
 
   const avgIntensity =
     data.length > 0

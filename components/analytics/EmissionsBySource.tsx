@@ -10,8 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from "recharts";
 import { Loader2 } from "lucide-react";
+
+interface SourceDetail {
+  compMat: string;
+  compName: string;
+  co2e: number;
+  category: 'input' | 'electricity';
+}
 
 interface SourceEmissionsData {
   current: {
@@ -25,6 +32,10 @@ interface SourceEmissionsData {
   yoyChange: {
     materialsAndFuels: { percent: number; absolute: number } | null;
     energy: { percent: number; absolute: number } | null;
+  };
+  breakdown: {
+    materialsAndFuels: SourceDetail[];
+    energy: SourceDetail[];
   };
 }
 
@@ -90,28 +101,86 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
     );
   }
 
-  // Prepare chart data
-  const chartData = [
+  // Color palettes
+  const COLORS = [
+    '#f97316', // orange
+    '#ef4444', // red
+    '#8b5cf6', // purple
+    '#06b6d4', // cyan
+    '#10b981', // green
+    '#f59e0b', // amber
+    '#6366f1', // indigo
+    '#94a3b8', // slate (for "Others")
+  ];
+  const ENERGY_COLOR = '#eab308'; // yellow
+
+  // Check if we have breakdown data
+  const hasBreakdown = data.breakdown && (data.breakdown.materialsAndFuels.length > 0 || data.breakdown.energy.length > 0);
+
+  // Prepare chart data - stacked bars if breakdown available, simple bars otherwise
+  const chartData = hasBreakdown ? [
     {
-      name: "Materials & Fuels",
-      emissions: data.current.materialsAndFuels,
-      fill: "#f97316", // Orange
+      category: "Materials & Fuels",
+      ...Object.fromEntries(
+        data.breakdown.materialsAndFuels.map(s => [s.compName, s.co2e])
+      ),
     },
     {
-      name: "Energy (Electricity)",
-      emissions: data.current.energy,
-      fill: "#eab308", // Yellow
+      category: "Energy (Electricity)",
+      ...Object.fromEntries(
+        data.breakdown.energy.map(s => [s.compName, s.co2e])
+      ),
     },
+  ] : [
+    { category: "Materials & Fuels", value: data.current.materialsAndFuels },
+    { category: "Energy (Electricity)", value: data.current.energy },
   ];
 
   // Calculate total
   const totalEmissions = data.current.materialsAndFuels + data.current.energy;
 
-  // Format YoY change
+  // Format YoY/QoQ change
+  const comparisonLabel = period === 'FULL_YEAR' ? 'YOY' : 'QoQ';
   const formatYoY = (change: { percent: number; absolute: number } | null) => {
     if (!change) return "N/A";
     const sign = change.absolute >= 0 ? "+" : "";
     return `${sign}${change.percent}% (${sign}${change.absolute.toFixed(2)} tCO₂e)`;
+  };
+
+  // Custom Tooltip Component
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (!active || !payload?.length) return null;
+
+    const validPayload = payload.filter(p => p.value && p.value > 0);
+    if (!validPayload.length) return null;
+
+    const total = validPayload.reduce((sum, entry) => sum + (entry.value || 0), 0);
+
+    return (
+      <div className="bg-white p-4 border rounded-lg shadow-lg">
+        <h3 className="font-semibold mb-2 text-sm">{label}</h3>
+        <div className="space-y-1">
+          {validPayload.map((entry) => (
+            <div key={entry.dataKey} className="flex justify-between gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-3 h-3 rounded-sm"
+                  style={{ backgroundColor: entry.fill || entry.color }}
+                />
+                <span>{entry.dataKey}:</span>
+              </div>
+              <span className="font-mono font-semibold">
+                {(entry.value || 0).toFixed(2)} tCO₂e
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-2 pt-2 border-t font-semibold text-sm flex justify-between">
+          <span>Total:</span>
+          <span className="font-mono">{total.toFixed(2)} tCO₂e</span>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -122,12 +191,43 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey="category" />
             <YAxis label={{ value: "Emissions (tCO₂e)", angle: -90, position: "insideLeft" }} />
-            <Tooltip
-              formatter={(value: number) => [`${value.toFixed(2)} tCO₂e`, "Emissions"]}
-            />
-            <Bar dataKey="emissions" fill="#8884d8" />
+
+            {hasBreakdown ? (
+              <>
+                {/* Materials & Fuels bars */}
+                {data.breakdown.materialsAndFuels.map((source, idx) => (
+                  <Bar
+                    key={source.compMat}
+                    dataKey={source.compName}
+                    stackId="materials"
+                    fill={COLORS[idx % COLORS.length]}
+                    activeBar={false}
+                  />
+                ))}
+
+                {/* Energy bars */}
+                {data.breakdown.energy.map((source) => (
+                  <Bar
+                    key={source.compMat}
+                    dataKey={source.compName}
+                    stackId="energy"
+                    fill={ENERGY_COLOR}
+                    activeBar={false}
+                  />
+                ))}
+
+                <Tooltip content={<CustomTooltip />} />
+              </>
+            ) : (
+              <>
+                <Bar dataKey="value" fill="#f97316" />
+                <Tooltip
+                  formatter={(value: number) => [`${value.toFixed(2)} tCO₂e`, "Emissions"]}
+                />
+              </>
+            )}
           </BarChart>
         </ResponsiveContainer>
       </Card>
@@ -144,7 +244,7 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
               <TableHead className="w-[100px]">Ranking</TableHead>
               <TableHead>Name</TableHead>
               <TableHead className="text-right">Emissions</TableHead>
-              <TableHead className="text-right">YOY Change (%)</TableHead>
+              <TableHead className="text-right">{comparisonLabel} Change (%)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -3,7 +3,7 @@
  */
 
 import { Pool } from 'pg';
-import { TimeRange, calculateYoYChange, YoYChange } from './utils';
+import { TimeRange, TimePeriod, calculateYoYChange, YoYChange, getPreviousQuarter, parseTimeRange } from './utils';
 
 export interface ProcessEmission {
   workCenter: string;
@@ -23,10 +23,14 @@ export interface ProcessEmissionsResponse {
 export async function calculateProcessEmissionsMetaEngitech(
   pool: Pool,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ProcessEmission[]> {
   const { months } = timeRange;
-  const previousYear = (parseInt(year) - 1).toString();
+
+  // Get previous period for comparison (QoQ if quarter, YoY if full year)
+  const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
+  const prevTimeRange = parseTimeRange(prevPeriod);
 
   // Get current year data
   const currentQuery = `
@@ -58,7 +62,7 @@ export async function calculateProcessEmissionsMetaEngitech(
 
   let previousResult;
   try {
-    previousResult = await pool.query(previousQuery, [previousYear, months]);
+    previousResult = await pool.query(previousQuery, [prevYear, prevTimeRange.months]);
   } catch (error) {
     previousResult = { rows: [] };
   }
@@ -91,10 +95,14 @@ export async function calculateProcessEmissionsMetaEngitech(
 export async function calculateProcessEmissionsShakambhari(
   pool: Pool,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ProcessEmission[]> {
   const { months } = timeRange;
-  const previousYear = (parseInt(year) - 1).toString();
+
+  // Get previous period for comparison (QoQ if quarter, YoY if full year)
+  const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
+  const prevTimeRange = parseTimeRange(prevPeriod);
 
   // Get current year data from pre-calculated emission_results_shakambhari
   const currentQuery = `
@@ -134,7 +142,7 @@ export async function calculateProcessEmissionsShakambhari(
 
   let previousResult;
   try {
-    previousResult = await pool.query(previousQuery, [previousYear, months]);
+    previousResult = await pool.query(previousQuery, [prevYear, prevTimeRange.months]);
   } catch (error) {
     previousResult = { rows: [] };
   }
@@ -174,13 +182,14 @@ export async function getProcessEmissions(
   pool: Pool,
   company: string,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ProcessEmissionsResponse> {
   const isMetaEngitech = company === 'meta_engitech_pune';
 
   const data = isMetaEngitech
-    ? await calculateProcessEmissionsMetaEngitech(pool, year, timeRange)
-    : await calculateProcessEmissionsShakambhari(pool, year, timeRange);
+    ? await calculateProcessEmissionsMetaEngitech(pool, year, period, timeRange)
+    : await calculateProcessEmissionsShakambhari(pool, year, period, timeRange);
 
   const totalEmissions = data.reduce((sum, item) => sum + item.emissions, 0);
 

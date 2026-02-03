@@ -4,7 +4,7 @@
  */
 
 import { Pool } from 'pg';
-import { TimeRange, calculateYoYChange, YoYChange } from './utils';
+import { TimeRange, TimePeriod, calculateYoYChange, YoYChange, getPreviousQuarter, parseTimeRange } from './utils';
 
 export interface ScopeEmissions {
   scope1: number; // Direct emissions (tCO₂e)
@@ -94,34 +94,38 @@ export async function calculateScopeEmissionsShakambhari(
 }
 
 /**
- * Get scope emissions with YoY comparison
+ * Get scope emissions with YoY/QoQ comparison
  */
 export async function getScopeEmissionsWithYoY(
   pool: Pool,
   company: string,
   year: string,
+  period: TimePeriod,
   timeRange: TimeRange
 ): Promise<ScopeEmissionsWithYoY> {
   const isMetaEngitech = company === 'meta_engitech_pune';
-  const previousYear = (parseInt(year) - 1).toString();
 
-  // Calculate current year emissions
+  // Get previous period for comparison (QoQ if quarter, YoY if full year)
+  const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
+  const prevTimeRange = parseTimeRange(prevPeriod);
+
+  // Calculate current period emissions
   const current = isMetaEngitech
     ? await calculateScopeEmissionsMetaEngitech(pool, year, timeRange)
     : await calculateScopeEmissionsShakambhari(pool, year, timeRange);
 
-  // Calculate previous year emissions
+  // Calculate previous period emissions
   let previous: ScopeEmissions | null = null;
   try {
     previous = isMetaEngitech
-      ? await calculateScopeEmissionsMetaEngitech(pool, previousYear, timeRange)
-      : await calculateScopeEmissionsShakambhari(pool, previousYear, timeRange);
+      ? await calculateScopeEmissionsMetaEngitech(pool, prevYear, prevTimeRange)
+      : await calculateScopeEmissionsShakambhari(pool, prevYear, prevTimeRange);
   } catch (error) {
-    // No data for previous year
+    // No data for previous period
     previous = null;
   }
 
-  // Calculate YoY changes
+  // Calculate YoY/QoQ changes
   const yoyChange = {
     scope1: calculateYoYChange(current.scope1, previous?.scope1 || null),
     scope2: calculateYoYChange(current.scope2, previous?.scope2 || null),
