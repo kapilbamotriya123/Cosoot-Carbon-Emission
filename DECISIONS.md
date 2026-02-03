@@ -419,6 +419,82 @@ Making the page company-aware with conditional rendering keeps the codebase DRY 
 
 ---
 
+### Decision 24: Analytics Dashboard — Compute-on-Demand Data Aggregation with Recharts
+
+**Date:** 2026-02-03
+
+**Choice:** Build analytics dashboard with compute-on-demand data aggregation in API routes. Use Recharts for visualizations.
+
+**Context:** Building comprehensive analytics views for emission data across both companies. Four main views: Emissions by Scope, by Source, by Process (work center), and by Product. Each view needs time-based filtering (Month/Quarter/Year), bar charts, and ranked tables with YoY comparison.
+
+**Aggregation Strategy:**
+- **Compute-on-demand** (not pre-computed): Query database with date filters and aggregate in API routes at request time
+- No pre-aggregation tables or materialized views
+- Matches existing architecture pattern from product flows
+
+**Alternatives considered:**
+- Pre-calculate aggregations: Store quarter/year rollups in separate tables. Faster queries but adds storage overhead, complexity, and requires cache invalidation on new uploads.
+
+**Reasoning:** Compute-on-demand keeps architecture simple and data always fresh. At current scale (~2 companies, monthly uploads), query performance will be adequate. Can optimize later with materialized views if needed.
+
+**Comparison Logic:**
+- **YoY (Year-over-Year) only**: Compare current period to same period last year (e.g., Q1 2025 vs Q1 2024)
+- Format: `-12% (-403 tCO₂e)` (percentage + absolute change)
+- If no previous year data exists, show "N/A" or hide comparison
+
+**Time Range Filtering:**
+- **Quarter view**: Show 4 bars (one per quarter) when year is selected. Hover reveals quarter-specific data. YoY comparison compares same quarter previous year.
+- **Month view**: Not initially implemented (may not make sense for all views). System designed to support it later if needed.
+- **No custom date ranges** for initial implementation
+
+**Scope Classification:**
+- **Meta Engitech**: Scope 1 = LPG + Diesel (scope1_intensity), Scope 2 = Electricity (scope2_intensity)
+- **Shakambhari**: Scope 1 = Carbon emissions from all materials except Mix Power (calculated from carbon mass balance), Scope 2 = Emissions from Mix Power (electricity)
+
+**Source Grouping:**
+- **Meta Engitech**: Two categories only — "Materials & Fuels" (LPG + Diesel) and "Energy (Electricity)"
+- **Shakambhari**: Two categories only — "Materials & Fuels" (all carbon from materials except Mix Power) and "Energy (Mix Power)"
+- No sub-category breakdowns in initial implementation (keeps UI simple)
+
+**Chart Library:**
+- **Recharts**: Integrates well with shadcn/ui aesthetic, handles responsive sizing, simpler API than Chart.js
+- Alternatives: Chart.js (more customizable but heavier), Victory (less maintained)
+
+**Data Validation:**
+- If selected time range has no data: Show empty chart with message "No data available for selected period"
+
+**UI Structure:**
+```
+/dashboard/analytics → Overview page with summary cards
+  - Dropdown: Emissions by [Scope | Source | Process | Product]
+  - Time range selector: [Year] dropdown + [Month/Quarter] dropdown
+  - Company selector: Existing pattern (?company=meta_engitech_pune or ?company=shakambhari)
+  - Bar chart (Recharts) on top
+  - Ranked table below with YoY comparison, pagination, search
+```
+
+**API Routes:**
+```
+/api/emissions/by-scope?company=X&year=Y&period=Q1
+/api/emissions/by-source?company=X&year=Y&period=Q1
+/api/emissions/by-process?company=X&year=Y&period=Q1
+/api/emissions/by-product?company=X&year=Y&period=Q1
+```
+
+**Implementation Phases:**
+1. API routes + aggregation logic (backend first)
+2. Analytics page shell (header, filters, dropdowns)
+3. Individual views one at a time: Scope → Source → Process → Product
+
+**Tradeoffs accepted:**
+- Repeated queries recalculate same aggregates (acceptable at current scale)
+- YoY only (no QoQ, MoM in initial implementation — can add later if users request)
+- Quarter/month drill-down not fully implemented in phase 1
+
+**Status:** Active (implementation started 2026-02-03)
+
+---
+
 ## Learning Notes
 
 ### 2026-02-03 - React Flow + dagre for Manufacturing Flow Diagrams
@@ -508,6 +584,27 @@ The mass balance approach is more comprehensive for process emissions (e.g., car
 ---
 
 ## Mistakes & Corrections
+
+### 2026-02-03 - Analytics recalculating emissions instead of using pre-computed results
+
+**What happened:** Initially implemented analytics by recalculating emissions from `production_data_shakambhari` using carbon mass balance formula, carbon content constants, and emission factors. This caused:
+1. Scope 1 (direct) emissions showing as 0 for Shakambhari
+2. Different/incorrect emission values compared to the pre-calculated `emission_results_shakambhari` table
+3. Unnecessary computation on every analytics query
+
+**Root cause:** Not realizing that emissions were already pre-calculated and stored in `emission_results_shakambhari` table with proper Scope 1/2 breakdown (`net_scope1_co2e`, `electricity_co2e`, `net_total_co2e`).
+
+**Fix:** Updated all Shakambhari analytics functions to use `emission_results_shakambhari`:
+- [lib/analytics/by-scope.ts](lib/analytics/by-scope.ts) - Query `SUM(net_scope1_co2e)` and `SUM(electricity_co2e)` instead of recalculating
+- [lib/analytics/by-source.ts](lib/analytics/by-source.ts) - Same approach (Scope 1 = Materials & Fuels, Scope 2 = Energy)
+- [lib/analytics/by-process.ts](lib/analytics/by-process.ts) - Query `SUM(net_total_co2e) GROUP BY work_center`
+- [lib/analytics/by-product.ts](lib/analytics/by-product.ts) - Aggregate by product_id with proper scope breakdown
+
+**Results:** Scope 1 emissions now show correctly (12,157.53 tCO₂e instead of ~0), data matches the pre-calculated values, and queries are much faster.
+
+**Lesson:** When a system has pre-computed/materialized data, use it instead of recalculating. Always check what tables exist and what they contain before implementing calculation logic. The emission calculation engine already ran and stored results — analytics should consume those results, not recompute them.
+
+---
 
 ### 2026-01-30 - DROP TABLE in initializeSchema() called on every request
 

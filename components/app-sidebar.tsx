@@ -10,6 +10,7 @@ import {
   Factory,
   User2,
   ChevronUp,
+  BarChart3,
 } from "lucide-react";
 
 import {
@@ -37,6 +38,11 @@ const mainMenuItems = [
     title: "Overview",
     href: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Analytics",
+    href: "/dashboard/analytics",
+    icon: BarChart3,
   },
   {
     title: "Product Flows",

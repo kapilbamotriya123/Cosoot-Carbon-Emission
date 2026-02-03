@@ -1,54 +1,59 @@
-import { NextRequest, NextResponse } from "next/server";
-import { pool } from "@/lib/db";
-import { initializeSchema } from "@/lib/schema";
+import { NextRequest, NextResponse } from 'next/server';
+import { Pool } from 'pg';
+import { validateCompany, parseTimeRange, TimePeriod } from '@/lib/analytics/utils';
+import { getProcessEmissions } from '@/lib/analytics/by-process';
 
-// GET /api/emissions/by-process?companySlug=X&year=Y&month=M
-//
-// Returns emission intensities for each work center in a given month.
-// No pagination needed — typically 20-50 work centers.
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
 export async function GET(request: NextRequest) {
   try {
-    await initializeSchema();
+    const searchParams = request.nextUrl.searchParams;
+    const company = searchParams.get('company');
+    const year = searchParams.get('year');
+    const period = searchParams.get('period') as TimePeriod | null;
 
-    const { searchParams } = new URL(request.url);
-    const companySlug = searchParams.get("companySlug");
-    const year = searchParams.get("year");
-    const month = searchParams.get("month");
-
-    if (!companySlug || !year || !month) {
+    const { isValid } = validateCompany(company);
+    if (!isValid) {
       return NextResponse.json(
-        { error: "companySlug, year, and month are required" },
+        { error: 'Invalid company parameter' },
         { status: 400 }
       );
     }
 
-    const result = await pool.query(
-      `SELECT
-        work_center AS "workCenter",
-        description,
-        production_mt AS "productionMT",
-        electricity_intensity AS "electricityIntensity",
-        lpg_intensity AS "lpgIntensity",
-        diesel_intensity AS "dieselIntensity",
-        total_intensity AS "totalIntensity",
-        scope1_intensity AS "scope1Intensity",
-        scope2_intensity AS "scope2Intensity",
-        calculated_at AS "calculatedAt"
-       FROM emission_by_process_meta_engitech
-       WHERE company_slug = $1 AND year = $2 AND month = $3
-       ORDER BY total_intensity DESC`,
-      [companySlug, parseInt(year), parseInt(month)]
-    );
+    if (!year || !/^\d{4}$/.test(year)) {
+      return NextResponse.json(
+        { error: 'Invalid year parameter. Expected format: YYYY' },
+        { status: 400 }
+      );
+    }
+
+    const timePeriod = period || 'FULL_YEAR';
+    const timeRange = parseTimeRange(timePeriod);
+
+    const result = await getProcessEmissions(pool, company!, year, timeRange);
 
     return NextResponse.json({
-      workCenters: result.rows,
-      total: result.rows.length,
+      success: true,
+      data: result.data,
+      totalEmissions: result.totalEmissions,
+      hasData: result.data.length > 0,
+      meta: {
+        company,
+        year,
+        period: timePeriod,
+        timeRange: { months: timeRange.months },
+      },
     });
   } catch (error) {
-    console.error("Failed to fetch by-process emissions:", error);
-    const message =
-      error instanceof Error ? error.message : "Unknown error occurred";
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('Error fetching process emissions:', error);
+    return NextResponse.json(
+      { error: 'Failed to fetch process emissions' },
+      { status: 500 }
+    );
   }
 }
