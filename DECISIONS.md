@@ -340,11 +340,136 @@ Next.js (App Router) + Clerk (auth) + GCP Cloud SQL PostgreSQL (JSONB storage) +
 
 **Reasoning:** Node layout computation (via dagre) is deterministic but non-trivial. Pre-computing once on upload and storing the result means instant page loads. For Shakambhari where 95% of products are the same month-to-month, we detect new products on upload and only generate layouts for those. Stored as JSONB (nodes array + edges array) per product per company.
 
-**Status:** Active (to be implemented in Phase 3)
+**Status:** Revised (see Decision 21)
+
+---
+
+### Decision 21: Product Flow Visualization — Compute-on-Demand with dagre Layout
+
+**Date:** 2026-02-03
+
+**Choice:** Product flow nodes and edges are computed on-demand in the API route using dagre for layout, not pre-computed and stored.
+
+**Alternatives considered:**
+- Pre-computed in DB (original plan from Decision 20): Faster page loads, but requires storage and invalidation logic
+- Client-side dagre: Simpler backend, but slower initial render and requires shipping layout lib to browser
+
+**Reasoning:** On-demand computation with server-side dagre provides the best balance:
+1. **No storage overhead** — Flow graphs are derived from routing/production data, no separate table needed
+2. **Always fresh** — Changes to routing or production data automatically reflect in flows
+3. **Fast enough** — dagre layout is deterministic and completes in <100ms for typical product graphs
+4. **Simpler architecture** — No cache invalidation, no separate migration for flow data
+
+For Meta Engitech, flows are derived from `routing_data` + `consumption_data` (fuel nodes based on monthly usage). For Shakambhari, flows are built from the first occurrence of a product in a selected month from `production_data_shakambhari`.
+
+**Implementation details:**
+- **Meta Engitech flow structure:** Input materials → Work centers (with routing sequence) → Final product. Fuel nodes (electricity/LPG/diesel) branch from work centers that consume them in the selected month.
+- **Shakambhari flow structure:** Input materials (including Mix Power as a fuel node) → Single work center → Main product + Byproducts. Simpler flow reflects their single-step process.
+- **Shared components:** Both companies use the same React Flow diagram component with custom node types (MaterialNode, WorkCenterNode, FuelNode). Dagre layout configured as top-to-bottom (TB) for Meta Engitech and left-to-right (LR) for Shakambhari.
+- **Month selection:** Both flows support month/year filtering via dropdown. Meta Engitech filters fuel nodes by monthly consumption. Shakambhari shows the first production occurrence in the selected month.
+
+**Tradeoffs accepted:** Repeated page loads recompute the same graph. Acceptable given the compute is fast and user pattern is "load once, explore." Can add caching later if needed.
+
+**Status:** Active (completed 2026-02-03)
+
+---
+
+### Decision 22: Unified Product Flows Page for Both Companies
+
+**Date:** 2026-02-03
+
+**Choice:** Single `/dashboard/product-flows` page that routes to different APIs based on selected company (`?company=meta_engitech_pune` vs `?company=shakambhari`).
+
+**Alternatives considered:**
+- Separate pages (`/dashboard/product-flows` for Meta, `/dashboard/product-flows-shakambhari` for Shakambhari): Clear separation, but duplicates UI code
+- Single API with company detection: Backend complexity to merge two different data sources
+
+**Reasoning:** The product list UI is fundamentally the same (table with search, pagination, "View Flow" button). The only differences are:
+- **Meta Engitech** shows "Work Centers" column (count of work centers in routing)
+- **Shakambhari** shows "Product Name" column (from production records)
+- Different API endpoints (`/api/product-flows` vs `/api/product-flows-shakambhari`)
+
+Making the page company-aware with conditional rendering keeps the codebase DRY while handling both companies gracefully. Union types handle response format differences.
+
+**Implementation:**
+- Frontend detects `isShakambhari = company === "shakambhari"`
+- Routes to correct API endpoint based on company
+- Table headers and cells adapt based on company
+- Product detail page similarly adapts (shows Shakambhari-specific info like production date, work center, quantity when applicable)
+
+**Status:** Active (completed 2026-02-03)
+
+---
+
+### Decision 23: PostgreSQL JSONB Auto-Parsing Behavior
+
+**Date:** 2026-02-03
+
+**Issue discovered:** In Shakambhari production API route, `JSON.parse(rawRecord.sources)` threw "Unexpected token 'o', '[object Obj...' is not valid JSON".
+
+**Root cause:** PostgreSQL JSONB columns are automatically parsed by the `node-postgres` (pg) driver into JavaScript objects. Attempting to parse an already-parsed object causes the error.
+
+**Learning:** Unlike JSON stored as TEXT (which requires `JSON.parse()`), JSONB is a native PostgreSQL type that the pg driver deserializes automatically. This is a feature — you get JavaScript objects directly from queries without manual parsing.
+
+**Fix:** Removed `JSON.parse()` call, used `rawRecord.sources` directly.
+
+**Why it matters:** This is a subtle difference between storing JSON as TEXT vs JSONB. JSONB has better query performance (can index into fields, use operators like `@>`) AND automatic parsing. TEXT JSON requires manual `JSON.parse()` in application code.
+
+**Status:** Documented
 
 ---
 
 ## Learning Notes
+
+### 2026-02-03 - React Flow + dagre for Manufacturing Flow Diagrams
+
+**Context:** Building the product flow visualization feature to show input materials → work centers → products with fuel consumption nodes.
+
+**What I learned:** React Flow is purpose-built for node-based UIs but doesn't do auto-layout — you need to provide node positions. That's where dagre comes in:
+
+1. **React Flow** provides the rendering layer: pan/zoom, minimap, custom node components, edge routing
+2. **dagre** provides the graph layout algorithm: given nodes + edges, computes (x, y) positions for each node
+
+The integration pattern:
+```typescript
+// 1. Create nodes + edges with position placeholders
+const nodes = [...]; // position: { x: 0, y: 0 }
+const edges = [...];
+
+// 2. Build dagre graph
+const g = new dagre.graphlib.Graph();
+g.setGraph({ rankdir: 'TB', nodesep: 80, ranksep: 100 });
+nodes.forEach(n => g.setNode(n.id, { width: 200, height: 60 }));
+edges.forEach(e => g.setEdge(e.source, e.target));
+
+// 3. Run layout algorithm
+dagre.layout(g);
+
+// 4. Apply computed positions back to nodes
+const positioned = nodes.map(n => ({
+  ...n,
+  position: { x: g.node(n.id).x - 100, y: g.node(n.id).y - 30 }
+}));
+```
+
+Key dagre settings:
+- `rankdir`: 'TB' (top-to-bottom) or 'LR' (left-to-right)
+- `nodesep`: horizontal spacing between nodes in same rank
+- `ranksep`: vertical spacing between ranks (layers)
+
+**Custom node types:** React Flow lets you define custom node components. We created three: MaterialNode (grey, gear icon), WorkCenterNode (orange, shows operation name), FuelNode (blue/yellow, shows fuel type icon). Each renders different content but shares the same data structure.
+
+**React Flow constraints:**
+- `nodesDraggable={false}` — prevent manual repositioning
+- `translateExtent` — constrain panning to graph bounds (calculated from node positions + padding)
+- `fitView` — auto-zoom to show entire graph on load
+- `MiniMap` — thumbnail overview with color-coded nodes by type
+
+**Why it matters:** This pattern (React Flow + dagre) is reusable for any directed graph visualization. Understanding the separation of concerns (React Flow = rendering, dagre = layout) is key. You could swap dagre for elk.js (better for complex graphs) or D3 force simulation (for organic layouts) without changing the React Flow layer.
+
+---
+
+### 2026-01-31 - Emission Intensity: Sum of Intensities vs Pooled Ratio
 
 ### 2026-01-31 - Emission Intensity: Sum of Intensities vs Pooled Ratio
 
