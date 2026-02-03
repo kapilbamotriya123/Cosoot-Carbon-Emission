@@ -132,6 +132,16 @@ export function buildGraph(
     prevWcNodeId = wcNodeId;
   }
 
+  // ── 4. Final product node (end of manufacturing route) ──
+  if (prevWcNodeId) {
+    const finalProductId = `mat-final-${product.productId}`;
+    addNode(finalProductId, "material", {
+      label: product.productId,
+      nodeType: "material",
+    });
+    addEdge(prevWcNodeId, finalProductId);
+  }
+
   return applyDagreLayout(nodes, edges);
 }
 

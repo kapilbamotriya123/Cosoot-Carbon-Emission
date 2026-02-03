@@ -15,17 +15,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FlowDiagram } from "@/components/product-flow/flow-diagram";
-import { COMPANIES } from "@/lib/constants";
-import type { ProductFlowResponse as MetaFlowResponse, AvailableMonth as MetaAvailableMonth } from "@/lib/product-flows/types";
-import type { ProductFlowResponse as ShakFlowResponse, AvailableMonth as ShakAvailableMonth } from "@/lib/product-flows-shakambhari/types";
-
-// Union types to handle both companies
-type AvailableMonth = MetaAvailableMonth | ShakAvailableMonth;
-type ProductFlowResponse = MetaFlowResponse | ShakFlowResponse;
+import type {
+  ProductFlowResponse,
+  AvailableMonth,
+} from "@/lib/product-flows-shakambhari/types";
 
 const MONTH_NAMES = [
-  "", "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 function formatMonthLabel(m: AvailableMonth): string {
@@ -45,19 +53,20 @@ function formatDate(isoDate: string): string {
   });
 }
 
-function ProductFlowContent() {
+function ProductFlowShakambhariContent() {
   const params = useParams<{ productId: string }>();
   const searchParams = useSearchParams();
-  const company = searchParams.get("company") ?? COMPANIES[0].slug;
+  const company = searchParams.get("company") ?? "shakambhari";
   const productId = decodeURIComponent(params.productId);
-  const isShakambhari = company === "shakambhari";
 
   const [data, setData] = useState<ProductFlowResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Month selection — null means "use API default (latest)"
-  const [selectedMonthKey, setSelectedMonthKey] = useState<string | null>(null);
+  const [selectedMonthKey, setSelectedMonthKey] = useState<string | null>(
+    null
+  );
   const [availableMonths, setAvailableMonths] = useState<AvailableMonth[]>([]);
 
   const fetchFlow = useCallback(
@@ -65,12 +74,7 @@ function ProductFlowContent() {
       setLoading(true);
       setError(null);
       try {
-        // Determine which API endpoint to use based on company
-        const baseEndpoint = isShakambhari
-          ? "/api/product-flows-shakambhari"
-          : "/api/product-flows";
-
-        let url = `${baseEndpoint}/${encodeURIComponent(productId)}?companySlug=${company}`;
+        let url = `/api/product-flows-shakambhari/${encodeURIComponent(productId)}?companySlug=${company}`;
         if (yearOverride !== undefined && monthOverride !== undefined) {
           url += `&year=${yearOverride}&month=${monthOverride}`;
         }
@@ -97,7 +101,7 @@ function ProductFlowContent() {
         setLoading(false);
       }
     },
-    [productId, company, isShakambhari]
+    [productId, company]
   );
 
   // Initial fetch (no month specified = API defaults to latest)
@@ -117,13 +121,15 @@ function ProductFlowContent() {
       <div className="mb-4 flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="icon" asChild>
-            <Link href={`/dashboard/product-flows?company=${company}`}>
+            <Link
+              href={`/dashboard/product-flows-shakambhari?company=${company}`}
+            >
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">Product Flow</h1>
-            {isShakambhari && data && "productName" in data ? (
+            <h1 className="text-2xl font-bold">Product Flow - Shakambhari</h1>
+            {data && (
               <div className="space-y-1 mt-1">
                 <p className="font-mono text-sm text-muted-foreground">
                   {data.productId} - {data.productName}
@@ -134,8 +140,6 @@ function ProductFlowContent() {
                   {data.productionUom}
                 </p>
               </div>
-            ) : (
-              <p className="font-mono text-sm text-muted-foreground">{productId}</p>
             )}
           </div>
         </div>
@@ -169,7 +173,10 @@ function ProductFlowContent() {
 
       {/* Loading state */}
       {loading && (
-        <div className="flex items-center justify-center" style={{ height: "70vh" }}>
+        <div
+          className="flex items-center justify-center"
+          style={{ height: "70vh" }}
+        >
           <div className="text-center space-y-3">
             <Skeleton className="mx-auto h-8 w-48" />
             <p className="text-sm text-muted-foreground">
@@ -188,7 +195,7 @@ function ProductFlowContent() {
       {!loading && !error && data && data.nodes.length === 0 && (
         <div className="flex items-center justify-center py-16">
           <p className="text-muted-foreground">
-            No routing data found for this product.
+            No production data found for this product.
           </p>
         </div>
       )}
@@ -196,10 +203,10 @@ function ProductFlowContent() {
   );
 }
 
-export default function ProductFlowPage() {
+export default function ProductFlowShakambhariPage() {
   return (
     <Suspense>
-      <ProductFlowContent />
+      <ProductFlowShakambhariContent />
     </Suspense>
   );
 }

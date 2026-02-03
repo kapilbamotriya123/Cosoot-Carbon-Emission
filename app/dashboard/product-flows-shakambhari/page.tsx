@@ -17,22 +17,16 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { COMPANIES } from "@/lib/constants";
-import type { ProductListItem as MetaProductListItem, ProductListResponse as MetaProductListResponse } from "@/lib/product-flows/types";
-import type { ProductListItem as ShakProductListItem, ProductListResponse as ShakProductListResponse } from "@/lib/product-flows-shakambhari/types";
+import type {
+  ProductListItem,
+  ProductListResponse,
+} from "@/lib/product-flows-shakambhari/types";
 
-// Union type to handle both company formats
-type ProductItem = (MetaProductListItem | ShakProductListItem) & {
-  productId: string;
-  productName?: string;
-  workCenterCount?: number;
-};
-
-function ProductFlowsContent() {
+function ProductFlowsShakambhariContent() {
   const searchParams = useSearchParams();
-  const company = searchParams.get("company") ?? COMPANIES[0].slug;
-  const isShakambhari = company === "shakambhari";
+  const company = searchParams.get("company") ?? "shakambhari";
 
-  const [allProducts, setAllProducts] = useState<ProductItem[]>([]);
+  const [allProducts, setAllProducts] = useState<ProductListItem[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -55,26 +49,20 @@ function ProductFlowsContent() {
       setLoading(true);
       setError(null);
       try {
-        // Determine which API endpoint to use based on company
-        const isShakambhari = company === "shakambhari";
-        const baseEndpoint = isShakambhari
-          ? "/api/product-flows-shakambhari"
-          : "/api/product-flows";
-
         // If searching, fetch all products; otherwise paginate
         const fetchAll = searchQuery.trim().length > 0;
         const url = fetchAll
-          ? `${baseEndpoint}?companySlug=${company}&page=1&pageSize=10000`
-          : `${baseEndpoint}?companySlug=${company}&page=${page}&pageSize=${pageSize}`;
+          ? `/api/product-flows-shakambhari?companySlug=${company}&page=1&pageSize=10000`
+          : `/api/product-flows-shakambhari?companySlug=${company}&page=${page}&pageSize=${pageSize}`;
 
         const res = await fetch(url);
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
           throw new Error(body.error ?? `HTTP ${res.status}`);
         }
-        const data: MetaProductListResponse | ShakProductListResponse = await res.json();
+        const data: ProductListResponse = await res.json();
         if (!cancelled) {
-          setAllProducts(data.products as ProductItem[]);
+          setAllProducts(data.products);
           setTotal(data.total);
         }
       } catch (err) {
@@ -98,8 +86,10 @@ function ProductFlowsContent() {
       return allProducts;
     }
     const query = searchQuery.toLowerCase().trim();
-    return allProducts.filter((p) =>
-      p.productId.toLowerCase().includes(query)
+    return allProducts.filter(
+      (p) =>
+        p.productId.toLowerCase().includes(query) ||
+        p.productName.toLowerCase().includes(query)
     );
   }, [allProducts, searchQuery]);
 
@@ -113,23 +103,21 @@ function ProductFlowsContent() {
     return allProducts;
   }, [searchQuery, filteredProducts, allProducts]);
 
-  const totalPages = searchQuery.trim()
-    ? 1
-    : Math.ceil(total / pageSize);
+  const totalPages = searchQuery.trim() ? 1 : Math.ceil(total / pageSize);
 
-  const displayedTotal = searchQuery.trim()
-    ? filteredProducts.length
-    : total;
+  const displayedTotal = searchQuery.trim() ? filteredProducts.length : total;
 
   return (
     <div>
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold mb-1">Product Flows</h1>
+          <h1 className="text-2xl font-bold mb-1">
+            Product Flows - Shakambhari
+          </h1>
           <p className="text-sm text-muted-foreground">
             {displayedTotal > 0
-              ? `${displayedTotal} product${displayedTotal === 1 ? "" : "s"} found. Click "View Flow" to see the manufacturing route.`
-              : "Select a company to view product flows."}
+              ? `${displayedTotal} product${displayedTotal === 1 ? "" : "s"} found. Click "View Flow" to see the manufacturing flow.`
+              : "No production data found."}
           </p>
         </div>
       </div>
@@ -138,7 +126,7 @@ function ProductFlowsContent() {
       <div className="mb-4 relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search by product ID..."
+          placeholder="Search by product ID or name..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-9 pr-9"
@@ -165,13 +153,7 @@ function ProductFlowsContent() {
             <TableRow>
               <TableHead className="w-[50px]">#</TableHead>
               <TableHead>Product ID</TableHead>
-              {isShakambhari ? (
-                <TableHead>Product Name</TableHead>
-              ) : (
-                <TableHead className="w-[150px] text-center">
-                  Work Centers
-                </TableHead>
-              )}
+              <TableHead>Product Name</TableHead>
               <TableHead className="w-[120px] text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -183,10 +165,10 @@ function ProductFlowsContent() {
                       <Skeleton className="h-4 w-8" />
                     </TableCell>
                     <TableCell>
-                      <Skeleton className="h-4 w-48" />
+                      <Skeleton className="h-4 w-32" />
                     </TableCell>
-                    <TableCell className={isShakambhari ? "" : "text-center"}>
-                      <Skeleton className={isShakambhari ? "h-4 w-48" : "mx-auto h-4 w-8"} />
+                    <TableCell>
+                      <Skeleton className="h-4 w-48" />
                     </TableCell>
                     <TableCell className="text-right">
                       <Skeleton className="ml-auto h-8 w-20" />
@@ -196,22 +178,18 @@ function ProductFlowsContent() {
               : paginatedProducts.map((p, i) => (
                   <TableRow key={p.productId}>
                     <TableCell className="text-muted-foreground">
-                      {searchQuery.trim() ? i + 1 : (page - 1) * pageSize + i + 1}
+                      {searchQuery.trim()
+                        ? i + 1
+                        : (page - 1) * pageSize + i + 1}
                     </TableCell>
                     <TableCell className="font-mono text-sm">
                       {p.productId}
                     </TableCell>
-                    {isShakambhari ? (
-                      <TableCell>{p.productName}</TableCell>
-                    ) : (
-                      <TableCell className="text-center">
-                        {p.workCenterCount}
-                      </TableCell>
-                    )}
+                    <TableCell>{p.productName}</TableCell>
                     <TableCell className="text-right">
                       <Button variant="outline" size="sm" asChild>
                         <Link
-                          href={`/dashboard/product-flows/${encodeURIComponent(p.productId)}?company=${company}`}
+                          href={`/dashboard/product-flows-shakambhari/${encodeURIComponent(p.productId)}?company=${company}`}
                         >
                           View Flow
                         </Link>
@@ -221,10 +199,13 @@ function ProductFlowsContent() {
                 ))}
             {!loading && paginatedProducts.length === 0 && !error && (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
+                <TableCell
+                  colSpan={4}
+                  className="text-center py-8 text-muted-foreground"
+                >
                   {searchQuery.trim()
                     ? `No products found matching "${searchQuery}"`
-                    : "No products found. Upload routing data first."}
+                    : "No products found. Upload production data first."}
                 </TableCell>
               </TableRow>
             )}
@@ -269,10 +250,10 @@ function ProductFlowsContent() {
   );
 }
 
-export default function ProductFlowsPage() {
+export default function ProductFlowsShakambhariPage() {
   return (
     <Suspense>
-      <ProductFlowsContent />
+      <ProductFlowsShakambhariContent />
     </Suspense>
   );
 }
