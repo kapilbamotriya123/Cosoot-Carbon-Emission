@@ -46,8 +46,8 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
-  const pageSize = 10;
 
   useEffect(() => {
     async function fetchData() {
@@ -85,7 +85,7 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
     }
 
     fetchData();
-  }, [company, year, period, page]);
+  }, [company, year, period, page, pageSize]);
 
   const toggleRow = (productId: string) => {
     const newExpanded = new Set(expandedRows);
@@ -150,11 +150,29 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
         </ResponsiveContainer>
 
         {/* Pagination Controls */}
-        {data.pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between mt-6 pt-4 border-t">
+        <div className="flex items-center justify-between mt-6 pt-4 border-t">
+          <div className="flex items-center gap-4">
             <div className="text-sm text-muted-foreground">
               Showing {(page - 1) * pageSize + 1} to {Math.min(page * pageSize, data.pagination.totalItems)} of {data.pagination.totalItems} products
             </div>
+            <div className="flex items-center gap-1.5">
+              {[10, 20, 30].map((size) => (
+                <Button
+                  key={size}
+                  variant={pageSize === size ? "default" : "outline"}
+                  size="sm"
+                  className="h-7 w-9 text-xs"
+                  onClick={() => {
+                    setPageSize(size);
+                    setPage(1);
+                  }}
+                >
+                  {size}
+                </Button>
+              ))}
+            </div>
+          </div>
+          {data.pagination.totalPages > 1 && (
             <div className="flex gap-2">
               <Button
                 variant="outline"
@@ -192,8 +210,8 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
                 <ChevronsRight className="h-4 w-4" />
               </Button>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </Card>
 
       {/* Table */}
@@ -251,17 +269,17 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
                     </TableRow>
                     {/* Expanded row showing breakdown */}
                     {isExpanded && (
-                      <TableRow className="bg-muted/30">
+                      <TableRow className="bg-muted/30 border-b">
                         <TableCell colSpan={row.productName ? 6 : 5}>
-                          <div className="py-2 px-4 space-y-2">
-                            <div className="grid grid-cols-2 gap-4 text-sm">
-                              <div>
-                                <span className="text-muted-foreground">Direct Emission (Scope 1):</span>
-                                <span className="ml-2 font-semibold">{row.directEmission.toFixed(2)} tCO₂e/t</span>
+                          <div className="py-3 px-4">
+                            <div className="flex flex-col gap-2 text-sm max-w-xs">
+                              <div className="flex items-center justify-between rounded-md bg-orange-50 dark:bg-orange-950/30 px-3 py-2 border border-orange-200 dark:border-orange-800">
+                                <span className="text-muted-foreground">Scope 1 (Direct)</span>
+                                <span className="font-semibold text-orange-700 dark:text-orange-400">{row.directEmission.toFixed(2)} tCO₂e/t</span>
                               </div>
-                              <div>
-                                <span className="text-muted-foreground">Indirect Emission (Scope 2):</span>
-                                <span className="ml-2 font-semibold">{row.indirectEmission.toFixed(2)} tCO₂e/t</span>
+                              <div className="flex items-center justify-between rounded-md bg-blue-50 dark:bg-blue-950/30 px-3 py-2 border border-blue-200 dark:border-blue-800">
+                                <span className="text-muted-foreground">Scope 2 (Indirect)</span>
+                                <span className="font-semibold text-blue-700 dark:text-blue-400">{row.indirectEmission.toFixed(2)} tCO₂e/t</span>
                               </div>
                             </div>
                           </div>
