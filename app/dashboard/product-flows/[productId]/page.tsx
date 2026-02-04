@@ -55,6 +55,7 @@ function ProductFlowContent() {
   const [data, setData] = useState<ProductFlowResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   // Month selection — null means "use API default (latest)"
   const [selectedMonthKey, setSelectedMonthKey] = useState<string | null>(null);
@@ -140,24 +141,35 @@ function ProductFlowContent() {
           </div>
         </div>
 
-        {/* Month/Year selector */}
-        {availableMonths.length > 0 && (
-          <Select
-            value={selectedMonthKey ?? undefined}
-            onValueChange={handleMonthChange}
+        <div className="flex items-center gap-3">
+          {/* Toggle details button */}
+          <Button
+            variant={showDetails ? "default" : "outline"}
+            size="sm"
+            onClick={() => setShowDetails(!showDetails)}
           >
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select month" />
-            </SelectTrigger>
-            <SelectContent>
-              {availableMonths.map((m) => (
-                <SelectItem key={monthKey(m)} value={monthKey(m)}>
-                  {formatMonthLabel(m)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+            {showDetails ? "Hide Details" : "Show Details"}
+          </Button>
+
+          {/* Month/Year selector */}
+          {availableMonths.length > 0 && (
+            <Select
+              value={selectedMonthKey ?? undefined}
+              onValueChange={handleMonthChange}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select month" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableMonths.map((m) => (
+                  <SelectItem key={monthKey(m)} value={monthKey(m)}>
+                    {formatMonthLabel(m)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </div>
 
       {/* Error state */}
@@ -181,7 +193,11 @@ function ProductFlowContent() {
 
       {/* Flow diagram */}
       {!loading && data && (
-        <FlowDiagram nodes={data.nodes} edges={data.edges} />
+        <FlowDiagram
+          nodes={data.nodes}
+          edges={data.edges}
+          showDetails={showDetails}
+        />
       )}
 
       {/* Empty state */}

@@ -71,6 +71,10 @@ export function buildGraph(record: ProductionRecord): {
       label: inp.compName,
       nodeType: nodeType,
       ...(nodeType === "fuel" && { fuelKind: "electricity" }),
+      // Add consumption and emission data
+      consumption: inp.consumedQty,
+      consumptionUnit: inp.compUom,
+      emission: inp.co2e,
     });
   });
 
@@ -90,9 +94,14 @@ export function buildGraph(record: ProductionRecord): {
 
   // ── 3. Main product node (right side, top) ──
   const mainProductId = `product-${record.product_id}`;
+  // Find main product in sources to get emission data
+  const mainProductSource = sources.find((s) => s.compMat === record.product_id);
   addNode(mainProductId, "material", {
     label: record.product_name,
     nodeType: "material",
+    consumption: record.production_qty,
+    consumptionUnit: record.production_uom,
+    emission: mainProductSource?.co2e,
   });
   addEdge(wcNodeId, mainProductId);
 
@@ -102,6 +111,9 @@ export function buildGraph(record: ProductionRecord): {
     addNode(byproductId, "material", {
       label: bp.compName,
       nodeType: "material",
+      consumption: bp.byproductQty,
+      consumptionUnit: bp.compUom,
+      emission: bp.co2e,
     });
     addEdge(wcNodeId, byproductId);
   });

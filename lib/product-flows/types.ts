@@ -6,6 +6,9 @@ export type FuelKind = "electricity" | "lpg" | "diesel";
 export interface MaterialNodeData {
   label: string; // material ID like "SLS3530142501"
   nodeType: "material";
+  consumption?: number; // Quantity consumed or produced
+  consumptionUnit?: string; // Unit of measurement (TO, kg, etc.)
+  emission?: number; // Calculated emission in tCO2e
   [key: string]: unknown;
 }
 
@@ -20,6 +23,9 @@ export interface FuelNodeData {
   label: string; // "Electricity", "LPG", or "Diesel"
   fuelKind: FuelKind;
   nodeType: "fuel";
+  consumption?: number; // Actual consumption quantity
+  consumptionUnit?: string; // Unit of measurement (kWh, kg, liters)
+  emission?: number; // Calculated emission in tCO2e
   [key: string]: unknown;
 }
 
@@ -71,10 +77,10 @@ export interface ProductFlowResponse {
 
 // ── Fuel profile (aggregated across all months) ──────────────────
 
-export interface FuelFlags {
-  electricity: boolean;
-  lpg: boolean;
-  diesel: boolean;
+export interface FuelConsumption {
+  electricity?: { value: number; unit: string };
+  lpg?: { value: number; unit: string };
+  diesel?: { value: number; unit: string };
 }
 
-export type FuelProfile = Map<string, FuelFlags>;
+export type FuelProfile = Map<string, FuelConsumption>;

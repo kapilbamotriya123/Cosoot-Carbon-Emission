@@ -62,6 +62,7 @@ function ProductFlowShakambhariContent() {
   const [data, setData] = useState<ProductFlowResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
   // Month selection — null means "use API default (latest)"
   const [selectedMonthKey, setSelectedMonthKey] = useState<string | null>(
@@ -135,8 +136,14 @@ function ProductFlowShakambhariContent() {
                   {data.productId} - {data.productName}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  Work Center: {data.workCenter} | Production Date:{" "}
-                  {formatDate(data.date)} | Quantity: {data.productionQty}{" "}
+                  Work Center: {data.workCenter} | First Production Date:{" "}
+                  {formatDate(data.date)}
+                  {data.totalRecords && data.totalRecords > 1 && (
+                    <> | Total from {data.totalRecords} production runs</>
+                  )}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Total Production: {data.productionQty.toFixed(2)}{" "}
                   {data.productionUom}
                 </p>
               </div>
@@ -144,8 +151,18 @@ function ProductFlowShakambhariContent() {
           </div>
         </div>
 
-        {/* Month/Year selector */}
-        {availableMonths.length > 0 && (
+        <div className="flex items-center gap-3">
+          {/* Toggle details button */}
+          <Button
+            variant={showDetails ? "default" : "outline"}
+            size="sm"
+            onClick={() => setShowDetails(!showDetails)}
+          >
+            {showDetails ? "Hide Details" : "Show Details"}
+          </Button>
+
+          {/* Month/Year selector */}
+          {availableMonths.length > 0 && (
           <Select
             value={selectedMonthKey ?? undefined}
             onValueChange={handleMonthChange}
@@ -161,7 +178,8 @@ function ProductFlowShakambhariContent() {
               ))}
             </SelectContent>
           </Select>
-        )}
+          )}
+        </div>
       </div>
 
       {/* Error state */}
@@ -188,7 +206,11 @@ function ProductFlowShakambhariContent() {
 
       {/* Flow diagram */}
       {!loading && data && (
-        <FlowDiagram nodes={data.nodes} edges={data.edges} />
+        <FlowDiagram
+          nodes={data.nodes}
+          edges={data.edges}
+          showDetails={showDetails}
+        />
       )}
 
       {/* Empty state */}

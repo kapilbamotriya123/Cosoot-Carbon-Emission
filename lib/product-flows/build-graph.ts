@@ -1,12 +1,19 @@
 import dagre from "dagre";
 import type { Product } from "@/lib/parsers/types";
-import type { FlowNode, FlowEdge, FuelProfile, FlowNodeType } from "./types";
+import type { FlowNode, FlowEdge, FuelProfile, FlowNodeType, FuelConsumption } from "./types";
 
 // Node dimensions used for dagre layout calculation
 const NODE_SIZES: Record<FlowNodeType, { width: number; height: number }> = {
   material: { width: 200, height: 50 },
   workCenter: { width: 240, height: 60 },
   fuel: { width: 150, height: 50 },
+};
+
+// Default emission factors for fuel consumption (tCO2e per unit)
+const DEFAULT_EMISSION_FACTORS = {
+  electricity: 0.0007, // tCO2e per kWh (India grid average)
+  lpg: 0.00299, // tCO2e per kg
+  diesel: 0.00274, // tCO2e per liter
 };
 
 /**
@@ -33,7 +40,11 @@ const NODE_SIZES: Record<FlowNodeType, { width: number; height: number }> = {
  */
 export function buildGraph(
   product: Product,
-  fuelProfile: FuelProfile
+  fuelProfile: FuelProfile,
+  emissionIntensities?: Map<
+    string,
+    { electricity: number; lpg: number; diesel: number }
+  >
 ): { nodes: FlowNode[]; edges: FlowEdge[] } {
   const nodes: FlowNode[] = [];
   const edges: FlowEdge[] = [];
@@ -99,31 +110,51 @@ export function buildGraph(
 
     // ── 3. Fuel nodes (from selected month's fuel profile) ──
     const fuels = fuelProfile.get(row.workCenter);
+    const intensities = emissionIntensities?.get(row.workCenter);
+
     if (fuels) {
       if (fuels.electricity) {
         const fuelId = `fuel-${i}-${row.workCenter}-elec`;
+        const emission =
+          fuels.electricity.value *
+          (intensities?.electricity || DEFAULT_EMISSION_FACTORS.electricity);
         addNode(fuelId, "fuel", {
           label: "Electricity",
           fuelKind: "electricity",
           nodeType: "fuel",
+          consumption: fuels.electricity.value,
+          consumptionUnit: fuels.electricity.unit,
+          emission,
         });
         addEdge(wcNodeId, fuelId);
       }
       if (fuels.lpg) {
         const fuelId = `fuel-${i}-${row.workCenter}-lpg`;
+        const emission =
+          fuels.lpg.value *
+          (intensities?.lpg || DEFAULT_EMISSION_FACTORS.lpg);
         addNode(fuelId, "fuel", {
           label: "LPG",
           fuelKind: "lpg",
           nodeType: "fuel",
+          consumption: fuels.lpg.value,
+          consumptionUnit: fuels.lpg.unit,
+          emission,
         });
         addEdge(wcNodeId, fuelId);
       }
       if (fuels.diesel) {
         const fuelId = `fuel-${i}-${row.workCenter}-diesel`;
+        const emission =
+          fuels.diesel.value *
+          (intensities?.diesel || DEFAULT_EMISSION_FACTORS.diesel);
         addNode(fuelId, "fuel", {
           label: "Diesel",
           fuelKind: "diesel",
           nodeType: "fuel",
+          consumption: fuels.diesel.value,
+          consumptionUnit: fuels.diesel.unit,
+          emission,
         });
         addEdge(wcNodeId, fuelId);
       }
@@ -192,40 +223,50 @@ function applyDagreLayout(
 
 interface ConsumptionWorkCenter {
   totalEnergyKWh?: number | null;
+  uomElectEnergy?: string;
   lpgConsumptionKg?: number | null;
+  uomLPG?: string;
   dieselConsumptionLtrs?: number | null;
+  uomDiesel?: string;
   [key: string]: unknown;
 }
 
 /**
- * Build fuel flags for each work center from consumption data.
+ * Build fuel consumption data for each work center from consumption data.
  * Typically called with a single month's data.
- * A fuel is flagged true if the work center has non-null, > 0 usage.
+ * Returns actual consumption values with their units.
  */
 export function buildFuelProfile(
   consumptionRows: Record<string, ConsumptionWorkCenter>[]
 ): FuelProfile {
-  const profile: FuelProfile = new Map();
+  const profile = new Map<string, FuelConsumption>();
 
   for (const monthData of consumptionRows) {
     for (const [wcCode, wc] of Object.entries(monthData)) {
-      const existing = profile.get(wcCode) ?? {
-        electricity: false,
-        lpg: false,
-        diesel: false,
-      };
+      const consumption: FuelConsumption = {};
 
       if (wc.totalEnergyKWh != null && wc.totalEnergyKWh > 0) {
-        existing.electricity = true;
+        consumption.electricity = {
+          value: wc.totalEnergyKWh,
+          unit: wc.uomElectEnergy || "kWh",
+        };
       }
       if (wc.lpgConsumptionKg != null && wc.lpgConsumptionKg > 0) {
-        existing.lpg = true;
+        consumption.lpg = {
+          value: wc.lpgConsumptionKg,
+          unit: wc.uomLPG || "kg",
+        };
       }
       if (wc.dieselConsumptionLtrs != null && wc.dieselConsumptionLtrs > 0) {
-        existing.diesel = true;
+        consumption.diesel = {
+          value: wc.dieselConsumptionLtrs,
+          unit: wc.uomDiesel || "liters",
+        };
       }
 
-      profile.set(wcCode, existing);
+      if (Object.keys(consumption).length > 0) {
+        profile.set(wcCode, consumption);
+      }
     }
   }
 

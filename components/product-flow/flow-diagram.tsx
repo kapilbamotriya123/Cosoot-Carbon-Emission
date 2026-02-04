@@ -26,9 +26,25 @@ const nodeTypes = {
 interface FlowDiagramProps {
   nodes: FlowNode[];
   edges: FlowEdge[];
+  showDetails?: boolean;
 }
 
-function FlowDiagramInner({ nodes, edges }: FlowDiagramProps) {
+function FlowDiagramInner({ nodes, edges, showDetails = false }: FlowDiagramProps) {
+  // Add showDetails to all fuel and material nodes
+  const nodesWithDetails = useMemo(() => {
+    return nodes.map((node) => {
+      if (node.type === "fuel" || node.type === "material") {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            showDetails,
+          },
+        };
+      }
+      return node;
+    });
+  }, [nodes, showDetails]);
   const { getNodes } = useReactFlow();
   const nodesInitialized = useNodesInitialized();
 
@@ -67,7 +83,7 @@ function FlowDiagramInner({ nodes, edges }: FlowDiagramProps) {
   return (
     <div style={{ width: "100%", height: "70vh" }}>
       <ReactFlow
-        nodes={nodes}
+        nodes={nodesWithDetails}
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
@@ -98,10 +114,10 @@ function FlowDiagramInner({ nodes, edges }: FlowDiagramProps) {
   );
 }
 
-export function FlowDiagram({ nodes, edges }: FlowDiagramProps) {
+export function FlowDiagram({ nodes, edges, showDetails }: FlowDiagramProps) {
   return (
     <ReactFlowProvider>
-      <FlowDiagramInner nodes={nodes} edges={edges} />
+      <FlowDiagramInner nodes={nodes} edges={edges} showDetails={showDetails} />
     </ReactFlowProvider>
   );
 }

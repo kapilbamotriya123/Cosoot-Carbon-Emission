@@ -78,20 +78,47 @@ export async function GET(
       );
     }
 
-    // Fetch consumption for the selected month only
+    // Fetch consumption and emission intensities for the selected month
     let fuelProfile = new Map();
+    const emissionIntensities = new Map<
+      string,
+      { electricity: number; lpg: number; diesel: number }
+    >();
+
     if (selectedYear !== null && selectedMonth !== null) {
-      const consumptionResult = await pool.query(
-        `SELECT data FROM consumption_data WHERE company_slug = $1 AND year = $2 AND month = $3`,
-        [companySlug, selectedYear, selectedMonth]
-      );
+      const [consumptionResult, intensitiesResult] = await Promise.all([
+        pool.query(
+          `SELECT data FROM consumption_data WHERE company_slug = $1 AND year = $2 AND month = $3`,
+          [companySlug, selectedYear, selectedMonth]
+        ),
+        pool.query(
+          `SELECT work_center, electricity_intensity, lpg_intensity, diesel_intensity
+           FROM emission_by_process_meta_engitech
+           WHERE company_slug = $1 AND year = $2 AND month = $3`,
+          [companySlug, selectedYear, selectedMonth]
+        ),
+      ]);
+
       if (consumptionResult.rows.length > 0) {
         fuelProfile = buildFuelProfile([consumptionResult.rows[0].data]);
+      }
+
+      // Build emission intensities map (in tCO2e per unit)
+      for (const row of intensitiesResult.rows) {
+        emissionIntensities.set(row.work_center, {
+          electricity: parseFloat(row.electricity_intensity) || 0,
+          lpg: parseFloat(row.lpg_intensity) || 0,
+          diesel: parseFloat(row.diesel_intensity) || 0,
+        });
       }
     }
 
     // Generate nodes + edges with dagre layout
-    const { nodes, edges } = buildGraph(product, fuelProfile);
+    const { nodes, edges } = buildGraph(
+      product,
+      fuelProfile,
+      emissionIntensities
+    );
 
     const response: ProductFlowResponse = {
       productId,

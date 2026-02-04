@@ -23,6 +23,7 @@ export interface SourceMaterial {
   consumedVal: number;
   byproductQty: number;
   byproductVal: number;
+  co2e?: number; // Emission data (tCO2e) - added from emission_results_shakambhari
 }
 
 // ── Production record from database ──
@@ -70,8 +71,9 @@ export interface ProductFlowResponse {
   productName: string;
   workCenter: string;
   date: string; // ISO date string of first occurrence
-  productionQty: number;
+  productionQty: number; // Total aggregated production quantity
   productionUom: string;
+  totalRecords?: number; // Number of production runs aggregated
   nodes: FlowNode[];
   edges: FlowEdge[];
   availableMonths: AvailableMonth[];

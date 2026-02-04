@@ -5,12 +5,13 @@ import { buildGraph } from "@/lib/product-flows-shakambhari/build-graph";
 import type {
   ProductFlowResponse,
   ProductionRecord,
+  SourceMaterial,
 } from "@/lib/product-flows-shakambhari/types";
 
 // GET /api/product-flows-shakambhari/[productId]?companySlug=shakambhari&year=2025&month=2
 //
 // Returns React Flow nodes + edges for a single product's flow.
-// Shows data from the FIRST occurrence (earliest date) of the product in the selected month.
+// Aggregates ALL occurrences of the product in the selected month.
 // Structure: Input materials → Work center → Main product + Byproducts
 
 export async function GET(
@@ -59,19 +60,28 @@ export async function GET(
       selectedMonth = availableMonths[0].month;
     }
 
-    // Fetch the FIRST occurrence (earliest date) of this product in the selected month
-    const recordResult = await pool.query(
-      `
-      SELECT *
-      FROM production_data_shakambhari
-      WHERE company_slug = $1 AND product_id = $2 AND year = $3 AND month = $4
-      ORDER BY date ASC, work_center ASC
-      LIMIT 1
-      `,
-      [companySlug, productId, selectedYear, selectedMonth]
-    );
+    // Fetch ALL occurrences of this product and emission data in the selected month
+    const [recordsResult, emissionsResult] = await Promise.all([
+      pool.query(
+        `
+        SELECT *
+        FROM production_data_shakambhari
+        WHERE company_slug = $1 AND product_id = $2 AND year = $3 AND month = $4
+        ORDER BY date ASC, work_center ASC
+        `,
+        [companySlug, productId, selectedYear, selectedMonth]
+      ),
+      pool.query(
+        `
+        SELECT source_breakdowns
+        FROM emission_results_shakambhari
+        WHERE company_slug = $1 AND product_id = $2 AND year = $3 AND month = $4
+        `,
+        [companySlug, productId, selectedYear, selectedMonth]
+      ),
+    ]);
 
-    if (recordResult.rows.length === 0) {
+    if (recordsResult.rows.length === 0) {
       return NextResponse.json(
         {
           error: `No production data found for ${productId} in ${selectedYear}-${selectedMonth}`,
@@ -80,13 +90,65 @@ export async function GET(
       );
     }
 
-    const rawRecord = recordResult.rows[0];
+    // Get the first record for basic info (earliest date)
+    const firstRecord = recordsResult.rows[0];
+    const totalRecords = recordsResult.rows.length;
 
-    // PostgreSQL JSONB is automatically parsed by node-postgres
-    // No need to JSON.parse - it's already an object
+    // Build emission map from emission_results_shakambhari
+    const emissionMap = new Map<string, number>();
+    for (const emissionRow of emissionsResult.rows) {
+      const breakdowns = emissionRow.source_breakdowns as Array<{
+        compMat: string;
+        co2e: number;
+      }>;
+      for (const breakdown of breakdowns) {
+        const existing = emissionMap.get(breakdown.compMat) || 0;
+        emissionMap.set(breakdown.compMat, existing + breakdown.co2e);
+      }
+    }
+
+    // Aggregate all production quantities and source materials
+    let totalProductionQty = 0;
+    const aggregatedSources = new Map<
+      string,
+      {
+        compMat: string;
+        compName: string;
+        compUom: string;
+        consumedQty: number;
+        consumedVal: number;
+        byproductQty: number;
+        byproductVal: number;
+        co2e?: number;
+      }
+    >();
+
+    for (const row of recordsResult.rows) {
+      totalProductionQty += parseFloat(row.production_qty) || 0;
+
+      // Aggregate sources
+      const sources = row.sources as SourceMaterial[];
+      for (const src of sources) {
+        const existing = aggregatedSources.get(src.compMat);
+        if (existing) {
+          existing.consumedQty += src.consumedQty;
+          existing.consumedVal += src.consumedVal;
+          existing.byproductQty += src.byproductQty;
+          existing.byproductVal += src.byproductVal;
+        } else {
+          aggregatedSources.set(src.compMat, {
+            ...src,
+            co2e: emissionMap.get(src.compMat),
+          });
+        }
+      }
+    }
+
+    // Build aggregated production record
     const productionRecord: ProductionRecord = {
-      ...rawRecord,
-      sources: rawRecord.sources, // Already parsed by pg driver
+      ...firstRecord,
+      production_qty: totalProductionQty,
+      sources: Array.from(aggregatedSources.values()),
     };
 
     // Generate nodes + edges with dagre layout
@@ -99,6 +161,7 @@ export async function GET(
       date: productionRecord.date,
       productionQty: productionRecord.production_qty,
       productionUom: productionRecord.production_uom,
+      totalRecords, // Number of production runs aggregated
       nodes,
       edges,
       availableMonths,
