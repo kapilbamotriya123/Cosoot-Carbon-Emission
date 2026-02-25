@@ -126,7 +126,7 @@ export function EmissionsByScope({ company, year, period }: EmissionsByScopeProp
             <XAxis dataKey="name" />
             <YAxis label={{ value: "Emissions (tCO₂e)", angle: -90, position: "insideLeft" }} />
             <Tooltip
-              formatter={(value: number) => [`${value.toFixed(2)} tCO₂e`, "Emissions"]}
+              formatter={(value) => [`${Number(value).toFixed(2)} tCO₂e`, "Emissions"]}
             />
             <Bar dataKey="emissions" fill="#8884d8" />
           </BarChart>

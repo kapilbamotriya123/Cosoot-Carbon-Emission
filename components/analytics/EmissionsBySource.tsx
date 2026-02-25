@@ -10,7 +10,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, TooltipProps } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import type { Payload } from "recharts/types/component/DefaultTooltipContent";
 import { Loader2 } from "lucide-react";
 
 interface SourceDetail {
@@ -148,7 +149,7 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
   };
 
   // Custom Tooltip Component
-  const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Payload<number, string>[]; label?: string }) => {
     if (!active || !payload?.length) return null;
 
     const validPayload = payload.filter(p => p.value && p.value > 0);
@@ -161,13 +162,13 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
         <h3 className="font-semibold mb-2 text-sm">{label}</h3>
         <div className="space-y-1">
           {validPayload.map((entry) => (
-            <div key={entry.dataKey} className="flex justify-between gap-6 text-sm">
+            <div key={String(entry.dataKey)} className="flex justify-between gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <div
                   className="w-3 h-3 rounded-sm"
                   style={{ backgroundColor: entry.fill || entry.color }}
                 />
-                <span>{entry.dataKey}:</span>
+                <span>{String(entry.dataKey)}:</span>
               </div>
               <span className="font-mono font-semibold">
                 {(entry.value || 0).toFixed(2)} tCO₂e
@@ -224,7 +225,7 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
               <>
                 <Bar dataKey="value" fill="#f97316" />
                 <Tooltip
-                  formatter={(value: number) => [`${value.toFixed(2)} tCO₂e`, "Emissions"]}
+                  formatter={(value) => [`${Number(value).toFixed(2)} tCO₂e`, "Emissions"]}
                 />
               </>
             )}

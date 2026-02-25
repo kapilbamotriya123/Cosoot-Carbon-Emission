@@ -143,7 +143,7 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
             <XAxis dataKey="name" height={60} />
             <YAxis label={{ value: "Emission Intensity (tCO₂e/t)", angle: -90, position: "insideLeft" }} />
             <Tooltip
-              formatter={(value: number) => [`${value.toFixed(2)} tCO₂e/t`, "Intensity"]}
+              formatter={(value) => [`${Number(value).toFixed(2)} tCO₂e/t`, "Intensity"]}
             />
             <Bar dataKey="emissions" fill="#f97316" />
           </BarChart>

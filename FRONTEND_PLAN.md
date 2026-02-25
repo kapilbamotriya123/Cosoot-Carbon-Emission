@@ -34,8 +34,7 @@ All dashboard routes under `/dashboard/`:
 /dashboard/emissions/summary        → Aggregated summary with charts
 /dashboard/product-flow             → Node-based product flow visualization
 /dashboard/upload-routing           → (existing) Admin only
-/dashboard/upload-consumption       → (existing) Admin only
-/dashboard/upload-production        → (existing) Admin only
+ /dashboard/upload-production        → (existing) Admin only
 ```
 
 ### Company Context
