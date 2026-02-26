@@ -10,8 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import type { Payload } from "recharts/types/component/DefaultTooltipContent";
+import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
 import { Loader2 } from "lucide-react";
 
 interface SourceDetail {
@@ -102,8 +101,8 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
     );
   }
 
-  // Color palettes
-  const COLORS = [
+  // Color palettes for treemap
+  const MATERIAL_COLORS = [
     '#f97316', // orange
     '#ef4444', // red
     '#8b5cf6', // purple
@@ -113,32 +112,52 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
     '#6366f1', // indigo
     '#94a3b8', // slate (for "Others")
   ];
-  const ENERGY_COLOR = '#eab308'; // yellow
+  const ENERGY_COLOR = '#3b82f6'; // blue
 
   // Check if we have breakdown data
   const hasBreakdown = data.breakdown && (data.breakdown.materialsAndFuels.length > 0 || data.breakdown.energy.length > 0);
 
-  // Prepare chart data - stacked bars if breakdown available, simple bars otherwise
-  const chartData = hasBreakdown ? [
-    {
-      category: "Materials & Fuels",
-      ...Object.fromEntries(
-        data.breakdown.materialsAndFuels.map(s => [s.compName, s.co2e])
-      ),
-    },
-    {
-      category: "Energy (Electricity)",
-      ...Object.fromEntries(
-        data.breakdown.energy.map(s => [s.compName, s.co2e])
-      ),
-    },
-  ] : [
-    { category: "Materials & Fuels", value: data.current.materialsAndFuels },
-    { category: "Energy (Electricity)", value: data.current.energy },
-  ];
-
   // Calculate total
   const totalEmissions = data.current.materialsAndFuels + data.current.energy;
+
+  // Prepare treemap data
+  const treemapData: Array<{ name: string; value: number; fill: string }> = [];
+
+  if (hasBreakdown) {
+    data.breakdown.materialsAndFuels.forEach((source, idx) => {
+      if (source.co2e > 0) {
+        treemapData.push({
+          name: source.compName,
+          value: source.co2e,
+          fill: MATERIAL_COLORS[idx % MATERIAL_COLORS.length],
+        });
+      }
+    });
+    data.breakdown.energy.forEach((source) => {
+      if (source.co2e > 0) {
+        treemapData.push({
+          name: source.compName,
+          value: source.co2e,
+          fill: ENERGY_COLOR,
+        });
+      }
+    });
+  } else {
+    if (data.current.materialsAndFuels > 0) {
+      treemapData.push({
+        name: "Materials & Fuels",
+        value: data.current.materialsAndFuels,
+        fill: MATERIAL_COLORS[0],
+      });
+    }
+    if (data.current.energy > 0) {
+      treemapData.push({
+        name: "Energy (Electricity)",
+        value: data.current.energy,
+        fill: ENERGY_COLOR,
+      });
+    }
+  }
 
   // Format YoY/QoQ change
   const comparisonLabel = period === 'FULL_YEAR' ? 'YOY' : 'QoQ';
@@ -148,88 +167,91 @@ export function EmissionsBySource({ company, year, period }: EmissionsBySourcePr
     return `${sign}${change.percent}% (${sign}${change.absolute.toFixed(2)} tCO₂e)`;
   };
 
-  // Custom Tooltip Component
-  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Payload<number, string>[]; label?: string }) => {
-    if (!active || !payload?.length) return null;
-
-    const validPayload = payload.filter(p => p.value && p.value > 0);
-    if (!validPayload.length) return null;
-
-    const total = validPayload.reduce((sum, entry) => sum + (entry.value || 0), 0);
+  // Custom content renderer for Treemap rectangles
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const CustomTreemapContent = (props: any) => {
+    const { x, y, width, height, name, value, fill } = props;
+    const showName = width > 60 && height > 35;
+    const showValue = width > 50 && height > 50;
 
     return (
-      <div className="bg-white p-4 border rounded-lg shadow-lg">
-        <h3 className="font-semibold mb-2 text-sm">{label}</h3>
-        <div className="space-y-1">
-          {validPayload.map((entry) => (
-            <div key={String(entry.dataKey)} className="flex justify-between gap-6 text-sm">
-              <div className="flex items-center gap-2">
-                <div
-                  className="w-3 h-3 rounded-sm"
-                  style={{ backgroundColor: entry.fill || entry.color }}
-                />
-                <span>{String(entry.dataKey)}:</span>
-              </div>
-              <span className="font-mono font-semibold">
-                {(entry.value || 0).toFixed(2)} tCO₂e
-              </span>
-            </div>
-          ))}
-        </div>
-        <div className="mt-2 pt-2 border-t font-semibold text-sm flex justify-between">
-          <span>Total:</span>
-          <span className="font-mono">{total.toFixed(2)} tCO₂e</span>
-        </div>
-      </div>
+      <g>
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          style={{
+            fill: fill || '#f97316',
+            stroke: '#fff',
+            strokeWidth: 2,
+          }}
+        />
+        {showName && (
+          <text
+            x={x + width / 2}
+            y={y + height / 2 - (showValue ? 8 : 0)}
+            textAnchor="middle"
+            dominantBaseline="central"
+            style={{ fill: '#fff', fontSize: Math.min(12, width / 8), fontWeight: 500 }}
+          >
+            {name}
+          </text>
+        )}
+        {showValue && (
+          <text
+            x={x + width / 2}
+            y={y + height / 2 + 12}
+            textAnchor="middle"
+            dominantBaseline="central"
+            style={{ fill: 'rgba(255,255,255,0.85)', fontSize: Math.min(11, width / 10) }}
+          >
+            {Number(value).toFixed(2)} tCO₂e
+          </text>
+        )}
+      </g>
     );
   };
 
   return (
     <div className="space-y-6">
-      {/* Chart */}
+      {/* Treemap Chart */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Emissions by Source</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="category" />
-            <YAxis label={{ value: "Emissions (tCO₂e)", angle: -90, position: "insideLeft" }} />
-
-            {hasBreakdown ? (
-              <>
-                {/* Materials & Fuels bars */}
-                {data.breakdown.materialsAndFuels.map((source, idx) => (
-                  <Bar
-                    key={source.compMat}
-                    dataKey={source.compName}
-                    stackId="materials"
-                    fill={COLORS[idx % COLORS.length]}
-                    activeBar={false}
-                  />
-                ))}
-
-                {/* Energy bars */}
-                {data.breakdown.energy.map((source) => (
-                  <Bar
-                    key={source.compMat}
-                    dataKey={source.compName}
-                    stackId="energy"
-                    fill={ENERGY_COLOR}
-                    activeBar={false}
-                  />
-                ))}
-
-                <Tooltip content={<CustomTooltip />} />
-              </>
-            ) : (
-              <>
-                <Bar dataKey="value" fill="#f97316" />
-                <Tooltip
-                  formatter={(value) => [`${Number(value).toFixed(2)} tCO₂e`, "Emissions"]}
-                />
-              </>
-            )}
-          </BarChart>
+        <h2 className="text-lg font-semibold mb-2">Emissions by Source</h2>
+        <div className="flex gap-4 mb-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: MATERIAL_COLORS[0] }} />
+            <span>Materials & Fuels</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-3 h-3 rounded-sm" style={{ backgroundColor: ENERGY_COLOR }} />
+            <span>Energy</span>
+          </div>
+        </div>
+        <ResponsiveContainer width="100%" height={400}>
+          <Treemap
+            data={treemapData}
+            dataKey="value"
+            nameKey="name"
+            content={<CustomTreemapContent />}
+            isAnimationActive={false}
+          >
+            <Tooltip
+              content={({ active, payload }) => {
+                if (!active || !payload?.length) return null;
+                const item = payload[0].payload;
+                return (
+                  <div className="bg-background p-3 border rounded-lg shadow-lg text-sm">
+                    <div className="font-semibold">{item.name}</div>
+                    <div className="font-mono mt-1">{Number(item.value).toFixed(2)} tCO₂e</div>
+                    <div className="text-muted-foreground mt-0.5">
+                      {((item.value / totalEmissions) * 100).toFixed(1)}% of total
+                    </div>
+                  </div>
+                );
+              }}
+            />
+          </Treemap>
         </ResponsiveContainer>
       </Card>
 

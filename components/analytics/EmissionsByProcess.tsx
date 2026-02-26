@@ -29,9 +29,11 @@ interface EmissionsByProcessProps {
   company: string;
   year: string;
   period: string;
+  viewLabel?: "process" | "asset";
 }
 
-export function EmissionsByProcess({ company, year, period }: EmissionsByProcessProps) {
+export function EmissionsByProcess({ company, year, period, viewLabel = "process" }: EmissionsByProcessProps) {
+  const isAssetView = viewLabel === "asset";
   const [data, setData] = useState<ProcessEmissionsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -90,9 +92,9 @@ export function EmissionsByProcess({ company, year, period }: EmissionsByProcess
     );
   }
 
-  // Prepare chart data (top 10 work centers)
+  // Prepare chart data (top 10)
   const chartData = data.data.slice(0, 10).map((item) => ({
-    name: item.workCenter,
+    name: isAssetView ? item.workCenter : (item.description || item.workCenter),
     emissions: item.emissions,
   }));
 
@@ -108,24 +110,33 @@ export function EmissionsByProcess({ company, year, period }: EmissionsByProcess
     <div className="space-y-6">
       {/* Chart */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Emissions by Process</h2>
-        <p className="text-sm text-muted-foreground mb-4">Top 10 work centers by emissions</p>
-        <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" height={60} />
-            <YAxis label={{ value: "Emissions (tCO₂e)", angle: -90, position: "insideLeft" }} />
+        <h2 className="text-lg font-semibold mb-4">{isAssetView ? "Emissions by Asset" : "Emissions by Process"}</h2>
+        <p className="text-sm text-muted-foreground mb-4">{isAssetView ? "Top 10 assets by emissions" : "Top 10 processes by emissions"}</p>
+        <ResponsiveContainer width="100%" height={Math.max(350, chartData.length * 40)}>
+          <BarChart data={chartData} layout="vertical" margin={{ left: 20 }}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+            <YAxis
+              dataKey="name"
+              type="category"
+              width={200}
+              tick={{ fontSize: 12 }}
+              interval={0}
+            />
+            <XAxis
+              type="number"
+              label={{ value: "Emissions (tCO₂e)", position: "insideBottom", offset: -5 }}
+            />
             <Tooltip
               formatter={(value) => [`${Number(value).toFixed(2)} tCO₂e`, "Emissions"]}
             />
-            <Bar dataKey="emissions" fill="#f97316" />
+            <Bar dataKey="emissions" fill="#f97316" barSize={24} radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </Card>
 
       {/* Table */}
       <Card className="p-6">
-        <h2 className="text-lg font-semibold mb-4">Process Wise Emissions</h2>
+        <h2 className="text-lg font-semibold mb-4">{isAssetView ? "Asset Wise Emissions" : "Process Wise Emissions"}</h2>
         <div className="mb-4 text-sm text-muted-foreground">
           Total Emissions: <span className="font-semibold text-foreground">{data.totalEmissions.toFixed(2)} Metric Tons</span>
         </div>
@@ -134,8 +145,17 @@ export function EmissionsByProcess({ company, year, period }: EmissionsByProcess
             <TableHeader className="sticky top-0 bg-background">
               <TableRow>
                 <TableHead className="w-[80px]">Ranking</TableHead>
-                <TableHead>Work Center</TableHead>
-                <TableHead>Description</TableHead>
+                {isAssetView ? (
+                  <>
+                    <TableHead>Work Center</TableHead>
+                    <TableHead>Description</TableHead>
+                  </>
+                ) : (
+                  <>
+                    <TableHead>Process</TableHead>
+                    <TableHead>Work Center</TableHead>
+                  </>
+                )}
                 <TableHead className="text-right">Emissions</TableHead>
                 <TableHead className="text-right">{comparisonLabel} Change (%)</TableHead>
               </TableRow>
@@ -144,8 +164,17 @@ export function EmissionsByProcess({ company, year, period }: EmissionsByProcess
               {data.data.map((row, index) => (
                 <TableRow key={row.workCenter}>
                   <TableCell className="font-medium">{index + 1}</TableCell>
-                  <TableCell className="font-mono">{row.workCenter}</TableCell>
-                  <TableCell className="text-muted-foreground">{row.description || "—"}</TableCell>
+                  {isAssetView ? (
+                    <>
+                      <TableCell className="font-mono">{row.workCenter}</TableCell>
+                      <TableCell className="text-muted-foreground">{row.description || "—"}</TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell>{row.description || row.workCenter}</TableCell>
+                      <TableCell className="font-mono text-muted-foreground">{row.workCenter}</TableCell>
+                    </>
+                  )}
                   <TableCell className="text-right">{row.emissions.toFixed(2)}</TableCell>
                   <TableCell className="text-right">
                     <span

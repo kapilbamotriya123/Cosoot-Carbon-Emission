@@ -15,7 +15,7 @@ import { EmissionsBySource } from "@/components/analytics/EmissionsBySource";
 import { EmissionsByProcess } from "@/components/analytics/EmissionsByProcess";
 import { EmissionsByProduct } from "@/components/analytics/EmissionsByProduct";
 
-type ViewType = "scope" | "source" | "process" | "product";
+type ViewType = "scope" | "source" | "process" | "product" | "asset";
 
 export default function AnalyticsPage() {
   const searchParams = useSearchParams();
@@ -69,6 +69,7 @@ export default function AnalyticsPage() {
                 <SelectItem value="scope">Emissions by Scope</SelectItem>
                 <SelectItem value="source">Emissions by Source</SelectItem>
                 <SelectItem value="process">Emissions by Process</SelectItem>
+                <SelectItem value="asset">Emissions by Asset</SelectItem>
                 <SelectItem value="product">Emissions by Product</SelectItem>
               </SelectContent>
             </Select>
@@ -117,6 +118,9 @@ export default function AnalyticsPage() {
       )}
       {view === "process" && (
         <EmissionsByProcess company={company} year={year} period={period} />
+      )}
+      {view === "asset" && (
+        <EmissionsByProcess company={company} year={year} period={period} viewLabel="asset" />
       )}
       {view === "product" && (
         <EmissionsByProduct company={company} year={year} period={period} />
