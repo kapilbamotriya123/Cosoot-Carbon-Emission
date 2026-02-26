@@ -4,7 +4,7 @@ import type {
   ProductEmissionResult,
   ShakambhariEmissionResults,
 } from "./types";
-import { CARBON_CONTENT_MAP, ELECTRICITY_EF, CO2_PER_CARBON } from "./constants";
+import type { ShakambhariConstants } from "../constants-loader";
 
 /**
  * Classify a source into one of 4 categories:
@@ -42,11 +42,12 @@ function calculateSourceEmission(
   category: "input" | "byproduct" | "main_product" | "electricity",
   productionQty: number,
   warnings: string[],
-  context: string
+  context: string,
+  constants: ShakambhariConstants
 ): SourceEmissionResult {
   // --- Electricity: separate formula ---
   if (category === "electricity") {
-    const co2e = source.consumedQty * ELECTRICITY_EF;
+    const co2e = source.consumedQty * constants.electricity_ef;
     return {
       compMat: source.compMat,
       compName: source.compName,
@@ -70,7 +71,7 @@ function calculateSourceEmission(
   }
 
   // --- Look up carbon content ---
-  const ccEntry = CARBON_CONTENT_MAP[source.compMat];
+  const ccEntry = constants.carbon_content_map[source.compMat];
   if (!ccEntry) {
     warnings.push(
       `Missing carbon content for ${source.compMat} (${source.compName}) in ${context}`
@@ -89,7 +90,7 @@ function calculateSourceEmission(
 
   // --- CE = qty × carbonContent, CO2e = CE × 44/12 ---
   const ce = qty * ccEntry.carbonContent;
-  const co2e = ce * CO2_PER_CARBON;
+  const co2e = ce * constants.co2_per_carbon;
 
   return {
     compMat: source.compMat,
@@ -113,7 +114,8 @@ function calculateSourceEmission(
  */
 export function calculateProductEmission(
   record: ProductionRecord,
-  warnings: string[]
+  warnings: string[],
+  constants: ShakambhariConstants
 ): ProductEmissionResult {
   const context = `product ${record.productId} (${record.productName}) on ${record.date} at ${record.workCenter}`;
   const sourceBreakdowns: SourceEmissionResult[] = [];
@@ -129,7 +131,8 @@ export function calculateProductEmission(
       category,
       record.productionQty,
       warnings,
-      context
+      context,
+      constants
     );
     sourceBreakdowns.push(result);
 
@@ -173,10 +176,11 @@ export function calculateProductEmission(
  * Pure function — no DB access, no side effects.
  */
 export function calculateAll(
-  records: ProductionRecord[]
+  records: ProductionRecord[],
+  constants: ShakambhariConstants
 ): ShakambhariEmissionResults {
   const warnings: string[] = [];
-  const results = records.map((r) => calculateProductEmission(r, warnings));
+  const results = records.map((r) => calculateProductEmission(r, warnings, constants));
 
   // Deduplicate warnings (same material can be missing across many records)
   const uniqueWarnings = [...new Set(warnings)];

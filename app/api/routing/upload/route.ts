@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
-import { uploadToGCS } from "@/lib/storage";
+import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getParser } from "@/lib/parsers";
 
 // POST /api/routing/upload
@@ -43,9 +43,8 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
 
     // Step 3: Upload original file to GCP Cloud Storage
-    // We name it with a timestamp so we can track upload history
-    const timestamp = new Date().toISOString().split("T")[0]; // e.g. "2026-01-30"
-    const gcsPath = `routing/${companySlug}_routing_data`;
+    const uploadDate = formatUploadDate();
+    const gcsPath = `routing/${companySlug}/${uploadDate}_${file.name}`;
     const fileUrl = await uploadToGCS(Buffer.from(arrayBuffer), gcsPath);
 
     // Step 4: Parse the Excel using the company-specific parser
@@ -73,6 +72,13 @@ export async function POST(request: NextRequest) {
          original_file_url = $3,
          uploaded_at = NOW()`,
       [companySlug, JSON.stringify(routingData), fileUrl]
+    );
+
+    // Track the upload in file_uploads
+    await pool.query(
+      `INSERT INTO file_uploads (company_slug, upload_type, file_name, file_url, file_size_bytes, metadata)
+       VALUES ($1, 'routing', $2, $3, $4, $5)`,
+      [companySlug, uploadDate, fileUrl, file.size, JSON.stringify({ productsFound: routingData.products.length })]
     );
 
     return NextResponse.json({

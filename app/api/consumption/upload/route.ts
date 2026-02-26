@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
-import { uploadToGCS } from "@/lib/storage";
+import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getConsumptionParser } from "@/lib/parsers/consumption";
 import { triggerEmissionCalculation } from "@/lib/emissions/engine";
 
@@ -58,8 +58,9 @@ export async function POST(request: NextRequest) {
 
     const arrayBuffer = await file.arrayBuffer();
 
-    // Upload original file to GCS: consumption_data/{companySlug}/{year}_{month}
-    const gcsPath = `consumption_data/${companySlug}/${year}_${month}`;
+    // Upload original file to GCS
+    const uploadDate = formatUploadDate();
+    const gcsPath = `consumption_data/${companySlug}/${uploadDate}_${file.name}`;
     const fileUrl = await uploadToGCS(Buffer.from(arrayBuffer), gcsPath);
 
     // Parse the Excel using the company-specific consumption parser
@@ -87,6 +88,13 @@ export async function POST(request: NextRequest) {
     );
 
     const workCenterCount = Object.keys(consumptionData).length;
+
+    // Track the upload in file_uploads
+    await pool.query(
+      `INSERT INTO file_uploads (company_slug, upload_type, file_name, file_url, file_size_bytes, year, month, metadata)
+       VALUES ($1, 'consumption', $2, $3, $4, $5, $6, $7)`,
+      [companySlug, uploadDate, fileUrl, file.size, year, month, JSON.stringify({ workCentersFound: workCenterCount })]
+    );
 
     // Fire-and-forget: calculate emissions in background.
     // Don't await — the upload response returns immediately.

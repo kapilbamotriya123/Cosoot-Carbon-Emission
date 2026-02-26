@@ -11,6 +11,8 @@ import { pool } from "./db";
 // - emission_by_product_meta_engitech: Per-product emissions (Meta Engitech specific)
 // - production_data_shakambhari: Daily production + consumption data for Shakambhari
 // - emission_results_shakambhari: Per-product per-date emission calculation results
+// - emission_constants: Per-company per-quarter emission calculation constants (JSONB)
+// - file_uploads: Audit trail of all uploaded files (routing, consumption, production, constants)
 
 export async function initializeSchema() {
   await pool.query(`
@@ -154,5 +156,38 @@ export async function initializeSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_emission_shak_net
       ON emission_results_shakambhari (company_slug, year, month, net_total_co2e DESC);
+
+    CREATE TABLE IF NOT EXISTS emission_constants (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT NOT NULL REFERENCES companies(slug) ON DELETE CASCADE,
+      year INTEGER NOT NULL,
+      quarter INTEGER NOT NULL CHECK (quarter BETWEEN 1 AND 4),
+      constants JSONB NOT NULL,
+      original_file_url TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      updated_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(company_slug, year, quarter)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_emission_constants_lookup
+      ON emission_constants (company_slug, year DESC, quarter DESC);
+
+    CREATE TABLE IF NOT EXISTS file_uploads (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT NOT NULL REFERENCES companies(slug) ON DELETE CASCADE,
+      upload_type TEXT NOT NULL,
+      file_name TEXT NOT NULL,
+      file_url TEXT NOT NULL,
+      file_size_bytes INTEGER,
+      year INTEGER,
+      month INTEGER,
+      quarter INTEGER,
+      status TEXT NOT NULL DEFAULT 'success',
+      metadata JSONB DEFAULT '{}',
+      uploaded_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_file_uploads_lookup
+      ON file_uploads (company_slug, upload_type, uploaded_at DESC);
   `);
 }

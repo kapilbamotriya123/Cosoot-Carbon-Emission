@@ -6,8 +6,6 @@ import {
   LayoutDashboard,
   GitBranch,
   Upload,
-  FileSpreadsheet,
-  Factory,
   User2,
   ChevronUp,
   BarChart3,
@@ -53,19 +51,9 @@ const mainMenuItems = [
 
 const adminMenuItems = [
   {
-    title: "Upload Routing",
-    href: "/dashboard/upload-routing",
-    icon: FileSpreadsheet,
-  },
-  {
-    title: "Upload Consumption",
-    href: "/dashboard/upload-consumption",
+    title: "Data Upload",
+    href: "/dashboard/data-upload",
     icon: Upload,
-  },
-  {
-    title: "Upload Production",
-    href: "/dashboard/upload-production",
-    icon: Factory,
   },
 ];
 

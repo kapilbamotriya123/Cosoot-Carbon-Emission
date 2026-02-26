@@ -167,6 +167,8 @@ You are continuing work on the Cosoot project. The approach is:
 
 Prefer modifying existing files over creating new ones. Keep things simple. No over-engineering.
 
+
+If there is any form of calculations required or changed or created, track it in Calculations.md - just so that when we make any changes we know where all calculations are done 
 ---
 
 ## Step Requirements

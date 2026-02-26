@@ -1,5 +1,6 @@
 import { pool } from "@/lib/db";
 import { calculateAll } from "./calculate";
+import { loadMetaEngitechConstants } from "./constants-loader";
 import type { ConsumptionData } from "@/lib/parsers/consumption/types";
 import type { RoutingData } from "@/lib/parsers/types";
 import type { WorkCenterEmission, ProductEmission } from "./types";
@@ -40,10 +41,13 @@ export async function triggerEmissionCalculation(
   const routing: RoutingData = routingResult.rows[0].data;
   const consumption: ConsumptionData = consumptionResult.rows[0].data;
 
-  // 3. Calculate
-  const results = calculateAll(routing, consumption);
+  // 3. Load constants from DB (falls back to hardcoded defaults)
+  const constants = await loadMetaEngitechConstants(year, month);
 
-  // 4. Write results
+  // 4. Calculate
+  const results = calculateAll(routing, consumption, constants);
+
+  // 5. Write results
   await writeByProcessResults(companySlug, year, month, results.byProcess);
   await writeByProductResults(companySlug, year, month, results.byProduct);
 

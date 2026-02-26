@@ -1,7 +1,7 @@
 import type { ConsumptionData, WorkCenterConsumption } from "@/lib/parsers/consumption/types";
 import type { RoutingData } from "@/lib/parsers/types";
 import type { WorkCenterEmission, ProductEmission, EmissionResults } from "./types";
-import { ELECTRICITY_EF, LPG_NCV, LPG_EF, DIESEL_NCV, DIESEL_EF, DIESEL_DENSITY } from "./constants";
+import type { MetaEngitechConstants } from "./constants-loader";
 
 /**
  * Calculate emission intensity for a single work center.
@@ -15,7 +15,8 @@ import { ELECTRICITY_EF, LPG_NCV, LPG_EF, DIESEL_NCV, DIESEL_EF, DIESEL_DENSITY 
  */
 export function calculateWorkCenterEmission(
   workCenter: string,
-  wc: WorkCenterConsumption
+  wc: WorkCenterConsumption,
+  constants: MetaEngitechConstants
 ): WorkCenterEmission {
   const production = wc.productionMT ?? 0;
 
@@ -34,10 +35,10 @@ export function calculateWorkCenterEmission(
     };
   }
 
-  const elec = ((wc.totalEnergyKWh ?? 0) / production) * ELECTRICITY_EF;
-  const lpg = ((wc.lpgConsumptionKg ?? 0) / production) * LPG_NCV * LPG_EF / 1_000_000;
+  const elec = ((wc.totalEnergyKWh ?? 0) / production) * constants.electricity_ef;
+  const lpg = ((wc.lpgConsumptionKg ?? 0) / production) * constants.lpg_ncv * constants.lpg_ef / 1_000_000;
   const diesel =
-    ((wc.dieselConsumptionLtrs ?? 0) / production) * DIESEL_NCV * DIESEL_EF * DIESEL_DENSITY / 1_000_000;
+    ((wc.dieselConsumptionLtrs ?? 0) / production) * constants.diesel_ncv * constants.diesel_ef * constants.diesel_density / 1_000_000;
 
   const scope1 = lpg + diesel;
   const scope2 = elec;
@@ -60,10 +61,11 @@ export function calculateWorkCenterEmission(
  * Calculate emission intensities for all work centers in consumption data.
  */
 export function calculateByProcess(
-  consumption: ConsumptionData
+  consumption: ConsumptionData,
+  constants: MetaEngitechConstants
 ): WorkCenterEmission[] {
   return Object.entries(consumption).map(([wcCode, wcData]) =>
-    calculateWorkCenterEmission(wcCode, wcData)
+    calculateWorkCenterEmission(wcCode, wcData, constants)
   );
 }
 
@@ -205,9 +207,10 @@ function pickDebugProducts(
  */
 export function calculateAll(
   routing: RoutingData,
-  consumption: ConsumptionData
+  consumption: ConsumptionData,
+  constants: MetaEngitechConstants
 ): EmissionResults {
-  const byProcess = calculateByProcess(consumption);
+  const byProcess = calculateByProcess(consumption, constants);
   const byProduct = calculateByProduct(routing, byProcess);
   return { byProcess, byProduct };
 }

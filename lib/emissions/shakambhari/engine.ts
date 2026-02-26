@@ -1,5 +1,6 @@
 import { pool } from "@/lib/db";
 import { calculateAll } from "./calculate";
+import { loadShakambhariConstants } from "../constants-loader";
 import type { ProductionRecord } from "@/lib/parsers/production/types";
 import type { ProductEmissionResult } from "./types";
 
@@ -55,10 +56,13 @@ export async function triggerShakambhariEmissionCalculation(
         : row.sources ?? [],
   }));
 
-  // 3. Calculate
-  const { results, warnings } = calculateAll(records);
+  // 3. Load constants from DB (falls back to hardcoded defaults)
+  const constants = await loadShakambhariConstants(year, month);
 
-  // 4. Write results
+  // 4. Calculate
+  const { results, warnings } = calculateAll(records, constants);
+
+  // 5. Write results
   await writeEmissionResults(companySlug, year, month, results);
 
   console.log(

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
-import { uploadToGCS } from "@/lib/storage";
+import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getProductionParser } from "@/lib/parsers/production";
 import { triggerShakambhariEmissionCalculation } from "@/lib/emissions/shakambhari/engine";
 
@@ -41,7 +41,8 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
 
     // Upload original file to GCS
-    const gcsPath = `production_data/${companySlug}/${Date.now()}_${file.name}`;
+    const uploadDate = formatUploadDate();
+    const gcsPath = `production_data/${companySlug}/${uploadDate}_${file.name}`;
     const fileUrl = await uploadToGCS(Buffer.from(arrayBuffer), gcsPath);
 
     // Parse the Excel using the company-specific production parser
@@ -132,6 +133,23 @@ export async function POST(request: NextRequest) {
     const uniqueProductIds = [...new Set(records.map((r) => r.productId))];
     const uniqueWorkCenters = [...new Set(records.map((r) => r.workCenter))];
     const allDates = records.map((r) => r.date).sort();
+
+    // Track the upload in file_uploads
+    // Production data spans multiple months — use the earliest date's year/month
+    const earliestYear = records.length > 0 ? records[0].year : null;
+    const earliestMonth = records.length > 0 ? records[0].month : null;
+    await pool.query(
+      `INSERT INTO file_uploads (company_slug, upload_type, file_name, file_url, file_size_bytes, year, month, metadata)
+       VALUES ($1, 'production', $2, $3, $4, $5, $6, $7)`,
+      [
+        companySlug, uploadDate, fileUrl, file.size, earliestYear, earliestMonth,
+        JSON.stringify({
+          recordCount: records.length,
+          dateRange: { from: allDates[0], to: allDates[allDates.length - 1] },
+          productsFound: uniqueProductIds.length,
+        }),
+      ]
+    );
 
     // Fire-and-forget: calculate emissions for each affected month.
     // A single upload can span multiple months, so trigger each one.
