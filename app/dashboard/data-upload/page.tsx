@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
-import { Construction } from "lucide-react";
 import { RoutingUploadForm } from "@/components/data-upload/routing-upload-form";
 import { UnifiedConsumptionForm } from "@/components/data-upload/unified-consumption-form";
 import { ConstantsEditor } from "@/components/data-upload/constants-editor";
+import { SalesUploadForm } from "@/components/data-upload/sales-upload-form";
 import { UploadHistory } from "@/components/data-upload/upload-history";
 import { getUploadTabs } from "@/lib/upload-config";
 import { COMPANIES } from "@/lib/constants";
 
-export default function DataUploadPage() {
+function DataUploadContent() {
   const searchParams = useSearchParams();
   const company = searchParams.get("company");
 
@@ -85,18 +85,25 @@ export default function DataUploadPage() {
             <ConstantsEditor company={company} />
           </TabsContent>
 
-          {/* Sales tab — placeholder */}
+          {/* Sales tab */}
           <TabsContent value="sales">
-            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-              <Construction className="h-10 w-10 mb-3" />
-              <p className="text-lg font-medium">Coming Soon</p>
-              <p className="text-sm mt-1">
-                Sales data upload will be available in a future update.
-              </p>
-            </div>
+            <SalesUploadForm company={company} onUploadComplete={refreshHistory} />
+            <UploadHistory
+              company={company}
+              uploadType="sales"
+              refreshKey={historyRefreshKey}
+            />
           </TabsContent>
         </Tabs>
       </Card>
     </div>
+  );
+}
+
+export default function DataUploadPage() {
+  return (
+    <Suspense>
+      <DataUploadContent />
+    </Suspense>
   );
 }

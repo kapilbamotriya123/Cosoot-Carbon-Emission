@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Select,
@@ -17,7 +17,7 @@ import { EmissionsByProduct } from "@/components/analytics/EmissionsByProduct";
 
 type ViewType = "scope" | "source" | "process" | "product" | "asset";
 
-export default function AnalyticsPage() {
+function AnalyticsContent() {
   const searchParams = useSearchParams();
   const company = searchParams.get("company");
 
@@ -126,5 +126,13 @@ export default function AnalyticsPage() {
         <EmissionsByProduct company={company} year={year} period={period} />
       )}
     </div>
+  );
+}
+
+export default function AnalyticsPage() {
+  return (
+    <Suspense>
+      <AnalyticsContent />
+    </Suspense>
   );
 }
