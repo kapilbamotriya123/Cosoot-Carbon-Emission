@@ -14,11 +14,9 @@ import type { MetaEngitechConstants } from "@/lib/emissions/constants-loader";
 // ---- Reporting Period ------------------------------------------------
 
 export interface ReportingPeriod {
-  year: number;
-  quarter: number; // 1–4
-  startDate: Date; // first day of quarter  (e.g. 2025-04-01 for Q2)
-  endDate: Date; // last day of quarter   (e.g. 2025-06-30 for Q2)
-  months: number[]; // e.g. [4, 5, 6] for Q2
+  startDate: Date; // e.g. 2025-04-01
+  endDate: Date; // e.g. 2025-06-30
+  yearMonths: Array<{ year: number; month: number }>; // all months in range, e.g. [{year:2025,month:4}, ...]
 }
 
 // ---- Company Profile (static data written into the report) -----------

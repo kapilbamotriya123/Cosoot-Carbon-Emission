@@ -25,31 +25,66 @@ import { pool } from "@/lib/db";
 import { loadMetaEngitechConstants } from "@/lib/emissions/constants-loader";
 
 /**
- * Derive start/end dates and month list from a year + quarter.
+ * Build a ReportingPeriod from arbitrary start/end dates.
  *
- * Quarter → months:
- *   Q1 → Jan, Feb, Mar  (months 1–3)
- *   Q2 → Apr, May, Jun  (months 4–6)
- *   Q3 → Jul, Aug, Sep  (months 7–9)
- *   Q4 → Oct, Nov, Dec  (months 10–12)
+ * Derives the list of (year, month) tuples that fall within the range,
+ * including partial months at both ends. For example:
+ *   2024-11-15 → 2025-02-10 yields [{2024,11},{2024,12},{2025,1},{2025,2}]
  */
-function buildPeriod(year: number, quarter: number): ReportingPeriod {
-  const startMonth = (quarter - 1) * 3 + 1; // Q1→1, Q2→4, Q3→7, Q4→10
-  const endMonth = startMonth + 2;
+function buildPeriod(startDate: Date, endDate: Date): ReportingPeriod {
+  const yearMonths: Array<{ year: number; month: number }> = [];
 
-  // new Date(year, month - 1, 1)  → first day of startMonth
-  // new Date(year, endMonth, 0)   → day 0 of the month after endMonth
-  //                                 = last day of endMonth
-  const startDate = new Date(year, startMonth - 1, 1);
-  const endDate = new Date(year, endMonth, 0); // e.g. Jun 30 for Q2
+  let y = startDate.getFullYear();
+  let m = startDate.getMonth() + 1; // 1-based
 
-  const months = [startMonth, startMonth + 1, startMonth + 2];
+  const endY = endDate.getFullYear();
+  const endM = endDate.getMonth() + 1;
 
-  return { year, quarter, startDate, endDate, months };
+  while (y < endY || (y === endY && m <= endM)) {
+    yearMonths.push({ year: y, month: m });
+    m++;
+    if (m > 12) {
+      m = 1;
+      y++;
+    }
+  }
+
+  return { startDate, endDate, yearMonths };
 }
 
 /**
- * Generate a CBAM Excel report for a given company and quarter.
+ * Build a SQL condition for (year, month) IN (...) from yearMonths array.
+ *
+ * Returns { clause: string, params: any[], nextParamIdx: number }
+ * Example: yearClause([{2025,4},{2025,5}], 2) → {
+ *   clause: "(year, month) IN (($2,$3),($4,$5))",
+ *   params: [2025, 4, 2025, 5],
+ *   nextParamIdx: 6
+ * }
+ */
+function buildYearMonthClause(
+  yearMonths: Array<{ year: number; month: number }>,
+  startIdx: number
+): { clause: string; params: (number)[]; nextParamIdx: number } {
+  const pairs: string[] = [];
+  const params: number[] = [];
+  let idx = startIdx;
+
+  for (const { year, month } of yearMonths) {
+    pairs.push(`($${idx},$${idx + 1})`);
+    params.push(year, month);
+    idx += 2;
+  }
+
+  return {
+    clause: `(year, month) IN (${pairs.join(",")})`,
+    params,
+    nextParamIdx: idx,
+  };
+}
+
+/**
+ * Generate a CBAM Excel report for a given company and date range.
  *
  * Returns a ReportResult containing:
  *   - buffer: the filled workbook as a Buffer (ready to upload to GCS)
@@ -60,13 +95,15 @@ function buildPeriod(year: number, quarter: number): ReportingPeriod {
  */
 export async function generateReport(
   companySlug: CompanySlug,
-  year: number,
-  quarter: number,
+  startDate: Date,
+  endDate: Date,
   customerCode: string,
   materialIds: string[]
 ): Promise<ReportResult> {
+  const startStr = formatDateCompact(startDate);
+  const endStr = formatDateCompact(endDate);
   console.log(
-    `[reports] Starting generation: ${companySlug}, ${year} Q${quarter}`
+    `[reports] Starting generation: ${companySlug}, ${startStr} → ${endStr}`
   );
 
   // 1. Load the template workbook
@@ -77,7 +114,7 @@ export async function generateReport(
 
   // 2. Build the shared context
   const companyProfile = getCompanyProfile(companySlug);
-  const period = buildPeriod(year, quarter);
+  const period = buildPeriod(startDate, endDate);
 
   const ctx: ReportContext = {
     workbook,
@@ -116,7 +153,7 @@ export async function generateReport(
   const rawBuffer = await workbook.xlsx.writeBuffer();
   const buffer = Buffer.from(rawBuffer);
 
-  const fileName = `CBAM_Report_${companySlug}_${year}_Q${quarter}.xlsx`;
+  const fileName = `CBAM_Report_${companySlug}_${startStr}_to_${endStr}.xlsx`;
 
   console.log(
     `[reports] Generated: ${fileName} ` +
@@ -127,31 +164,41 @@ export async function generateReport(
   return { buffer, fileName, sheetsProcessed };
 }
 
+/** Format a Date as YYYY-MM-DD for file names and logs. */
+function formatDateCompact(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 /**
  * Load Meta Engitech DB data into the report context.
  *
- * Queries consumption_data for all months in the quarter, sums fuel
+ * Queries consumption_data for all months in the date range, sums fuel
  * quantities across all work centers, and converts to tonnes:
  *   Diesel: litres × density (0.832 kg/L) / 1000 → tonnes
  *   LPG: kg / 1000 → tonnes
  *
- * Also loads emission constants (NCV, EF) for the quarter.
+ * Also loads emission constants (NCV, EF) using the first month in the range.
  */
 async function loadMetaEngitechData(ctx: ReportContext): Promise<void> {
   const { period, companySlug } = ctx;
+  const ym = period.yearMonths;
 
-  // Load emission constants (NCV, EF values) for this quarter
-  // Uses the first month of the quarter; the loader finds the best match.
+  // Load emission constants (NCV, EF values) for this period
+  // Uses the first month in the range; the loader finds the best match.
   ctx.emissionConstants = await loadMetaEngitechConstants(
-    period.year,
-    period.months[0]
+    ym[0].year,
+    ym[0].month
   );
 
-  // Query consumption_data JSONB for all months in the quarter
+  // Query consumption_data for all months in the date range
+  const ymClause = buildYearMonthClause(ym, 2);
   const result = await pool.query(
     `SELECT data FROM consumption_data
-     WHERE company_slug = $1 AND year = $2 AND month = ANY($3)`,
-    [companySlug, period.year, period.months]
+     WHERE company_slug = $1 AND ${ymClause.clause}`,
+    [companySlug, ...ymClause.params]
   );
 
   let totalDieselLtrs = 0;
@@ -194,10 +241,10 @@ async function loadMetaEngitechData(ctx: ReportContext): Promise<void> {
 /**
  * Load D_Processes data: per-product sales quantities and emission intensities.
  *
- * For each selected material sold to the customer in the quarter:
+ * For each selected material sold to the customer in the date range:
  *   1. Get quantity_mt from sales_data
  *   2. Get scope1_intensity and scope2_intensity from emission_by_product_meta_engitech
- *      (averaged across the quarter's months)
+ *      (averaged across the range's months)
  *   3. Compute:
  *      - totalDirectEmissionsCO2e = SUM(scope1_intensity × quantity_mt) per product
  *      - totalElectricityMWh = SUM(scope2_intensity × quantity_mt / electricity_ef_MWh) per product
@@ -219,32 +266,35 @@ async function loadDProcessesData(ctx: ReportContext): Promise<void> {
 
   // electricity_ef is stored as tCO2/kWh (e.g. 0.000598). Convert to tCO2/MWh (0.598).
   const electricityEFMWh = emissionConstants.electricity_ef * 1000;
+  const ym = period.yearMonths;
 
-  // 1. Get total quantity sold to this customer for selected materials in the quarter
+  // 1. Get total quantity sold to this customer for selected materials in the date range
+  const salesYM = buildYearMonthClause(ym, 2);
+  let paramIdx = salesYM.nextParamIdx;
   const salesResult = await pool.query(
     `SELECT material_id, SUM(quantity_mt) as total_qty
      FROM sales_data
      WHERE company_slug = $1
-       AND year = $2
-       AND month = ANY($3)
-       AND customer_code = $4
-       AND material_id = ANY($5)
+       AND ${salesYM.clause}
+       AND customer_code = $${paramIdx}
+       AND material_id = ANY($${paramIdx + 1})
      GROUP BY material_id`,
-    [companySlug, period.year, period.months, customerCode, materialIds]
+    [companySlug, ...salesYM.params, customerCode, materialIds]
   );
 
-  // 2. Get average emission intensities for these materials across the quarter's months
+  // 2. Get average emission intensities for these materials across the range's months
+  const emYM = buildYearMonthClause(ym, 2);
+  paramIdx = emYM.nextParamIdx;
   const emissionResult = await pool.query(
     `SELECT product_id,
             AVG(scope1_intensity) as avg_scope1,
             AVG(scope2_intensity) as avg_scope2
      FROM emission_by_product_meta_engitech
      WHERE company_slug = $1
-       AND year = $2
-       AND month = ANY($3)
-       AND product_id = ANY($4)
+       AND ${emYM.clause}
+       AND product_id = ANY($${paramIdx})
      GROUP BY product_id`,
-    [companySlug, period.year, period.months, materialIds]
+    [companySlug, ...emYM.params, materialIds]
   );
 
   // Build emission lookup: materialId → { scope1, scope2 }

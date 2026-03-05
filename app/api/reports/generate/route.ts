@@ -12,7 +12,13 @@ import type { CompanySlug } from "@/lib/constants";
 
 // POST /api/reports/generate
 //
-// Body (JSON): { companySlug: string, year: number, quarter: number, customerCode: string, materialIds: string[] }
+// Body (JSON): {
+//   companySlug: string,
+//   startDate: string,       // ISO date e.g. "2025-04-01"
+//   endDate: string,         // ISO date e.g. "2025-06-30"
+//   customerCode: string,
+//   materialIds: string[]
+// }
 //
 // Response: {
 //   success: true,
@@ -34,10 +40,10 @@ export async function POST(request: NextRequest) {
     await initializeSchema();
 
     const body = await request.json();
-    const { companySlug, year, quarter, customerCode, materialIds } = body as {
+    const { companySlug, startDate: startDateStr, endDate: endDateStr, customerCode, materialIds } = body as {
       companySlug: unknown;
-      year: unknown;
-      quarter: unknown;
+      startDate: unknown;
+      endDate: unknown;
       customerCode: unknown;
       materialIds: unknown;
     };
@@ -61,22 +67,42 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!year || typeof year !== "number" || !Number.isInteger(year)) {
+    // -- Validate date range -------------------------------------------
+
+    if (!startDateStr || typeof startDateStr !== "string") {
       return NextResponse.json(
-        { error: "year is required and must be an integer" },
+        { error: "startDate is required (ISO format, e.g. \"2025-04-01\")" },
         { status: 400 }
       );
     }
 
-    if (
-      !quarter ||
-      typeof quarter !== "number" ||
-      !Number.isInteger(quarter) ||
-      quarter < 1 ||
-      quarter > 4
-    ) {
+    if (!endDateStr || typeof endDateStr !== "string") {
       return NextResponse.json(
-        { error: "quarter is required and must be an integer between 1 and 4" },
+        { error: "endDate is required (ISO format, e.g. \"2025-06-30\")" },
+        { status: 400 }
+      );
+    }
+
+    const startDate = new Date(startDateStr as string);
+    const endDate = new Date(endDateStr as string);
+
+    if (isNaN(startDate.getTime())) {
+      return NextResponse.json(
+        { error: "startDate is not a valid date" },
+        { status: 400 }
+      );
+    }
+
+    if (isNaN(endDate.getTime())) {
+      return NextResponse.json(
+        { error: "endDate is not a valid date" },
+        { status: 400 }
+      );
+    }
+
+    if (startDate >= endDate) {
+      return NextResponse.json(
+        { error: "startDate must be before endDate" },
         { status: 400 }
       );
     }
@@ -108,23 +134,20 @@ export async function POST(request: NextRequest) {
 
     const result = await generateReport(
       companySlug as CompanySlug,
-      year,
-      quarter,
+      startDate,
+      endDate,
       validatedCustomerCode,
       validatedMaterialIds
     );
 
     // -- Upload to GCS -------------------------------------------------
 
-    // GCS path pattern: reports/{companySlug}/{date}_{fileName}
-    // This mirrors the existing pattern for other upload types.
     const uploadDate = formatUploadDate();
     const gcsPath = `reports/${companySlug}/${uploadDate}_${result.fileName}`;
     const fileUrl = await uploadToGCS(result.buffer, gcsPath);
 
     // -- Log in file_uploads -------------------------------------------
 
-    // Ensure company record exists (same pattern as other upload routes)
     await pool.query(
       `INSERT INTO companies (slug, display_name, clerk_user_id)
        VALUES ($1, $2, $3)
@@ -134,16 +157,16 @@ export async function POST(request: NextRequest) {
 
     await pool.query(
       `INSERT INTO file_uploads
-         (company_slug, upload_type, file_name, file_url, file_size_bytes, year, quarter, metadata)
-       VALUES ($1, 'report', $2, $3, $4, $5, $6, $7)`,
+         (company_slug, upload_type, file_name, file_url, file_size_bytes, metadata)
+       VALUES ($1, 'report', $2, $3, $4, $5)`,
       [
         companySlug,
         result.fileName,
         fileUrl,
         result.buffer.length,
-        year,
-        quarter,
         JSON.stringify({
+          startDate: startDateStr,
+          endDate: endDateStr,
           sheetsProcessed: result.sheetsProcessed,
           generatedAt: new Date().toISOString(),
         }),
@@ -152,8 +175,6 @@ export async function POST(request: NextRequest) {
 
     // -- Get signed download URL ---------------------------------------
 
-    // Signed URLs expire in 15 minutes (see lib/storage.ts).
-    // The user should download immediately after generation.
     const downloadUrl = await getSignedDownloadUrl(fileUrl);
 
     return NextResponse.json({
