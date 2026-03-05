@@ -1,0 +1,2365 @@
+
+================================================================================
+SHEET: "D_Processes" (664 rows × 24 cols)
+================================================================================
+--- Row 1 ---
+  A1: ausblenden
+--- Row 2 ---
+  B2: FORMULA: =Translations!$B$240 → Production processes
+  C2: FORMULA: =Translations!$B$240 → Production processes
+  D2: FORMULA: =Translations!$B$240 → Production processes
+  E2: FORMULA: =Translations!$B$11 → Navigation Area:
+  F2: FORMULA: =Translations!$B$11 → Navigation Area:
+  G2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  H2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  I2: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  J2: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  K2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  L2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  M2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+  N2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+--- Row 3 ---
+  B3: FORMULA: =Translations!$B$240 → Production processes
+  C3: FORMULA: =Translations!$B$240 → Production processes
+  D3: FORMULA: =Translations!$B$240 → Production processes
+  G3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(R3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,R3))) → ERW tubes, CEW tubes
+  H3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(R3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,R3))) → ERW tubes, CEW tubes
+  I3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,T3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(T3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,T3))) → ?
+  J3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,T3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(T3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,T3))) → ?
+  K3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,V3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(V3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,V3))) → ?
+  L3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,V3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(V3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,V3))) → ?
+  M3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,X3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(X3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,X3))) → ?
+  N3: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,X3)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(X3,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,X3))) → ?
+--- Row 4 ---
+  B4: FORMULA: =Translations!$B$240 → Production processes
+  C4: FORMULA: =Translations!$B$240 → Production processes
+  D4: FORMULA: =Translations!$B$240 → Production processes
+  G4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(R4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,R4))) → ?
+  H4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(R4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,R4))) → ?
+  I4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,T4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(T4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,T4))) → ?
+  J4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,T4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(T4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,T4))) → ?
+  K4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,V4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(V4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,V4))) → ?
+  L4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,V4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(V4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,V4))) → ?
+  M4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,X4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(X4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,X4))) → ?
+  N4: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,X4)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(X4,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,X4))) → ?
+--- Row 5 ---
+  B5: FORMULA: =Translations!$B$240 → Production processes
+  C5: FORMULA: =Translations!$B$240 → Production processes
+  D5: FORMULA: =Translations!$B$240 → Production processes
+  G5: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R5)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(R5,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,R5))) → ?
+  H5: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R5)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(R5,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,R5))) → ?
+  I5: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,T5)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(T5,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,T5))) → ?
+  J5: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,T5)=CONST_NA,"",HYPERLINK("#"&ADDRESS(ROW($C$11)+MATCH(T5,$C$11:$C$662,0)-1,COLUMN($C$11)),INDEX(CNTR_List_ExistProdProcNames,T5))) → ?
+--- Row 7 ---
+  C7: D.
+  E7: FORMULA: =Translations!$B$241 → Sheet "D_Processes" - Production level and attributed emissions for SEE calculation
+--- Row 9 ---
+  A9: 1
+  D9: FORMULA: =Translations!$B$242 → Data input for the determination of the specific embedded emissions
+--- Row 11 ---
+  C11: 1
+  D11: FORMULA: =CONST_ProductionProcess & " " & C11 & ":" → Production process 1:
+  G11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R11)) → ERW tubes, CEW tubes
+  H11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R11)) → ERW tubes, CEW tubes
+  I11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R11)) → ERW tubes, CEW tubes
+  J11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R11)) → ERW tubes, CEW tubes
+  K11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R11)) → ERW tubes, CEW tubes
+  L11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R11)) → Iron or steel products
+  M11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R11)) → Iron or steel products
+  N11: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R11)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R11)) → Iron or steel products
+--- Row 13 ---
+  E13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M13: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S13,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 15 ---
+  D15: (a) 
+  E15: FORMULA: =Translations!$B$243 → Total production levels:
+  H15: FORMULA: =Translations!$B$244 → Production route
+  K15: FORMULA: =Translations!$B$221 → Unit
+  L15: FORMULA: =Translations!$B$245 → Amounts
+--- Row 16 ---
+  D16: 1
+  E16: FORMULA: =IF(G11="","",G11) & IF(L11="",""," | " & L11) → ERW tubes, CEW tubes | Iron or steel products
+  H16: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D16)) → All production routes
+  K16: FORMULA: =IF(L11="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L11,CONST_LIST_Goods,0))) → t
+  L16: 49.260126 ⬅ FILL_IN
+--- Row 17 ---
+  D17: 2
+  E17: FORMULA: =IF(H17=CONST_NA,"",E16) → ?
+  H17: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D17)) → n.a.
+  K17: FORMULA: =IF(H17=CONST_NA,"",K16) → ?
+--- Row 18 ---
+  D18: 3
+  E18: SHARED_FORMULA → ?
+  H18: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D18)) → n.a.
+  K18: SHARED_FORMULA → ?
+--- Row 19 ---
+  D19: 4
+  E19: SHARED_FORMULA → ?
+  H19: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D19)) → n.a.
+  K19: SHARED_FORMULA → ?
+--- Row 20 ---
+  D20: 5
+  E20: SHARED_FORMULA → ?
+  H20: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D20)) → n.a.
+  K20: SHARED_FORMULA → ?
+--- Row 21 ---
+  D21: 6
+  E21: SHARED_FORMULA → ?
+  H21: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D21)) → n.a.
+  K21: SHARED_FORMULA → ?
+--- Row 22 ---
+  D22: 7
+  E22: SHARED_FORMULA → ?
+  H22: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D22)) → n.a.
+  K22: SHARED_FORMULA → ?
+--- Row 23 ---
+  D23: 8
+  E23: SHARED_FORMULA → ?
+  H23: FORMULA: =IF(L11="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L11,CONST_LIST_Goods,0),D23)) → n.a.
+  K23: SHARED_FORMULA → ?
+--- Row 24 ---
+  E24: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K24: FORMULA: =K16 → t
+  L24: FORMULA: =IF(G11="","",SUM(L16:L23)) → 49.260126
+--- Row 26 ---
+  D26: (b)
+  E26: FORMULA: =Translations!$B$247 → Production details
+  K26: FORMULA: =Translations!$B$221 → Unit
+  L26: FORMULA: =Translations!$B$245 → Amounts
+--- Row 27 ---
+  D27: i.
+  E27: FORMULA: =Translations!$B$248 → Produced for the market
+  K27: FORMULA: =K16 → t
+  L27: 49.260126 ⬅ FILL_IN
+--- Row 28 ---
+  D28: ii.
+  E28: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L28: FORMULA: =IF(AND(COUNT(L24,L27)=2,SUM(L24>0)),SUM(L27)/SUM(L24),"") → 1
+--- Row 29 ---
+  D29: iii.
+  E29: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L29: FORMULA: =IF(G11="","",AND(SUM(L24)>0,SUM(L24)=SUM(L27))) → true
+--- Row 31 ---
+  D31: (c)
+  E31: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K31: FORMULA: =Translations!$B$221 → Unit
+  L31: FORMULA: =Translations!$B$245 → Amounts
+--- Row 32 ---
+  D32: 1
+  E32: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S32)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S32)) → ?
+  K32: FORMULA: =K16 → t
+--- Row 33 ---
+  D33: 2
+  E33: SHARED_FORMULA → ?
+  K33: FORMULA: =K32 → t
+--- Row 34 ---
+  D34: 3
+  E34: SHARED_FORMULA → ?
+  K34: FORMULA: =K33 → t
+--- Row 35 ---
+  D35: 4
+  E35: SHARED_FORMULA → ?
+  K35: SHARED_FORMULA → t
+--- Row 36 ---
+  D36: 5
+  E36: SHARED_FORMULA → ?
+  K36: SHARED_FORMULA → t
+--- Row 37 ---
+  D37: 6
+  E37: SHARED_FORMULA → ?
+  K37: SHARED_FORMULA → t
+--- Row 38 ---
+  D38: 7
+  E38: SHARED_FORMULA → ?
+  K38: SHARED_FORMULA → t
+--- Row 39 ---
+  D39: 8
+  E39: SHARED_FORMULA → ?
+  K39: SHARED_FORMULA → t
+--- Row 40 ---
+  D40: 9
+  E40: SHARED_FORMULA → ?
+  K40: SHARED_FORMULA → t
+--- Row 41 ---
+  D41: (d)
+  E41: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K41: SHARED_FORMULA → t
+  L41: 0 ⬅ FILL_IN
+--- Row 42 ---
+  D42: (e)
+  E42: FORMULA: =Translations!$B$253 → Control:
+  K42: SHARED_FORMULA → t
+  L42: FORMULA: =IF(G11="","",SUM(L24)-SUM(L27,L32:L41)) → ?
+--- Row 45 ---
+  D45: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J45: FORMULA: =IF(G11="","",G11) → ERW tubes, CEW tubes
+  K45: FORMULA: =IF(G11="","",G11) → ERW tubes, CEW tubes
+  L45: FORMULA: =IF(G11="","",G11) → ERW tubes, CEW tubes
+  M45: FORMULA: =IF(G11="","",G11) → ERW tubes, CEW tubes
+--- Row 47 ---
+  E47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M47: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S47,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 49 ---
+  K49: FORMULA: =Translations!$B$255 → Measurable heat
+  L49: FORMULA: =Translations!$B$256 → Waste gases
+  M49: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 50 ---
+  D50: (f)
+  E50: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  K50: false ⬅ FILL_IN
+  L50: false ⬅ FILL_IN
+  M50: FORMULA: =IF(L11="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L11,CONST_LIST_Goods,0))) → true
+--- Row 51 ---
+  E51: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 53 ---
+  K53: FORMULA: =Translations!$B$221 → Unit
+  L53: FORMULA: =Translations!$B$260 → Value
+--- Row 54 ---
+  D54: (g)
+  E54: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K54: FORMULA: =CONST_tCO2eq → tCO2e
+  L54: 3.60830423 ⬅ FILL_IN
+--- Row 56 ---
+  D56: (h)
+  E56: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K56: FORMULA: =Translations!$B$221 → Unit
+  L56: FORMULA: =Translations!$B$263 → Imported
+  M56: FORMULA: =Translations!$B$264 → Exported
+--- Row 57 ---
+  D57: i.
+  E57: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K57: TJ
+--- Row 58 ---
+  D58: ii.
+  E58: FORMULA: =Translations!$B$266 → Emissions factor
+  K58: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 60 ---
+  D60: (i)
+  E60: FORMULA: =Translations!$B$256 → Waste gases
+  K60: FORMULA: =Translations!$B$221 → Unit
+  L60: FORMULA: =Translations!$B$263 → Imported
+  M60: FORMULA: =Translations!$B$264 → Exported
+--- Row 61 ---
+  D61: i.
+  E61: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K61: FORMULA: =CONST_TJ → TJ
+--- Row 62 ---
+  D62: ii.
+  E62: FORMULA: =Translations!$B$268 → Emission factor
+  K62: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 64 ---
+  D64: (j)
+  E64: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K64: FORMULA: =Translations!$B$221 → Unit
+  L64: FORMULA: =Translations!$B$260 → Value
+--- Row 65 ---
+  D65: i.
+  E65: FORMULA: =Translations!$B$270 → Electricity consumption
+  K65: FORMULA: =CONST_MWh → MWh
+  L65: 23.84093428 ⬅ FILL_IN
+--- Row 66 ---
+  D66: ii.
+  E66: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K66: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+  L66: 0.598 ⬅ FILL_IN
+--- Row 67 ---
+  D67: iii.
+  E67: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K67: -
+  L67: Mix ⬅ FILL_IN
+--- Row 70 ---
+  D70: (k)
+  E70: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K70: FORMULA: =Translations!$B$221 → Unit
+  L70: FORMULA: =Translations!$B$260 → Value
+--- Row 71 ---
+  D71: i.
+  E71: FORMULA: =Translations!$B$274 → Amounts exported
+  K71: MWh
+  L71: 0 ⬅ FILL_IN
+--- Row 72 ---
+  D72: ii.
+  E72: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K72: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+  L72: 0.598 ⬅ FILL_IN
+--- Row 76 ---
+  C76: FORMULA: =C11+1 → 2
+  D76: FORMULA: =CONST_ProductionProcess & " " & C76 & ":" → Production process 2:
+  G76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R76)) → ?
+  H76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R76)) → ?
+  I76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R76)) → ?
+  J76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R76)) → ?
+  K76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R76)) → ?
+  L76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R76)) → ?
+  M76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R76)) → ?
+  N76: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R76)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R76)) → ?
+--- Row 78 ---
+  E78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M78: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S78,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 80 ---
+  D80: (a) 
+  E80: FORMULA: =Translations!$B$243 → Total production levels:
+  H80: FORMULA: =Translations!$B$244 → Production route
+  K80: FORMULA: =Translations!$B$221 → Unit
+  L80: FORMULA: =Translations!$B$245 → Amounts
+--- Row 81 ---
+  D81: 1
+  E81: FORMULA: =IF(G76="","",G76) & IF(L76="",""," | " & L76) → ?
+  H81: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D81)) → ?
+  K81: FORMULA: =IF(L76="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L76,CONST_LIST_Goods,0))) → ?
+--- Row 82 ---
+  D82: 2
+  E82: FORMULA: =IF(H82=CONST_NA,"",E81) → ?
+  H82: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D82)) → ?
+  K82: FORMULA: =IF(H82=CONST_NA,"",K81) → ?
+--- Row 83 ---
+  D83: 3
+  E83: SHARED_FORMULA → ?
+  H83: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D83)) → ?
+  K83: SHARED_FORMULA → ?
+--- Row 84 ---
+  D84: 4
+  E84: SHARED_FORMULA → ?
+  H84: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D84)) → ?
+  K84: SHARED_FORMULA → ?
+--- Row 85 ---
+  D85: 5
+  E85: SHARED_FORMULA → ?
+  H85: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D85)) → ?
+  K85: SHARED_FORMULA → ?
+--- Row 86 ---
+  D86: 6
+  E86: SHARED_FORMULA → ?
+  H86: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D86)) → ?
+  K86: SHARED_FORMULA → ?
+--- Row 87 ---
+  D87: 7
+  E87: SHARED_FORMULA → ?
+  H87: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D87)) → ?
+  K87: SHARED_FORMULA → ?
+--- Row 88 ---
+  D88: 8
+  E88: SHARED_FORMULA → ?
+  H88: FORMULA: =IF(L76="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L76,CONST_LIST_Goods,0),D88)) → ?
+  K88: SHARED_FORMULA → ?
+--- Row 89 ---
+  E89: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K89: FORMULA: =K81 → ?
+  L89: FORMULA: =IF(G76="","",SUM(L81:L88)) → ?
+--- Row 91 ---
+  D91: (b)
+  E91: FORMULA: =Translations!$B$247 → Production details
+  K91: FORMULA: =Translations!$B$221 → Unit
+  L91: FORMULA: =Translations!$B$245 → Amounts
+--- Row 92 ---
+  D92: i.
+  E92: FORMULA: =Translations!$B$248 → Produced for the market
+  K92: FORMULA: =K81 → ?
+--- Row 93 ---
+  D93: ii.
+  E93: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L93: FORMULA: =IF(AND(COUNT(L89,L92)=2,SUM(L89>0)),SUM(L92)/SUM(L89),"") → ?
+--- Row 94 ---
+  D94: iii.
+  E94: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L94: FORMULA: =IF(G76="","",AND(SUM(L89)>0,SUM(L89)=SUM(L92))) → ?
+--- Row 96 ---
+  D96: (c)
+  E96: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K96: FORMULA: =Translations!$B$221 → Unit
+  L96: FORMULA: =Translations!$B$245 → Amounts
+--- Row 97 ---
+  D97: 1
+  E97: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S97)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S97)) → ERW tubes, CEW tubes
+  K97: FORMULA: =K81 → ?
+--- Row 98 ---
+  D98: 2
+  E98: SHARED_FORMULA → ?
+  K98: FORMULA: =K97 → ?
+--- Row 99 ---
+  D99: 3
+  E99: SHARED_FORMULA → ?
+  K99: FORMULA: =K98 → ?
+--- Row 100 ---
+  D100: 4
+  E100: SHARED_FORMULA → ?
+  K100: SHARED_FORMULA → ?
+--- Row 101 ---
+  D101: 5
+  E101: SHARED_FORMULA → ?
+  K101: SHARED_FORMULA → ?
+--- Row 102 ---
+  D102: 6
+  E102: SHARED_FORMULA → ?
+  K102: SHARED_FORMULA → ?
+--- Row 103 ---
+  D103: 7
+  E103: SHARED_FORMULA → ?
+  K103: SHARED_FORMULA → ?
+--- Row 104 ---
+  D104: 8
+  E104: SHARED_FORMULA → ?
+  K104: SHARED_FORMULA → ?
+--- Row 105 ---
+  D105: 9
+  E105: SHARED_FORMULA → ?
+  K105: SHARED_FORMULA → ?
+--- Row 106 ---
+  D106: (d)
+  E106: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K106: SHARED_FORMULA → ?
+--- Row 107 ---
+  D107: (e)
+  E107: FORMULA: =Translations!$B$253 → Control:
+  K107: SHARED_FORMULA → ?
+  L107: FORMULA: =IF(G76="","",SUM(L89)-SUM(L92,L97:L106)) → ?
+--- Row 110 ---
+  D110: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J110: FORMULA: =IF(G76="","",G76) → ?
+  K110: FORMULA: =IF(G76="","",G76) → ?
+  L110: FORMULA: =IF(G76="","",G76) → ?
+  M110: FORMULA: =IF(G76="","",G76) → ?
+--- Row 112 ---
+  E112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M112: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S112,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 114 ---
+  K114: FORMULA: =Translations!$B$255 → Measurable heat
+  L114: FORMULA: =Translations!$B$256 → Waste gases
+  M114: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 115 ---
+  D115: (f)
+  E115: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M115: FORMULA: =IF(L76="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L76,CONST_LIST_Goods,0))) → ?
+--- Row 116 ---
+  E116: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 118 ---
+  K118: FORMULA: =Translations!$B$221 → Unit
+  L118: FORMULA: =Translations!$B$260 → Value
+--- Row 119 ---
+  D119: (g)
+  E119: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K119: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 121 ---
+  D121: (h)
+  E121: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K121: FORMULA: =Translations!$B$221 → Unit
+  L121: FORMULA: =Translations!$B$263 → Imported
+  M121: FORMULA: =Translations!$B$264 → Exported
+--- Row 122 ---
+  D122: i.
+  E122: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K122: TJ
+--- Row 123 ---
+  D123: ii.
+  E123: FORMULA: =Translations!$B$266 → Emissions factor
+  K123: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 125 ---
+  D125: (i)
+  E125: FORMULA: =Translations!$B$256 → Waste gases
+  K125: FORMULA: =Translations!$B$221 → Unit
+  L125: FORMULA: =Translations!$B$263 → Imported
+  M125: FORMULA: =Translations!$B$264 → Exported
+--- Row 126 ---
+  D126: i.
+  E126: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K126: FORMULA: =CONST_TJ → TJ
+--- Row 127 ---
+  D127: ii.
+  E127: FORMULA: =Translations!$B$268 → Emission factor
+  K127: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 129 ---
+  D129: (j)
+  E129: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K129: FORMULA: =Translations!$B$221 → Unit
+  L129: FORMULA: =Translations!$B$260 → Value
+--- Row 130 ---
+  D130: i.
+  E130: FORMULA: =Translations!$B$270 → Electricity consumption
+  K130: FORMULA: =CONST_MWh → MWh
+--- Row 131 ---
+  D131: ii.
+  E131: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K131: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 132 ---
+  D132: iii.
+  E132: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K132: -
+--- Row 135 ---
+  D135: (k)
+  E135: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K135: FORMULA: =Translations!$B$221 → Unit
+  L135: FORMULA: =Translations!$B$260 → Value
+--- Row 136 ---
+  D136: i.
+  E136: FORMULA: =Translations!$B$274 → Amounts exported
+  K136: MWh
+--- Row 137 ---
+  D137: ii.
+  E137: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K137: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 141 ---
+  C141: FORMULA: =C76+1 → 3
+  D141: FORMULA: =CONST_ProductionProcess & " " & C141 & ":" → Production process 3:
+  G141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R141)) → ?
+  H141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R141)) → ?
+  I141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R141)) → ?
+  J141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R141)) → ?
+  K141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R141)) → ?
+  L141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R141)) → ?
+  M141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R141)) → ?
+  N141: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R141)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R141)) → ?
+--- Row 143 ---
+  E143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M143: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S143,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 145 ---
+  D145: (a) 
+  E145: FORMULA: =Translations!$B$243 → Total production levels:
+  H145: FORMULA: =Translations!$B$244 → Production route
+  K145: FORMULA: =Translations!$B$221 → Unit
+  L145: FORMULA: =Translations!$B$245 → Amounts
+--- Row 146 ---
+  D146: 1
+  E146: FORMULA: =IF(G141="","",G141) & IF(L141="",""," | " & L141) → ?
+  H146: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D146)) → ?
+  K146: FORMULA: =IF(L141="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L141,CONST_LIST_Goods,0))) → ?
+--- Row 147 ---
+  D147: 2
+  E147: FORMULA: =IF(H147=CONST_NA,"",E146) → ?
+  H147: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D147)) → ?
+  K147: FORMULA: =IF(H147=CONST_NA,"",K146) → ?
+--- Row 148 ---
+  D148: 3
+  E148: SHARED_FORMULA → ?
+  H148: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D148)) → ?
+  K148: SHARED_FORMULA → ?
+--- Row 149 ---
+  D149: 4
+  E149: SHARED_FORMULA → ?
+  H149: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D149)) → ?
+  K149: SHARED_FORMULA → ?
+--- Row 150 ---
+  D150: 5
+  E150: SHARED_FORMULA → ?
+  H150: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D150)) → ?
+  K150: SHARED_FORMULA → ?
+--- Row 151 ---
+  D151: 6
+  E151: SHARED_FORMULA → ?
+  H151: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D151)) → ?
+  K151: SHARED_FORMULA → ?
+--- Row 152 ---
+  D152: 7
+  E152: SHARED_FORMULA → ?
+  H152: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D152)) → ?
+  K152: SHARED_FORMULA → ?
+--- Row 153 ---
+  D153: 8
+  E153: SHARED_FORMULA → ?
+  H153: FORMULA: =IF(L141="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L141,CONST_LIST_Goods,0),D153)) → ?
+  K153: SHARED_FORMULA → ?
+--- Row 154 ---
+  E154: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K154: FORMULA: =K146 → ?
+  L154: FORMULA: =IF(G141="","",SUM(L146:L153)) → ?
+--- Row 156 ---
+  D156: (b)
+  E156: FORMULA: =Translations!$B$247 → Production details
+  K156: FORMULA: =Translations!$B$221 → Unit
+  L156: FORMULA: =Translations!$B$245 → Amounts
+--- Row 157 ---
+  D157: i.
+  E157: FORMULA: =Translations!$B$248 → Produced for the market
+  K157: FORMULA: =K146 → ?
+--- Row 158 ---
+  D158: ii.
+  E158: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L158: FORMULA: =IF(AND(COUNT(L154,L157)=2,SUM(L154>0)),SUM(L157)/SUM(L154),"") → ?
+--- Row 159 ---
+  D159: iii.
+  E159: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L159: FORMULA: =IF(G141="","",AND(SUM(L154)>0,SUM(L154)=SUM(L157))) → ?
+--- Row 161 ---
+  D161: (c)
+  E161: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K161: FORMULA: =Translations!$B$221 → Unit
+  L161: FORMULA: =Translations!$B$245 → Amounts
+--- Row 162 ---
+  D162: 1
+  E162: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S162)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S162)) → ERW tubes, CEW tubes
+  K162: FORMULA: =K146 → ?
+--- Row 163 ---
+  D163: 2
+  E163: SHARED_FORMULA → ?
+  K163: FORMULA: =K162 → ?
+--- Row 164 ---
+  D164: 3
+  E164: SHARED_FORMULA → ?
+  K164: FORMULA: =K163 → ?
+--- Row 165 ---
+  D165: 4
+  E165: SHARED_FORMULA → ?
+  K165: SHARED_FORMULA → ?
+--- Row 166 ---
+  D166: 5
+  E166: SHARED_FORMULA → ?
+  K166: SHARED_FORMULA → ?
+--- Row 167 ---
+  D167: 6
+  E167: SHARED_FORMULA → ?
+  K167: SHARED_FORMULA → ?
+--- Row 168 ---
+  D168: 7
+  E168: SHARED_FORMULA → ?
+  K168: SHARED_FORMULA → ?
+--- Row 169 ---
+  D169: 8
+  E169: SHARED_FORMULA → ?
+  K169: SHARED_FORMULA → ?
+--- Row 170 ---
+  D170: 9
+  E170: SHARED_FORMULA → ?
+  K170: SHARED_FORMULA → ?
+--- Row 171 ---
+  D171: (d)
+  E171: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K171: SHARED_FORMULA → ?
+--- Row 172 ---
+  D172: (e)
+  E172: FORMULA: =Translations!$B$253 → Control:
+  K172: SHARED_FORMULA → ?
+  L172: FORMULA: =IF(G141="","",SUM(L154)-SUM(L157,L162:L171)) → ?
+--- Row 175 ---
+  D175: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J175: FORMULA: =IF(G141="","",G141) → ?
+  K175: FORMULA: =IF(G141="","",G141) → ?
+  L175: FORMULA: =IF(G141="","",G141) → ?
+  M175: FORMULA: =IF(G141="","",G141) → ?
+--- Row 177 ---
+  E177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M177: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S177,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 179 ---
+  K179: FORMULA: =Translations!$B$255 → Measurable heat
+  L179: FORMULA: =Translations!$B$256 → Waste gases
+  M179: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 180 ---
+  D180: (f)
+  E180: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M180: FORMULA: =IF(L141="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L141,CONST_LIST_Goods,0))) → ?
+--- Row 181 ---
+  E181: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 183 ---
+  K183: FORMULA: =Translations!$B$221 → Unit
+  L183: FORMULA: =Translations!$B$260 → Value
+--- Row 184 ---
+  D184: (g)
+  E184: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K184: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 186 ---
+  D186: (h)
+  E186: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K186: FORMULA: =Translations!$B$221 → Unit
+  L186: FORMULA: =Translations!$B$263 → Imported
+  M186: FORMULA: =Translations!$B$264 → Exported
+--- Row 187 ---
+  D187: i.
+  E187: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K187: TJ
+--- Row 188 ---
+  D188: ii.
+  E188: FORMULA: =Translations!$B$266 → Emissions factor
+  K188: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 190 ---
+  D190: (i)
+  E190: FORMULA: =Translations!$B$256 → Waste gases
+  K190: FORMULA: =Translations!$B$221 → Unit
+  L190: FORMULA: =Translations!$B$263 → Imported
+  M190: FORMULA: =Translations!$B$264 → Exported
+--- Row 191 ---
+  D191: i.
+  E191: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K191: FORMULA: =CONST_TJ → TJ
+--- Row 192 ---
+  D192: ii.
+  E192: FORMULA: =Translations!$B$268 → Emission factor
+  K192: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 194 ---
+  D194: (j)
+  E194: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K194: FORMULA: =Translations!$B$221 → Unit
+  L194: FORMULA: =Translations!$B$260 → Value
+--- Row 195 ---
+  D195: i.
+  E195: FORMULA: =Translations!$B$270 → Electricity consumption
+  K195: FORMULA: =CONST_MWh → MWh
+--- Row 196 ---
+  D196: ii.
+  E196: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K196: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 197 ---
+  D197: iii.
+  E197: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K197: -
+--- Row 200 ---
+  D200: (k)
+  E200: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K200: FORMULA: =Translations!$B$221 → Unit
+  L200: FORMULA: =Translations!$B$260 → Value
+--- Row 201 ---
+  D201: i.
+  E201: FORMULA: =Translations!$B$274 → Amounts exported
+  K201: MWh
+--- Row 202 ---
+  D202: ii.
+  E202: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K202: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 206 ---
+  C206: FORMULA: =C141+1 → 4
+  D206: FORMULA: =CONST_ProductionProcess & " " & C206 & ":" → Production process 4:
+  G206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R206)) → ?
+  H206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R206)) → ?
+  I206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R206)) → ?
+  J206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R206)) → ?
+  K206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R206)) → ?
+  L206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R206)) → ?
+  M206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R206)) → ?
+  N206: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R206)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R206)) → ?
+--- Row 208 ---
+  E208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M208: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S208,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 210 ---
+  D210: (a) 
+  E210: FORMULA: =Translations!$B$243 → Total production levels:
+  H210: FORMULA: =Translations!$B$244 → Production route
+  K210: FORMULA: =Translations!$B$221 → Unit
+  L210: FORMULA: =Translations!$B$245 → Amounts
+--- Row 211 ---
+  D211: 1
+  E211: FORMULA: =IF(G206="","",G206) & IF(L206="",""," | " & L206) → ?
+  H211: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D211)) → ?
+  K211: FORMULA: =IF(L206="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L206,CONST_LIST_Goods,0))) → ?
+--- Row 212 ---
+  D212: 2
+  E212: FORMULA: =IF(H212=CONST_NA,"",E211) → ?
+  H212: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D212)) → ?
+  K212: FORMULA: =IF(H212=CONST_NA,"",K211) → ?
+--- Row 213 ---
+  D213: 3
+  E213: SHARED_FORMULA → ?
+  H213: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D213)) → ?
+  K213: SHARED_FORMULA → ?
+--- Row 214 ---
+  D214: 4
+  E214: SHARED_FORMULA → ?
+  H214: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D214)) → ?
+  K214: SHARED_FORMULA → ?
+--- Row 215 ---
+  D215: 5
+  E215: SHARED_FORMULA → ?
+  H215: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D215)) → ?
+  K215: SHARED_FORMULA → ?
+--- Row 216 ---
+  D216: 6
+  E216: SHARED_FORMULA → ?
+  H216: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D216)) → ?
+  K216: SHARED_FORMULA → ?
+--- Row 217 ---
+  D217: 7
+  E217: SHARED_FORMULA → ?
+  H217: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D217)) → ?
+  K217: SHARED_FORMULA → ?
+--- Row 218 ---
+  D218: 8
+  E218: SHARED_FORMULA → ?
+  H218: FORMULA: =IF(L206="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L206,CONST_LIST_Goods,0),D218)) → ?
+  K218: SHARED_FORMULA → ?
+--- Row 219 ---
+  E219: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K219: FORMULA: =K211 → ?
+  L219: FORMULA: =IF(G206="","",SUM(L211:L218)) → ?
+--- Row 221 ---
+  D221: (b)
+  E221: FORMULA: =Translations!$B$247 → Production details
+  K221: FORMULA: =Translations!$B$221 → Unit
+  L221: FORMULA: =Translations!$B$245 → Amounts
+--- Row 222 ---
+  D222: i.
+  E222: FORMULA: =Translations!$B$248 → Produced for the market
+  K222: FORMULA: =K211 → ?
+--- Row 223 ---
+  D223: ii.
+  E223: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L223: FORMULA: =IF(AND(COUNT(L219,L222)=2,SUM(L219>0)),SUM(L222)/SUM(L219),"") → ?
+--- Row 224 ---
+  D224: iii.
+  E224: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L224: FORMULA: =IF(G206="","",AND(SUM(L219)>0,SUM(L219)=SUM(L222))) → ?
+--- Row 226 ---
+  D226: (c)
+  E226: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K226: FORMULA: =Translations!$B$221 → Unit
+  L226: FORMULA: =Translations!$B$245 → Amounts
+--- Row 227 ---
+  D227: 1
+  E227: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S227)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S227)) → ERW tubes, CEW tubes
+  K227: FORMULA: =K211 → ?
+--- Row 228 ---
+  D228: 2
+  E228: SHARED_FORMULA → ?
+  K228: FORMULA: =K227 → ?
+--- Row 229 ---
+  D229: 3
+  E229: SHARED_FORMULA → ?
+  K229: FORMULA: =K228 → ?
+--- Row 230 ---
+  D230: 4
+  E230: SHARED_FORMULA → ?
+  K230: SHARED_FORMULA → ?
+--- Row 231 ---
+  D231: 5
+  E231: SHARED_FORMULA → ?
+  K231: SHARED_FORMULA → ?
+--- Row 232 ---
+  D232: 6
+  E232: SHARED_FORMULA → ?
+  K232: SHARED_FORMULA → ?
+--- Row 233 ---
+  D233: 7
+  E233: SHARED_FORMULA → ?
+  K233: SHARED_FORMULA → ?
+--- Row 234 ---
+  D234: 8
+  E234: SHARED_FORMULA → ?
+  K234: SHARED_FORMULA → ?
+--- Row 235 ---
+  D235: 9
+  E235: SHARED_FORMULA → ?
+  K235: SHARED_FORMULA → ?
+--- Row 236 ---
+  D236: (d)
+  E236: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K236: SHARED_FORMULA → ?
+--- Row 237 ---
+  D237: (e)
+  E237: FORMULA: =Translations!$B$253 → Control:
+  K237: SHARED_FORMULA → ?
+  L237: FORMULA: =IF(G206="","",SUM(L219)-SUM(L222,L227:L236)) → ?
+--- Row 240 ---
+  D240: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J240: FORMULA: =IF(G206="","",G206) → ?
+  K240: FORMULA: =IF(G206="","",G206) → ?
+  L240: FORMULA: =IF(G206="","",G206) → ?
+  M240: FORMULA: =IF(G206="","",G206) → ?
+--- Row 242 ---
+  E242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M242: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S242,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 244 ---
+  K244: FORMULA: =Translations!$B$255 → Measurable heat
+  L244: FORMULA: =Translations!$B$256 → Waste gases
+  M244: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 245 ---
+  D245: (f)
+  E245: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M245: FORMULA: =IF(L206="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L206,CONST_LIST_Goods,0))) → ?
+--- Row 246 ---
+  E246: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 248 ---
+  K248: FORMULA: =Translations!$B$221 → Unit
+  L248: FORMULA: =Translations!$B$260 → Value
+--- Row 249 ---
+  D249: (g)
+  E249: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K249: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 251 ---
+  D251: (h)
+  E251: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K251: FORMULA: =Translations!$B$221 → Unit
+  L251: FORMULA: =Translations!$B$263 → Imported
+  M251: FORMULA: =Translations!$B$264 → Exported
+--- Row 252 ---
+  D252: i.
+  E252: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K252: TJ
+--- Row 253 ---
+  D253: ii.
+  E253: FORMULA: =Translations!$B$266 → Emissions factor
+  K253: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 255 ---
+  D255: (i)
+  E255: FORMULA: =Translations!$B$256 → Waste gases
+  K255: FORMULA: =Translations!$B$221 → Unit
+  L255: FORMULA: =Translations!$B$263 → Imported
+  M255: FORMULA: =Translations!$B$264 → Exported
+--- Row 256 ---
+  D256: i.
+  E256: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K256: FORMULA: =CONST_TJ → TJ
+--- Row 257 ---
+  D257: ii.
+  E257: FORMULA: =Translations!$B$268 → Emission factor
+  K257: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 259 ---
+  D259: (j)
+  E259: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K259: FORMULA: =Translations!$B$221 → Unit
+  L259: FORMULA: =Translations!$B$260 → Value
+--- Row 260 ---
+  D260: i.
+  E260: FORMULA: =Translations!$B$270 → Electricity consumption
+  K260: FORMULA: =CONST_MWh → MWh
+--- Row 261 ---
+  D261: ii.
+  E261: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K261: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 262 ---
+  D262: iii.
+  E262: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K262: -
+--- Row 265 ---
+  D265: (k)
+  E265: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K265: FORMULA: =Translations!$B$221 → Unit
+  L265: FORMULA: =Translations!$B$260 → Value
+--- Row 266 ---
+  D266: i.
+  E266: FORMULA: =Translations!$B$274 → Amounts exported
+  K266: MWh
+--- Row 267 ---
+  D267: ii.
+  E267: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K267: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 271 ---
+  C271: FORMULA: =C206+1 → 5
+  D271: FORMULA: =CONST_ProductionProcess & " " & C271 & ":" → Production process 5:
+  G271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R271)) → ?
+  H271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R271)) → ?
+  I271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R271)) → ?
+  J271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R271)) → ?
+  K271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R271)) → ?
+  L271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R271)) → ?
+  M271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R271)) → ?
+  N271: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R271)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R271)) → ?
+--- Row 273 ---
+  E273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M273: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S273,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 275 ---
+  D275: (a) 
+  E275: FORMULA: =Translations!$B$243 → Total production levels:
+  H275: FORMULA: =Translations!$B$244 → Production route
+  K275: FORMULA: =Translations!$B$221 → Unit
+  L275: FORMULA: =Translations!$B$245 → Amounts
+--- Row 276 ---
+  D276: 1
+  E276: FORMULA: =IF(G271="","",G271) & IF(L271="",""," | " & L271) → ?
+  H276: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D276)) → ?
+  K276: FORMULA: =IF(L271="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L271,CONST_LIST_Goods,0))) → ?
+--- Row 277 ---
+  D277: 2
+  E277: FORMULA: =IF(H277=CONST_NA,"",E276) → ?
+  H277: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D277)) → ?
+  K277: FORMULA: =IF(H277=CONST_NA,"",K276) → ?
+--- Row 278 ---
+  D278: 3
+  E278: SHARED_FORMULA → ?
+  H278: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D278)) → ?
+  K278: SHARED_FORMULA → ?
+--- Row 279 ---
+  D279: 4
+  E279: SHARED_FORMULA → ?
+  H279: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D279)) → ?
+  K279: SHARED_FORMULA → ?
+--- Row 280 ---
+  D280: 5
+  E280: SHARED_FORMULA → ?
+  H280: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D280)) → ?
+  K280: SHARED_FORMULA → ?
+--- Row 281 ---
+  D281: 6
+  E281: SHARED_FORMULA → ?
+  H281: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D281)) → ?
+  K281: SHARED_FORMULA → ?
+--- Row 282 ---
+  D282: 7
+  E282: SHARED_FORMULA → ?
+  H282: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D282)) → ?
+  K282: SHARED_FORMULA → ?
+--- Row 283 ---
+  D283: 8
+  E283: SHARED_FORMULA → ?
+  H283: FORMULA: =IF(L271="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L271,CONST_LIST_Goods,0),D283)) → ?
+  K283: SHARED_FORMULA → ?
+--- Row 284 ---
+  E284: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K284: FORMULA: =K276 → ?
+  L284: FORMULA: =IF(G271="","",SUM(L276:L283)) → ?
+--- Row 286 ---
+  D286: (b)
+  E286: FORMULA: =Translations!$B$247 → Production details
+  K286: FORMULA: =Translations!$B$221 → Unit
+  L286: FORMULA: =Translations!$B$245 → Amounts
+--- Row 287 ---
+  D287: i.
+  E287: FORMULA: =Translations!$B$248 → Produced for the market
+  K287: FORMULA: =K276 → ?
+--- Row 288 ---
+  D288: ii.
+  E288: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L288: FORMULA: =IF(AND(COUNT(L284,L287)=2,SUM(L284>0)),SUM(L287)/SUM(L284),"") → ?
+--- Row 289 ---
+  D289: iii.
+  E289: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L289: FORMULA: =IF(G271="","",AND(SUM(L284)>0,SUM(L284)=SUM(L287))) → ?
+--- Row 291 ---
+  D291: (c)
+  E291: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K291: FORMULA: =Translations!$B$221 → Unit
+  L291: FORMULA: =Translations!$B$245 → Amounts
+--- Row 292 ---
+  D292: 1
+  E292: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S292)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S292)) → ERW tubes, CEW tubes
+  K292: FORMULA: =K276 → ?
+--- Row 293 ---
+  D293: 2
+  E293: SHARED_FORMULA → ?
+  K293: FORMULA: =K292 → ?
+--- Row 294 ---
+  D294: 3
+  E294: SHARED_FORMULA → ?
+  K294: FORMULA: =K293 → ?
+--- Row 295 ---
+  D295: 4
+  E295: SHARED_FORMULA → ?
+  K295: SHARED_FORMULA → ?
+--- Row 296 ---
+  D296: 5
+  E296: SHARED_FORMULA → ?
+  K296: SHARED_FORMULA → ?
+--- Row 297 ---
+  D297: 6
+  E297: SHARED_FORMULA → ?
+  K297: SHARED_FORMULA → ?
+--- Row 298 ---
+  D298: 7
+  E298: SHARED_FORMULA → ?
+  K298: SHARED_FORMULA → ?
+--- Row 299 ---
+  D299: 8
+  E299: SHARED_FORMULA → ?
+  K299: SHARED_FORMULA → ?
+--- Row 300 ---
+  D300: 9
+  E300: SHARED_FORMULA → ?
+  K300: SHARED_FORMULA → ?
+--- Row 301 ---
+  D301: (d)
+  E301: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K301: SHARED_FORMULA → ?
+--- Row 302 ---
+  D302: (e)
+  E302: FORMULA: =Translations!$B$253 → Control:
+  K302: SHARED_FORMULA → ?
+  L302: FORMULA: =IF(G271="","",SUM(L284)-SUM(L287,L292:L301)) → ?
+--- Row 305 ---
+  D305: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J305: FORMULA: =IF(G271="","",G271) → ?
+  K305: FORMULA: =IF(G271="","",G271) → ?
+  L305: FORMULA: =IF(G271="","",G271) → ?
+  M305: FORMULA: =IF(G271="","",G271) → ?
+--- Row 307 ---
+  E307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M307: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S307,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 309 ---
+  K309: FORMULA: =Translations!$B$255 → Measurable heat
+  L309: FORMULA: =Translations!$B$256 → Waste gases
+  M309: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 310 ---
+  D310: (f)
+  E310: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M310: FORMULA: =IF(L271="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L271,CONST_LIST_Goods,0))) → ?
+--- Row 311 ---
+  E311: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 313 ---
+  K313: FORMULA: =Translations!$B$221 → Unit
+  L313: FORMULA: =Translations!$B$260 → Value
+--- Row 314 ---
+  D314: (g)
+  E314: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K314: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 316 ---
+  D316: (h)
+  E316: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K316: FORMULA: =Translations!$B$221 → Unit
+  L316: FORMULA: =Translations!$B$263 → Imported
+  M316: FORMULA: =Translations!$B$264 → Exported
+--- Row 317 ---
+  D317: i.
+  E317: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K317: TJ
+--- Row 318 ---
+  D318: ii.
+  E318: FORMULA: =Translations!$B$266 → Emissions factor
+  K318: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 320 ---
+  D320: (i)
+  E320: FORMULA: =Translations!$B$256 → Waste gases
+  K320: FORMULA: =Translations!$B$221 → Unit
+  L320: FORMULA: =Translations!$B$263 → Imported
+  M320: FORMULA: =Translations!$B$264 → Exported
+--- Row 321 ---
+  D321: i.
+  E321: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K321: FORMULA: =CONST_TJ → TJ
+--- Row 322 ---
+  D322: ii.
+  E322: FORMULA: =Translations!$B$268 → Emission factor
+  K322: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 324 ---
+  D324: (j)
+  E324: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K324: FORMULA: =Translations!$B$221 → Unit
+  L324: FORMULA: =Translations!$B$260 → Value
+--- Row 325 ---
+  D325: i.
+  E325: FORMULA: =Translations!$B$270 → Electricity consumption
+  K325: FORMULA: =CONST_MWh → MWh
+--- Row 326 ---
+  D326: ii.
+  E326: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K326: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 327 ---
+  D327: iii.
+  E327: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K327: -
+--- Row 330 ---
+  D330: (k)
+  E330: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K330: FORMULA: =Translations!$B$221 → Unit
+  L330: FORMULA: =Translations!$B$260 → Value
+--- Row 331 ---
+  D331: i.
+  E331: FORMULA: =Translations!$B$274 → Amounts exported
+  K331: MWh
+--- Row 332 ---
+  D332: ii.
+  E332: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K332: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 336 ---
+  C336: FORMULA: =C271+1 → 6
+  D336: FORMULA: =CONST_ProductionProcess & " " & C336 & ":" → Production process 6:
+  G336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R336)) → ?
+  H336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R336)) → ?
+  I336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R336)) → ?
+  J336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R336)) → ?
+  K336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R336)) → ?
+  L336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R336)) → ?
+  M336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R336)) → ?
+  N336: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R336)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R336)) → ?
+--- Row 338 ---
+  E338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M338: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S338,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 340 ---
+  D340: (a) 
+  E340: FORMULA: =Translations!$B$243 → Total production levels:
+  H340: FORMULA: =Translations!$B$244 → Production route
+  K340: FORMULA: =Translations!$B$221 → Unit
+  L340: FORMULA: =Translations!$B$245 → Amounts
+--- Row 341 ---
+  D341: 1
+  E341: FORMULA: =IF(G336="","",G336) & IF(L336="",""," | " & L336) → ?
+  H341: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D341)) → ?
+  K341: FORMULA: =IF(L336="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L336,CONST_LIST_Goods,0))) → ?
+--- Row 342 ---
+  D342: 2
+  E342: FORMULA: =IF(H342=CONST_NA,"",E341) → ?
+  H342: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D342)) → ?
+  K342: FORMULA: =IF(H342=CONST_NA,"",K341) → ?
+--- Row 343 ---
+  D343: 3
+  E343: SHARED_FORMULA → ?
+  H343: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D343)) → ?
+  K343: SHARED_FORMULA → ?
+--- Row 344 ---
+  D344: 4
+  E344: SHARED_FORMULA → ?
+  H344: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D344)) → ?
+  K344: SHARED_FORMULA → ?
+--- Row 345 ---
+  D345: 5
+  E345: SHARED_FORMULA → ?
+  H345: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D345)) → ?
+  K345: SHARED_FORMULA → ?
+--- Row 346 ---
+  D346: 6
+  E346: SHARED_FORMULA → ?
+  H346: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D346)) → ?
+  K346: SHARED_FORMULA → ?
+--- Row 347 ---
+  D347: 7
+  E347: SHARED_FORMULA → ?
+  H347: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D347)) → ?
+  K347: SHARED_FORMULA → ?
+--- Row 348 ---
+  D348: 8
+  E348: SHARED_FORMULA → ?
+  H348: FORMULA: =IF(L336="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L336,CONST_LIST_Goods,0),D348)) → ?
+  K348: SHARED_FORMULA → ?
+--- Row 349 ---
+  E349: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K349: FORMULA: =K341 → ?
+  L349: FORMULA: =IF(G336="","",SUM(L341:L348)) → ?
+--- Row 351 ---
+  D351: (b)
+  E351: FORMULA: =Translations!$B$247 → Production details
+  K351: FORMULA: =Translations!$B$221 → Unit
+  L351: FORMULA: =Translations!$B$245 → Amounts
+--- Row 352 ---
+  D352: i.
+  E352: FORMULA: =Translations!$B$248 → Produced for the market
+  K352: FORMULA: =K341 → ?
+--- Row 353 ---
+  D353: ii.
+  E353: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L353: FORMULA: =IF(AND(COUNT(L349,L352)=2,SUM(L349>0)),SUM(L352)/SUM(L349),"") → ?
+--- Row 354 ---
+  D354: iii.
+  E354: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L354: FORMULA: =IF(G336="","",AND(SUM(L349)>0,SUM(L349)=SUM(L352))) → ?
+--- Row 356 ---
+  D356: (c)
+  E356: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K356: FORMULA: =Translations!$B$221 → Unit
+  L356: FORMULA: =Translations!$B$245 → Amounts
+--- Row 357 ---
+  D357: 1
+  E357: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S357)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S357)) → ERW tubes, CEW tubes
+  K357: FORMULA: =K341 → ?
+--- Row 358 ---
+  D358: 2
+  E358: SHARED_FORMULA → ?
+  K358: FORMULA: =K357 → ?
+--- Row 359 ---
+  D359: 3
+  E359: SHARED_FORMULA → ?
+  K359: FORMULA: =K358 → ?
+--- Row 360 ---
+  D360: 4
+  E360: SHARED_FORMULA → ?
+  K360: SHARED_FORMULA → ?
+--- Row 361 ---
+  D361: 5
+  E361: SHARED_FORMULA → ?
+  K361: SHARED_FORMULA → ?
+--- Row 362 ---
+  D362: 6
+  E362: SHARED_FORMULA → ?
+  K362: SHARED_FORMULA → ?
+--- Row 363 ---
+  D363: 7
+  E363: SHARED_FORMULA → ?
+  K363: SHARED_FORMULA → ?
+--- Row 364 ---
+  D364: 8
+  E364: SHARED_FORMULA → ?
+  K364: SHARED_FORMULA → ?
+--- Row 365 ---
+  D365: 9
+  E365: SHARED_FORMULA → ?
+  K365: SHARED_FORMULA → ?
+--- Row 366 ---
+  D366: (d)
+  E366: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K366: SHARED_FORMULA → ?
+--- Row 367 ---
+  D367: (e)
+  E367: FORMULA: =Translations!$B$253 → Control:
+  K367: SHARED_FORMULA → ?
+  L367: FORMULA: =IF(G336="","",SUM(L349)-SUM(L352,L357:L366)) → ?
+--- Row 370 ---
+  D370: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J370: FORMULA: =IF(G336="","",G336) → ?
+  K370: FORMULA: =IF(G336="","",G336) → ?
+  L370: FORMULA: =IF(G336="","",G336) → ?
+  M370: FORMULA: =IF(G336="","",G336) → ?
+--- Row 372 ---
+  E372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M372: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S372,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 374 ---
+  K374: FORMULA: =Translations!$B$255 → Measurable heat
+  L374: FORMULA: =Translations!$B$255 → Measurable heat
+  M374: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 375 ---
+  D375: (f)
+  E375: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M375: FORMULA: =IF(L336="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L336,CONST_LIST_Goods,0))) → ?
+--- Row 376 ---
+  E376: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 378 ---
+  K378: FORMULA: =Translations!$B$221 → Unit
+  L378: FORMULA: =Translations!$B$260 → Value
+--- Row 379 ---
+  D379: (g)
+  E379: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K379: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 381 ---
+  D381: (h)
+  E381: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K381: FORMULA: =Translations!$B$221 → Unit
+  L381: FORMULA: =Translations!$B$263 → Imported
+  M381: FORMULA: =Translations!$B$264 → Exported
+--- Row 382 ---
+  D382: i.
+  E382: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K382: TJ
+--- Row 383 ---
+  D383: ii.
+  E383: FORMULA: =Translations!$B$266 → Emissions factor
+  K383: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 385 ---
+  D385: (i)
+  E385: FORMULA: =Translations!$B$256 → Waste gases
+  K385: FORMULA: =Translations!$B$221 → Unit
+  L385: FORMULA: =Translations!$B$263 → Imported
+  M385: FORMULA: =Translations!$B$264 → Exported
+--- Row 386 ---
+  D386: i.
+  E386: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K386: FORMULA: =CONST_TJ → TJ
+--- Row 387 ---
+  D387: ii.
+  E387: FORMULA: =Translations!$B$268 → Emission factor
+  K387: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 389 ---
+  D389: (j)
+  E389: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K389: FORMULA: =Translations!$B$221 → Unit
+  L389: FORMULA: =Translations!$B$260 → Value
+--- Row 390 ---
+  D390: i.
+  E390: FORMULA: =Translations!$B$270 → Electricity consumption
+  K390: FORMULA: =CONST_MWh → MWh
+--- Row 391 ---
+  D391: ii.
+  E391: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K391: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 392 ---
+  D392: iii.
+  E392: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K392: -
+--- Row 395 ---
+  D395: (k)
+  E395: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K395: FORMULA: =Translations!$B$221 → Unit
+  L395: FORMULA: =Translations!$B$260 → Value
+--- Row 396 ---
+  D396: i.
+  E396: FORMULA: =Translations!$B$274 → Amounts exported
+  K396: MWh
+--- Row 397 ---
+  D397: ii.
+  E397: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K397: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 401 ---
+  C401: FORMULA: =C336+1 → 7
+  D401: FORMULA: =CONST_ProductionProcess & " " & C401 & ":" → Production process 7:
+  G401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R401)) → ?
+  H401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R401)) → ?
+  I401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R401)) → ?
+  J401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R401)) → ?
+  K401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R401)) → ?
+  L401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R401)) → ?
+  M401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R401)) → ?
+  N401: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R401)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R401)) → ?
+--- Row 403 ---
+  E403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M403: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S403,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 405 ---
+  D405: (a) 
+  E405: FORMULA: =Translations!$B$243 → Total production levels:
+  H405: FORMULA: =Translations!$B$244 → Production route
+  K405: FORMULA: =Translations!$B$221 → Unit
+  L405: FORMULA: =Translations!$B$245 → Amounts
+--- Row 406 ---
+  D406: 1
+  E406: FORMULA: =IF(G401="","",G401) & IF(L401="",""," | " & L401) → ?
+  H406: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D406)) → ?
+  K406: FORMULA: =IF(L401="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L401,CONST_LIST_Goods,0))) → ?
+--- Row 407 ---
+  D407: 2
+  E407: FORMULA: =IF(H407=CONST_NA,"",E406) → ?
+  H407: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D407)) → ?
+  K407: FORMULA: =IF(H407=CONST_NA,"",K406) → ?
+--- Row 408 ---
+  D408: 3
+  E408: SHARED_FORMULA → ?
+  H408: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D408)) → ?
+  K408: SHARED_FORMULA → ?
+--- Row 409 ---
+  D409: 4
+  E409: SHARED_FORMULA → ?
+  H409: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D409)) → ?
+  K409: SHARED_FORMULA → ?
+--- Row 410 ---
+  D410: 5
+  E410: SHARED_FORMULA → ?
+  H410: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D410)) → ?
+  K410: SHARED_FORMULA → ?
+--- Row 411 ---
+  D411: 6
+  E411: SHARED_FORMULA → ?
+  H411: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D411)) → ?
+  K411: SHARED_FORMULA → ?
+--- Row 412 ---
+  D412: 7
+  E412: SHARED_FORMULA → ?
+  H412: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D412)) → ?
+  K412: SHARED_FORMULA → ?
+--- Row 413 ---
+  D413: 8
+  E413: SHARED_FORMULA → ?
+  H413: FORMULA: =IF(L401="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L401,CONST_LIST_Goods,0),D413)) → ?
+  K413: SHARED_FORMULA → ?
+--- Row 414 ---
+  E414: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K414: FORMULA: =K406 → ?
+  L414: FORMULA: =IF(G401="","",SUM(L406:L413)) → ?
+--- Row 416 ---
+  D416: (b)
+  E416: FORMULA: =Translations!$B$247 → Production details
+  K416: FORMULA: =Translations!$B$221 → Unit
+  L416: FORMULA: =Translations!$B$245 → Amounts
+--- Row 417 ---
+  D417: i.
+  E417: FORMULA: =Translations!$B$248 → Produced for the market
+  K417: FORMULA: =K406 → ?
+--- Row 418 ---
+  D418: ii.
+  E418: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L418: FORMULA: =IF(AND(COUNT(L414,L417)=2,SUM(L414>0)),SUM(L417)/SUM(L414),"") → ?
+--- Row 419 ---
+  D419: iii.
+  E419: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L419: FORMULA: =IF(G401="","",AND(SUM(L414)>0,SUM(L414)=SUM(L417))) → ?
+--- Row 421 ---
+  D421: (c)
+  E421: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K421: FORMULA: =Translations!$B$221 → Unit
+  L421: FORMULA: =Translations!$B$245 → Amounts
+--- Row 422 ---
+  D422: 1
+  E422: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S422)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S422)) → ERW tubes, CEW tubes
+  K422: FORMULA: =K406 → ?
+--- Row 423 ---
+  D423: 2
+  E423: SHARED_FORMULA → ?
+  K423: FORMULA: =K422 → ?
+--- Row 424 ---
+  D424: 3
+  E424: SHARED_FORMULA → ?
+  K424: FORMULA: =K423 → ?
+--- Row 425 ---
+  D425: 4
+  E425: SHARED_FORMULA → ?
+  K425: SHARED_FORMULA → ?
+--- Row 426 ---
+  D426: 5
+  E426: SHARED_FORMULA → ?
+  K426: SHARED_FORMULA → ?
+--- Row 427 ---
+  D427: 6
+  E427: SHARED_FORMULA → ?
+  K427: SHARED_FORMULA → ?
+--- Row 428 ---
+  D428: 7
+  E428: SHARED_FORMULA → ?
+  K428: SHARED_FORMULA → ?
+--- Row 429 ---
+  D429: 8
+  E429: SHARED_FORMULA → ?
+  K429: SHARED_FORMULA → ?
+--- Row 430 ---
+  D430: 9
+  E430: SHARED_FORMULA → ?
+  K430: SHARED_FORMULA → ?
+--- Row 431 ---
+  D431: (d)
+  E431: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K431: SHARED_FORMULA → ?
+--- Row 432 ---
+  D432: (e)
+  E432: FORMULA: =Translations!$B$253 → Control:
+  K432: SHARED_FORMULA → ?
+  L432: FORMULA: =IF(G401="","",SUM(L414)-SUM(L417,L422:L431)) → ?
+--- Row 435 ---
+  D435: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J435: FORMULA: =IF(G401="","",G401) → ?
+  K435: FORMULA: =IF(G401="","",G401) → ?
+  L435: FORMULA: =IF(G401="","",G401) → ?
+  M435: FORMULA: =IF(G401="","",G401) → ?
+--- Row 437 ---
+  E437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M437: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S437,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 439 ---
+  K439: FORMULA: =Translations!$B$255 → Measurable heat
+  L439: FORMULA: =Translations!$B$256 → Waste gases
+  M439: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 440 ---
+  D440: (f)
+  E440: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M440: FORMULA: =IF(L401="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L401,CONST_LIST_Goods,0))) → ?
+--- Row 441 ---
+  E441: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 443 ---
+  K443: FORMULA: =Translations!$B$221 → Unit
+  L443: FORMULA: =Translations!$B$260 → Value
+--- Row 444 ---
+  D444: (g)
+  E444: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K444: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 446 ---
+  D446: (h)
+  E446: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K446: FORMULA: =Translations!$B$221 → Unit
+  L446: FORMULA: =Translations!$B$263 → Imported
+  M446: FORMULA: =Translations!$B$264 → Exported
+--- Row 447 ---
+  D447: i.
+  E447: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K447: TJ
+--- Row 448 ---
+  D448: ii.
+  E448: FORMULA: =Translations!$B$266 → Emissions factor
+  K448: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 450 ---
+  D450: (i)
+  E450: FORMULA: =Translations!$B$256 → Waste gases
+  K450: FORMULA: =Translations!$B$221 → Unit
+  L450: FORMULA: =Translations!$B$263 → Imported
+  M450: FORMULA: =Translations!$B$264 → Exported
+--- Row 451 ---
+  D451: i.
+  E451: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K451: FORMULA: =CONST_TJ → TJ
+--- Row 452 ---
+  D452: ii.
+  E452: FORMULA: =Translations!$B$268 → Emission factor
+  K452: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 454 ---
+  D454: (j)
+  E454: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K454: FORMULA: =Translations!$B$221 → Unit
+  L454: FORMULA: =Translations!$B$260 → Value
+--- Row 455 ---
+  D455: i.
+  E455: FORMULA: =Translations!$B$270 → Electricity consumption
+  K455: FORMULA: =CONST_MWh → MWh
+--- Row 456 ---
+  D456: ii.
+  E456: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K456: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 457 ---
+  D457: iii.
+  E457: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K457: -
+--- Row 460 ---
+  D460: (k)
+  E460: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K460: FORMULA: =Translations!$B$221 → Unit
+  L460: FORMULA: =Translations!$B$260 → Value
+--- Row 461 ---
+  D461: i.
+  E461: FORMULA: =Translations!$B$274 → Amounts exported
+  K461: MWh
+--- Row 462 ---
+  D462: ii.
+  E462: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K462: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 466 ---
+  C466: FORMULA: =C401+1 → 8
+  D466: FORMULA: =CONST_ProductionProcess & " " & C466 & ":" → Production process 8:
+  G466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R466)) → ?
+  H466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R466)) → ?
+  I466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R466)) → ?
+  J466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R466)) → ?
+  K466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R466)) → ?
+  L466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R466)) → ?
+  M466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R466)) → ?
+  N466: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R466)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R466)) → ?
+--- Row 468 ---
+  E468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M468: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S468,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 470 ---
+  D470: (a) 
+  E470: FORMULA: =Translations!$B$243 → Total production levels:
+  H470: FORMULA: =Translations!$B$244 → Production route
+  K470: FORMULA: =Translations!$B$221 → Unit
+  L470: FORMULA: =Translations!$B$245 → Amounts
+--- Row 471 ---
+  D471: 1
+  E471: FORMULA: =IF(G466="","",G466) & IF(L466="",""," | " & L466) → ?
+  H471: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D471)) → ?
+  K471: FORMULA: =IF(L466="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L466,CONST_LIST_Goods,0))) → ?
+--- Row 472 ---
+  D472: 2
+  E472: FORMULA: =IF(H472=CONST_NA,"",E471) → ?
+  H472: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D472)) → ?
+  K472: FORMULA: =IF(H472=CONST_NA,"",K471) → ?
+--- Row 473 ---
+  D473: 3
+  E473: SHARED_FORMULA → ?
+  H473: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D473)) → ?
+  K473: SHARED_FORMULA → ?
+--- Row 474 ---
+  D474: 4
+  E474: SHARED_FORMULA → ?
+  H474: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D474)) → ?
+  K474: SHARED_FORMULA → ?
+--- Row 475 ---
+  D475: 5
+  E475: SHARED_FORMULA → ?
+  H475: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D475)) → ?
+  K475: SHARED_FORMULA → ?
+--- Row 476 ---
+  D476: 6
+  E476: SHARED_FORMULA → ?
+  H476: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D476)) → ?
+  K476: SHARED_FORMULA → ?
+--- Row 477 ---
+  D477: 7
+  E477: SHARED_FORMULA → ?
+  H477: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D477)) → ?
+  K477: SHARED_FORMULA → ?
+--- Row 478 ---
+  D478: 8
+  E478: SHARED_FORMULA → ?
+  H478: FORMULA: =IF(L466="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L466,CONST_LIST_Goods,0),D478)) → ?
+  K478: SHARED_FORMULA → ?
+--- Row 479 ---
+  E479: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K479: FORMULA: =K471 → ?
+  L479: FORMULA: =IF(G466="","",SUM(L471:L478)) → ?
+--- Row 481 ---
+  D481: (b)
+  E481: FORMULA: =Translations!$B$247 → Production details
+  K481: FORMULA: =Translations!$B$221 → Unit
+  L481: FORMULA: =Translations!$B$245 → Amounts
+--- Row 482 ---
+  D482: i.
+  E482: FORMULA: =Translations!$B$248 → Produced for the market
+  K482: FORMULA: =K471 → ?
+--- Row 483 ---
+  D483: ii.
+  E483: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L483: FORMULA: =IF(AND(COUNT(L479,L482)=2,SUM(L479>0)),SUM(L482)/SUM(L479),"") → ?
+--- Row 484 ---
+  D484: iii.
+  E484: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L484: FORMULA: =IF(G466="","",AND(SUM(L479)>0,SUM(L479)=SUM(L482))) → ?
+--- Row 486 ---
+  D486: (c)
+  E486: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K486: FORMULA: =Translations!$B$221 → Unit
+  L486: FORMULA: =Translations!$B$245 → Amounts
+--- Row 487 ---
+  D487: 1
+  E487: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S487)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S487)) → ERW tubes, CEW tubes
+  K487: FORMULA: =K471 → ?
+--- Row 488 ---
+  D488: 2
+  E488: SHARED_FORMULA → ?
+  K488: FORMULA: =K487 → ?
+--- Row 489 ---
+  D489: 3
+  E489: SHARED_FORMULA → ?
+  K489: FORMULA: =K488 → ?
+--- Row 490 ---
+  D490: 4
+  E490: SHARED_FORMULA → ?
+  K490: SHARED_FORMULA → ?
+--- Row 491 ---
+  D491: 5
+  E491: SHARED_FORMULA → ?
+  K491: SHARED_FORMULA → ?
+--- Row 492 ---
+  D492: 6
+  E492: SHARED_FORMULA → ?
+  K492: SHARED_FORMULA → ?
+--- Row 493 ---
+  D493: 7
+  E493: SHARED_FORMULA → ?
+  K493: SHARED_FORMULA → ?
+--- Row 494 ---
+  D494: 8
+  E494: SHARED_FORMULA → ?
+  K494: SHARED_FORMULA → ?
+--- Row 495 ---
+  D495: 9
+  E495: SHARED_FORMULA → ?
+  K495: SHARED_FORMULA → ?
+--- Row 496 ---
+  D496: (d)
+  E496: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K496: SHARED_FORMULA → ?
+--- Row 497 ---
+  D497: (e)
+  E497: FORMULA: =Translations!$B$253 → Control:
+  K497: SHARED_FORMULA → ?
+  L497: FORMULA: =IF(G466="","",SUM(L479)-SUM(L482,L487:L496)) → ?
+--- Row 500 ---
+  D500: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J500: FORMULA: =IF(G466="","",G466) → ?
+  K500: FORMULA: =IF(G466="","",G466) → ?
+  L500: FORMULA: =IF(G466="","",G466) → ?
+  M500: FORMULA: =IF(G466="","",G466) → ?
+--- Row 502 ---
+  E502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M502: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S502,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 504 ---
+  K504: FORMULA: =Translations!$B$255 → Measurable heat
+  L504: FORMULA: =Translations!$B$256 → Waste gases
+  M504: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 505 ---
+  D505: (f)
+  E505: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M505: FORMULA: =IF(L466="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L466,CONST_LIST_Goods,0))) → ?
+--- Row 506 ---
+  E506: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 508 ---
+  K508: FORMULA: =Translations!$B$221 → Unit
+  L508: FORMULA: =Translations!$B$260 → Value
+--- Row 509 ---
+  D509: (g)
+  E509: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K509: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 511 ---
+  D511: (h)
+  E511: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K511: FORMULA: =Translations!$B$221 → Unit
+  L511: FORMULA: =Translations!$B$263 → Imported
+  M511: FORMULA: =Translations!$B$264 → Exported
+--- Row 512 ---
+  D512: i.
+  E512: FORMULA: =Translations!$B$264 → Exported
+  K512: TJ
+--- Row 513 ---
+  D513: ii.
+  E513: FORMULA: =Translations!$B$266 → Emissions factor
+  K513: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 515 ---
+  D515: (i)
+  E515: FORMULA: =Translations!$B$256 → Waste gases
+  K515: FORMULA: =Translations!$B$221 → Unit
+  L515: FORMULA: =Translations!$B$263 → Imported
+  M515: FORMULA: =Translations!$B$264 → Exported
+--- Row 516 ---
+  D516: i.
+  E516: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K516: FORMULA: =CONST_TJ → TJ
+--- Row 517 ---
+  D517: ii.
+  E517: FORMULA: =Translations!$B$268 → Emission factor
+  K517: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 519 ---
+  D519: (j)
+  E519: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K519: FORMULA: =Translations!$B$221 → Unit
+  L519: FORMULA: =Translations!$B$260 → Value
+--- Row 520 ---
+  D520: i.
+  E520: FORMULA: =Translations!$B$270 → Electricity consumption
+  K520: FORMULA: =CONST_MWh → MWh
+--- Row 521 ---
+  D521: ii.
+  E521: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K521: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 522 ---
+  D522: iii.
+  E522: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K522: -
+--- Row 525 ---
+  D525: (k)
+  E525: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K525: FORMULA: =Translations!$B$221 → Unit
+  L525: FORMULA: =Translations!$B$260 → Value
+--- Row 526 ---
+  D526: i.
+  E526: FORMULA: =Translations!$B$274 → Amounts exported
+  K526: MWh
+--- Row 527 ---
+  D527: ii.
+  E527: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K527: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 531 ---
+  C531: FORMULA: =C466+1 → 9
+  D531: FORMULA: =CONST_ProductionProcess & " " & C531 & ":" → Production process 9:
+  G531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R531)) → ?
+  H531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R531)) → ?
+  I531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R531)) → ?
+  J531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R531)) → ?
+  K531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R531)) → ?
+  L531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R531)) → ?
+  M531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R531)) → ?
+  N531: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R531)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R531)) → ?
+--- Row 533 ---
+  E533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M533: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S533,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 535 ---
+  D535: (a) 
+  E535: FORMULA: =Translations!$B$243 → Total production levels:
+  H535: FORMULA: =Translations!$B$244 → Production route
+  K535: FORMULA: =Translations!$B$221 → Unit
+  L535: FORMULA: =Translations!$B$245 → Amounts
+--- Row 536 ---
+  D536: 1
+  E536: FORMULA: =IF(G531="","",G531) & IF(L531="",""," | " & L531) → ?
+  H536: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D536)) → ?
+  K536: FORMULA: =IF(L531="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L531,CONST_LIST_Goods,0))) → ?
+--- Row 537 ---
+  D537: 2
+  E537: FORMULA: =IF(H537=CONST_NA,"",E536) → ?
+  H537: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D537)) → ?
+  K537: FORMULA: =IF(H537=CONST_NA,"",K536) → ?
+--- Row 538 ---
+  D538: 3
+  E538: SHARED_FORMULA → ?
+  H538: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D538)) → ?
+  K538: SHARED_FORMULA → ?
+--- Row 539 ---
+  D539: 4
+  E539: SHARED_FORMULA → ?
+  H539: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D539)) → ?
+  K539: SHARED_FORMULA → ?
+--- Row 540 ---
+  D540: 5
+  E540: SHARED_FORMULA → ?
+  H540: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D540)) → ?
+  K540: SHARED_FORMULA → ?
+--- Row 541 ---
+  D541: 6
+  E541: SHARED_FORMULA → ?
+  H541: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D541)) → ?
+  K541: SHARED_FORMULA → ?
+--- Row 542 ---
+  D542: 7
+  E542: SHARED_FORMULA → ?
+  H542: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D542)) → ?
+  K542: SHARED_FORMULA → ?
+--- Row 543 ---
+  D543: 8
+  E543: SHARED_FORMULA → ?
+  H543: FORMULA: =IF(L531="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L531,CONST_LIST_Goods,0),D543)) → ?
+  K543: SHARED_FORMULA → ?
+--- Row 544 ---
+  E544: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K544: FORMULA: =K536 → ?
+  L544: FORMULA: =IF(G531="","",SUM(L536:L543)) → ?
+--- Row 546 ---
+  D546: (b)
+  E546: FORMULA: =Translations!$B$247 → Production details
+  K546: FORMULA: =Translations!$B$221 → Unit
+  L546: FORMULA: =Translations!$B$245 → Amounts
+--- Row 547 ---
+  D547: i.
+  E547: FORMULA: =Translations!$B$248 → Produced for the market
+  K547: FORMULA: =K536 → ?
+--- Row 548 ---
+  D548: ii.
+  E548: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L548: FORMULA: =IF(AND(COUNT(L544,L547)=2,SUM(L544>0)),SUM(L547)/SUM(L544),"") → ?
+--- Row 549 ---
+  D549: iii.
+  E549: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L549: FORMULA: =IF(G531="","",AND(SUM(L544)>0,SUM(L544)=SUM(L547))) → ?
+--- Row 551 ---
+  D551: (c)
+  E551: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K551: FORMULA: =Translations!$B$221 → Unit
+  L551: FORMULA: =Translations!$B$245 → Amounts
+--- Row 552 ---
+  D552: 1
+  E552: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S552)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S552)) → ERW tubes, CEW tubes
+  K552: FORMULA: =K536 → ?
+--- Row 553 ---
+  D553: 2
+  E553: SHARED_FORMULA → ?
+  K553: FORMULA: =K552 → ?
+--- Row 554 ---
+  D554: 3
+  E554: SHARED_FORMULA → ?
+  K554: FORMULA: =K553 → ?
+--- Row 555 ---
+  D555: 4
+  E555: SHARED_FORMULA → ?
+  K555: SHARED_FORMULA → ?
+--- Row 556 ---
+  D556: 5
+  E556: SHARED_FORMULA → ?
+  K556: SHARED_FORMULA → ?
+--- Row 557 ---
+  D557: 6
+  E557: SHARED_FORMULA → ?
+  K557: SHARED_FORMULA → ?
+--- Row 558 ---
+  D558: 7
+  E558: SHARED_FORMULA → ?
+  K558: SHARED_FORMULA → ?
+--- Row 559 ---
+  D559: 8
+  E559: SHARED_FORMULA → ?
+  K559: SHARED_FORMULA → ?
+--- Row 560 ---
+  D560: 9
+  E560: SHARED_FORMULA → ?
+  K560: SHARED_FORMULA → ?
+--- Row 561 ---
+  D561: (d)
+  E561: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K561: SHARED_FORMULA → ?
+--- Row 562 ---
+  D562: (e)
+  E562: FORMULA: =Translations!$B$253 → Control:
+  K562: SHARED_FORMULA → ?
+  L562: FORMULA: =IF(G531="","",SUM(L544)-SUM(L547,L552:L561)) → ?
+--- Row 565 ---
+  D565: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J565: FORMULA: =IF(G531="","",G531) → ?
+  K565: FORMULA: =IF(G531="","",G531) → ?
+  L565: FORMULA: =IF(G531="","",G531) → ?
+  M565: FORMULA: =IF(G531="","",G531) → ?
+--- Row 567 ---
+  E567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M567: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S567,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 569 ---
+  K569: FORMULA: =Translations!$B$255 → Measurable heat
+  L569: FORMULA: =Translations!$B$256 → Waste gases
+  M569: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 570 ---
+  D570: (f)
+  E570: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M570: FORMULA: =IF(L531="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L531,CONST_LIST_Goods,0))) → ?
+--- Row 571 ---
+  E571: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 573 ---
+  K573: FORMULA: =Translations!$B$221 → Unit
+  L573: FORMULA: =Translations!$B$260 → Value
+--- Row 574 ---
+  D574: (g)
+  E574: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K574: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 576 ---
+  D576: (h)
+  E576: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K576: FORMULA: =Translations!$B$221 → Unit
+  L576: FORMULA: =Translations!$B$263 → Imported
+  M576: FORMULA: =Translations!$B$264 → Exported
+--- Row 577 ---
+  D577: i.
+  E577: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K577: TJ
+--- Row 578 ---
+  D578: ii.
+  E578: FORMULA: =Translations!$B$266 → Emissions factor
+  K578: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 580 ---
+  D580: (i)
+  E580: FORMULA: =Translations!$B$256 → Waste gases
+  K580: FORMULA: =Translations!$B$221 → Unit
+  L580: FORMULA: =Translations!$B$263 → Imported
+  M580: FORMULA: =Translations!$B$264 → Exported
+--- Row 581 ---
+  D581: i.
+  E581: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K581: FORMULA: =CONST_TJ → TJ
+--- Row 582 ---
+  D582: ii.
+  E582: FORMULA: =Translations!$B$268 → Emission factor
+  K582: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 584 ---
+  D584: (j)
+  E584: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K584: FORMULA: =Translations!$B$221 → Unit
+  L584: FORMULA: =Translations!$B$260 → Value
+--- Row 585 ---
+  D585: i.
+  E585: FORMULA: =Translations!$B$270 → Electricity consumption
+  K585: FORMULA: =CONST_MWh → MWh
+--- Row 586 ---
+  D586: ii.
+  E586: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K586: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 587 ---
+  D587: iii.
+  E587: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K587: -
+--- Row 590 ---
+  D590: (k)
+  E590: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K590: FORMULA: =Translations!$B$221 → Unit
+  L590: FORMULA: =Translations!$B$260 → Value
+--- Row 591 ---
+  D591: i.
+  E591: FORMULA: =Translations!$B$274 → Amounts exported
+  K591: MWh
+--- Row 592 ---
+  D592: ii.
+  E592: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K592: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 596 ---
+  C596: FORMULA: =C531+1 → 10
+  D596: FORMULA: =CONST_ProductionProcess & " " & C596 & ":" → Production process 10:
+  G596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R596)) → ?
+  H596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R596)) → ?
+  I596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R596)) → ?
+  J596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R596)) → ?
+  K596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,R596)) → ?
+  L596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R596)) → ?
+  M596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R596)) → ?
+  N596: FORMULA: =IF(INDEX(CNTR_List_ExistProdProc,R596)=CONST_NA,"",INDEX(CNTR_List_ExistProdProc,R596)) → ?
+--- Row 598 ---
+  E598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M598: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S598,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 600 ---
+  D600: (a) 
+  E600: FORMULA: =Translations!$B$243 → Total production levels:
+  H600: FORMULA: =Translations!$B$244 → Production route
+  K600: FORMULA: =Translations!$B$221 → Unit
+  L600: FORMULA: =Translations!$B$245 → Amounts
+--- Row 601 ---
+  D601: 1
+  E601: FORMULA: =IF(G596="","",G596) & IF(L596="",""," | " & L596) → ?
+  H601: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D601)) → ?
+  K601: FORMULA: =IF(L596="","",INDEX(CONST_LIST_GoodsUnit,MATCH(L596,CONST_LIST_Goods,0))) → ?
+--- Row 602 ---
+  D602: 2
+  E602: FORMULA: =IF(H602=CONST_NA,"",E601) → ?
+  H602: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D602)) → ?
+  K602: FORMULA: =IF(H602=CONST_NA,"",K601) → ?
+--- Row 603 ---
+  D603: 3
+  E603: SHARED_FORMULA → ?
+  H603: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D603)) → ?
+  K603: SHARED_FORMULA → ?
+--- Row 604 ---
+  D604: 4
+  E604: SHARED_FORMULA → ?
+  H604: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D604)) → ?
+  K604: SHARED_FORMULA → ?
+--- Row 605 ---
+  D605: 5
+  E605: SHARED_FORMULA → ?
+  H605: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D605)) → ?
+  K605: SHARED_FORMULA → ?
+--- Row 606 ---
+  D606: 6
+  E606: SHARED_FORMULA → ?
+  H606: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D606)) → ?
+  K606: SHARED_FORMULA → ?
+--- Row 607 ---
+  D607: 7
+  E607: SHARED_FORMULA → ?
+  H607: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D607)) → ?
+  K607: SHARED_FORMULA → ?
+--- Row 608 ---
+  D608: 8
+  E608: SHARED_FORMULA → ?
+  H608: FORMULA: =IF(L596="","",INDEX(CONST_MATRIX_ProductionRoute,MATCH(L596,CONST_LIST_Goods,0),D608)) → ?
+  K608: SHARED_FORMULA → ?
+--- Row 609 ---
+  E609: FORMULA: =Translations!$B$246 → Total production within installation (= denominator for SEE calculation):
+  K609: FORMULA: =K601 → ?
+  L609: FORMULA: =IF(G596="","",SUM(L601:L608)) → ?
+--- Row 611 ---
+  D611: (b)
+  E611: FORMULA: =Translations!$B$247 → Production details
+  K611: FORMULA: =Translations!$B$221 → Unit
+  L611: FORMULA: =Translations!$B$245 → Amounts
+--- Row 612 ---
+  D612: i.
+  E612: FORMULA: =Translations!$B$248 → Produced for the market
+  K612: FORMULA: =K601 → ?
+--- Row 613 ---
+  D613: ii.
+  E613: FORMULA: =Translations!$B$249 → Share of total under (a) produced for the market
+  L613: FORMULA: =IF(AND(COUNT(L609,L612)=2,SUM(L609>0)),SUM(L612)/SUM(L609),"") → ?
+--- Row 614 ---
+  D614: iii.
+  E614: FORMULA: =Translations!$B$250 → Total production only for the market?
+  L614: FORMULA: =IF(G596="","",AND(SUM(L609)>0,SUM(L609)=SUM(L612))) → ?
+--- Row 616 ---
+  D616: (c)
+  E616: FORMULA: =Translations!$B$251 → Consumed in other 'production processes' within the installation:
+  K616: FORMULA: =Translations!$B$221 → Unit
+  L616: FORMULA: =Translations!$B$245 → Amounts
+--- Row 617 ---
+  D617: 1
+  E617: FORMULA: =IF(INDEX(CNTR_List_ExistProdProcNames,S617)=CONST_NA,"",INDEX(CNTR_List_ExistProdProcNames,S617)) → ERW tubes, CEW tubes
+  K617: FORMULA: =K601 → ?
+--- Row 618 ---
+  D618: 2
+  E618: SHARED_FORMULA → ?
+  K618: FORMULA: =K617 → ?
+--- Row 619 ---
+  D619: 3
+  E619: SHARED_FORMULA → ?
+  K619: FORMULA: =K618 → ?
+--- Row 620 ---
+  D620: 4
+  E620: SHARED_FORMULA → ?
+  K620: SHARED_FORMULA → ?
+--- Row 621 ---
+  D621: 5
+  E621: SHARED_FORMULA → ?
+  K621: SHARED_FORMULA → ?
+--- Row 622 ---
+  D622: 6
+  E622: SHARED_FORMULA → ?
+  K622: SHARED_FORMULA → ?
+--- Row 623 ---
+  D623: 7
+  E623: SHARED_FORMULA → ?
+  K623: SHARED_FORMULA → ?
+--- Row 624 ---
+  D624: 8
+  E624: SHARED_FORMULA → ?
+  K624: SHARED_FORMULA → ?
+--- Row 625 ---
+  D625: 9
+  E625: SHARED_FORMULA → ?
+  K625: SHARED_FORMULA → ?
+--- Row 626 ---
+  D626: (d)
+  E626: FORMULA: =Translations!$B$252 → Consumed for non-CBAM goods within the installation:
+  K626: SHARED_FORMULA → ?
+--- Row 627 ---
+  D627: (e)
+  E627: FORMULA: =Translations!$B$253 → Control:
+  K627: SHARED_FORMULA → ?
+  L627: FORMULA: =IF(G596="","",SUM(L609)-SUM(L612,L617:L626)) → ?
+--- Row 630 ---
+  D630: FORMULA: =Translations!$B$254 → Calculation of the attributed emissions:
+  J630: FORMULA: =IF(G596="","",G596) → ?
+  K630: FORMULA: =IF(G596="","",G596) → ?
+  L630: FORMULA: =IF(G596="","",G596) → ?
+  M630: FORMULA: =IF(G596="","",G596) → ?
+--- Row 632 ---
+  E632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M632: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($S632,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 634 ---
+  K634: FORMULA: =Translations!$B$255 → Measurable heat
+  L634: FORMULA: =Translations!$B$256 → Waste gases
+  M634: FORMULA: =Translations!$B$257 → Indirect emissions
+--- Row 635 ---
+  D635: (f)
+  E635: FORMULA: =Translations!$B$258 → Please select which elements are applicable
+  M635: FORMULA: =IF(L596="","",INDEX(CONST_LIST_GoodsIndRel,MATCH(L596,CONST_LIST_Goods,0))) → ?
+--- Row 636 ---
+  E636: FORMULA: =Translations!$B$259 → Based on your selection, related sections below might become irrelevant and greyed out below.
+--- Row 638 ---
+  K638: FORMULA: =Translations!$B$221 → Unit
+  L638: FORMULA: =Translations!$B$260 → Value
+--- Row 639 ---
+  D639: (g)
+  E639: FORMULA: =Translations!$B$261 → Directly attributable emissions (DirEm*)
+  K639: FORMULA: =CONST_tCO2eq → tCO2e
+--- Row 641 ---
+  D641: (h)
+  E641: FORMULA: =Translations!$B$262 → Import and export of measurable heat
+  K641: FORMULA: =Translations!$B$221 → Unit
+  L641: FORMULA: =Translations!$B$263 → Imported
+  M641: FORMULA: =Translations!$B$264 → Exported
+--- Row 642 ---
+  D642: i.
+  E642: FORMULA: =Translations!$B$265 → Amount of net measurable heat
+  K642: TJ
+--- Row 643 ---
+  D643: ii.
+  E643: FORMULA: =Translations!$B$266 → Emissions factor
+  K643: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 645 ---
+  D645: (i)
+  E645: FORMULA: =Translations!$B$256 → Waste gases
+  K645: FORMULA: =Translations!$B$221 → Unit
+  L645: FORMULA: =Translations!$B$263 → Imported
+  M645: FORMULA: =Translations!$B$264 → Exported
+--- Row 646 ---
+  D646: i.
+  E646: FORMULA: =Translations!$B$267 → Amount of waste gas
+  K646: FORMULA: =CONST_TJ → TJ
+--- Row 647 ---
+  D647: ii.
+  E647: FORMULA: =Translations!$B$268 → Emission factor
+  K647: FORMULA: =CONST_tCO2pTJ → tCO2/TJ
+--- Row 649 ---
+  D649: (j)
+  E649: FORMULA: =Translations!$B$269 → Indirect emissions from electricity consumption
+  K649: FORMULA: =Translations!$B$221 → Unit
+  L649: FORMULA: =Translations!$B$260 → Value
+--- Row 650 ---
+  D650: i.
+  E650: FORMULA: =Translations!$B$270 → Electricity consumption
+  K650: FORMULA: =CONST_MWh → MWh
+--- Row 651 ---
+  D651: ii.
+  E651: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K651: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 652 ---
+  D652: iii.
+  E652: FORMULA: =Translations!$B$272 → Source of the emission factor
+  K652: -
+--- Row 655 ---
+  D655: (k)
+  E655: FORMULA: =Translations!$B$273 → Electricity exported from the production process
+  K655: FORMULA: =Translations!$B$221 → Unit
+  L655: FORMULA: =Translations!$B$260 → Value
+--- Row 656 ---
+  D656: i.
+  E656: FORMULA: =Translations!$B$274 → Amounts exported
+  K656: MWh
+--- Row 657 ---
+  D657: ii.
+  E657: FORMULA: =Translations!$B$271 → Emission factor of the electricity
+  K657: FORMULA: =CONST_tCO2&"/"&CONST_MWh → tCO2/MWh
+--- Row 662 ---
+  A662: ausblenden
+--- Row 663 ---
+  A663: ausblenden
+--- Row 664 ---
+  A664: ausblenden

@@ -189,5 +189,23 @@ export async function initializeSchema() {
 
     CREATE INDEX IF NOT EXISTS idx_file_uploads_lookup
       ON file_uploads (company_slug, upload_type, uploaded_at DESC);
+
+    CREATE TABLE IF NOT EXISTS sales_data (
+      id SERIAL PRIMARY KEY,
+      company_slug TEXT NOT NULL REFERENCES companies(slug) ON DELETE CASCADE,
+      year INTEGER NOT NULL,
+      month INTEGER NOT NULL,
+      customer_code TEXT NOT NULL,
+      material_id TEXT NOT NULL,
+      quantity_mt NUMERIC NOT NULL DEFAULT 0,
+      original_file_url TEXT,
+      uploaded_at TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_sales_data_lookup
+      ON sales_data (company_slug, year, month);
+
+    CREATE INDEX IF NOT EXISTS idx_sales_data_customer
+      ON sales_data (company_slug, customer_code, year, month);
   `);
 }

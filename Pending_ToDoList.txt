@@ -1,0 +1,3 @@
+for the report generation move the companies, 
+company-data.ts -> move this to database, we dont need to hard code this 
+

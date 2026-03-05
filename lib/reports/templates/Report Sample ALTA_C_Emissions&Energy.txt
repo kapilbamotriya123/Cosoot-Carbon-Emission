@@ -1,0 +1,286 @@
+
+================================================================================
+SHEET: "C_Emissions&Energy" (47 rows × 24 cols)
+================================================================================
+--- Row 1 ---
+  A1: ausblenden
+--- Row 2 ---
+  B2: FORMULA: =Translations!$B$212 → Energy & Emissions
+  C2: FORMULA: =Translations!$B$212 → Energy & Emissions
+  D2: FORMULA: =Translations!$B$212 → Energy & Emissions
+  E2: FORMULA: =Translations!$B$11 → Navigation Area:
+  F2: FORMULA: =Translations!$B$11 → Navigation Area:
+  G2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  H2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  I2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  J2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  K2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  L2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  M2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+  N2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+--- Row 3 ---
+  B3: FORMULA: =Translations!$B$212 → Energy & Emissions
+  C3: FORMULA: =Translations!$B$212 → Energy & Emissions
+  D3: FORMULA: =Translations!$B$212 → Energy & Emissions
+  G3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(R3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(R3,$A:$A,0))),"") → Fuel balance
+  H3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(R3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(R3,$A:$A,0))),"") → Fuel balance
+  I3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(T3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(T3,$A:$A,0))),"") → GHG balance & data quality
+  J3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(T3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(T3,$A:$A,0))),"") → GHG balance & data quality
+--- Row 4 ---
+  B4: FORMULA: =Translations!$B$212 → Energy & Emissions
+  C4: FORMULA: =Translations!$B$212 → Energy & Emissions
+  D4: FORMULA: =Translations!$B$212 → Energy & Emissions
+--- Row 6 ---
+  C6: C.
+  E6: FORMULA: =Translations!$B$213 → Sheet "C_Emissions&Energy" - Installation-level GHG emissions and energy consumption
+--- Row 8 ---
+  A8: FORMULA: =C8 → 1
+  C8: 1
+  D8: FORMULA: =Translations!$B$215 → Fuel balance
+--- Row 10 ---
+  D10: FORMULA: =Translations!$B$216 → Please enter in the table below the amount of energy consumed for each use type:
+--- Row 11 ---
+  D11: -
+  E11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  F11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  G11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  H11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  I11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  J11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  K11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  L11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  M11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+  N11: FORMULA: =Translations!$B$217 → Fuel input to all CBAM production processes (including precursors produced within the installation), either directly or via the production of measurable heat (e.g. steam) with the exception of fuel for electricity.
+--- Row 12 ---
+  D12: -
+  E12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  F12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  G12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  H12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  I12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  J12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  K12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  L12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  M12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+  N12: FORMULA: =Translations!$B$218 → Fuel input for electricity production
+--- Row 13 ---
+  D13: -
+  E13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  F13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  G13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  H13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  I13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  J13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  K13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  L13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  M13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+  N13: FORMULA: =Translations!$B$219 → Fuel input to all non-CBAM production processes, either directly or via the production of measurable heat (e.g. steam).
+--- Row 14 ---
+  E14: FORMULA: =Translations!$B$220 → Fuel balance:
+  G14: FORMULA: =Translations!$B$221 → Unit
+  H14: FORMULA: =Translations!$B$222 → Total fuel input
+  I14: FORMULA: =Translations!$B$223 → Direct fuel for CBAM goods
+  J14: FORMULA: =Translations!$B$224 → Fuel for electricity
+  K14: FORMULA: =Translations!$B$225 → Direct fuel for non-CBAM goods
+  L14: FORMULA: =Translations!$B$226 → Rest
+--- Row 15 ---
+  D15: i.
+  E15: FORMULA: =Translations!$B$227 → from sheet "B_EmInst"
+  G15: FORMULA: =CONST_TJ → TJ
+  H15: FORMULA: =IF(CNTR_HasEntriesA,SUMIFS(B_EmInst!$AX:$AX,B_EmInst!$BA:$BA,CONST_CNTR_SUM_CO2)+SUMIFS(B_EmInst!$AY:$AY,B_EmInst!$BA:$BA,CONST_CNTR_SUM_CO2),"") → 6.801309999999999
+--- Row 16 ---
+  D16: ii.
+  E16: FORMULA: =Translations!$B$228 → manual entries
+  G16: FORMULA: =CONST_TJ → TJ
+--- Row 17 ---
+  D17: iii.
+  E17: FORMULA: =Translations!$B$229 → Results:
+  G17: FORMULA: =CONST_TJ → TJ
+  H17: FORMULA: =IF(H16="",H15,H16) → 6.801309999999999
+  I17: FORMULA: =IF(I16="","",I16) → ?
+  J17: FORMULA: =IF(J16="","",J16) → ?
+  K17: FORMULA: =IF(K16="","",K16) → ?
+  L17: FORMULA: =IF(COUNT(H17:K17)>0,SUM(H17)-SUM(I17:K17),"") → 6.801309999999999
+--- Row 19 ---
+  A19: FORMULA: =C19 → 2
+  C19: 2
+  D19: FORMULA: =Translations!$B$230 → Greenhouse gas emissions balance & information on data quality
+--- Row 21 ---
+  D21: (a)
+  E21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  F21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  G21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  H21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  I21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  J21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  K21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  L21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  M21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+  N21: FORMULA: =Translations!$B$1850 → GHG balance by type of GHG
+--- Row 22 ---
+  E22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  F22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  G22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  H22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  I22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  J22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  K22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  L22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  M22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+  N22: FORMULA: =Translations!$B$231 → Values below are taken automatically from entries in sheet "B_EmInst". If entries made in that sheet are incomplete, please enter the total emissions figures manually under ii. to override automatic results displayed under i.
+--- Row 23 ---
+  E23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  F23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  G23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  H23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  I23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  J23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  K23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  L23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  M23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+  N23: FORMULA: =Translations!$B$1965 → The entry of total indirect emissions must always be entered manually.
+--- Row 24 ---
+  E24: FORMULA: =Translations!$B$232 → Installation level data:
+  G24: FORMULA: =Translations!$B$221 → Unit
+  H24: FORMULA: =Translations!$B$233 → Total CO2 emissions
+  I24: FORMULA: =Translations!$B$234 → Biomass emissions
+  J24: FORMULA: =Translations!$B$235 → Total N2O emissions
+  K24: FORMULA: =Translations!$B$236 → Total PFC emissions
+  L24: FORMULA: =Translations!$B$237 → Total direct emissions
+  M24: FORMULA: =Translations!$B$238 → Total indirect emissions
+  N24: FORMULA: =Translations!$B$239 → Total emissions
+--- Row 25 ---
+  D25: i.
+  E25: FORMULA: =Translations!$B$227 → from sheet "B_EmInst"
+  G25: FORMULA: =CONST_tCO2eq → tCO2e
+  H25: FORMULA: =IF(CNTR_HasEntriesA,SUMIFS(B_EmInst!$AU:$AU,B_EmInst!$BA:$BA,CONST_CNTR_SUM_CO2),"") → 433.216271
+  I25: FORMULA: =IF(CNTR_HasEntriesA,SUMIFS(B_EmInst!AV:AV,B_EmInst!$BA:$BA,CONST_CNTR_SUM_CO2),"") → ?
+  J25: FORMULA: =IF(CNTR_HasEntriesA,SUMIFS(B_EmInst!$AU:$AU,B_EmInst!$BA:$BA,CONST_CNTR_SUM_N2O),"") → ?
+  K25: FORMULA: =IF(CNTR_HasEntriesA,SUMIFS(B_EmInst!$AU:$AU,B_EmInst!$BA:$BA,CONST_CNTR_SUM_PFC),"") → ?
+  L25: FORMULA: =IF(COUNT(H25:K25)>0,SUM(H25,J25:K25),"") → 433.216271
+--- Row 26 ---
+  D26: ii.
+  E26: FORMULA: =Translations!$B$228 → manual entries
+  G26: FORMULA: =CONST_tCO2eq → tCO2e
+  M26: 2317.25448 ⬅ FILL_IN
+--- Row 27 ---
+  D27: iii.
+  E27: FORMULA: =Translations!$B$229 → Results:
+  G27: FORMULA: =CONST_tCO2eq → tCO2e
+  H27: FORMULA: =IF(CNTR_HasEntriesA,IF(H26="",H25,H26),"") → 433.216271
+  I27: FORMULA: =IF(CNTR_HasEntriesA,IF(I26="",I25,I26),"") → ?
+  J27: FORMULA: =IF(CNTR_HasEntriesA,IF(J26="",J25,J26),"") → ?
+  K27: FORMULA: =IF(CNTR_HasEntriesA,IF(K26="",K25,K26),"") → ?
+  L27: FORMULA: =IF(CNTR_HasEntriesA,SUM(H27,J27:K27),"") → 433.216271
+  M27: FORMULA: =IF(M26="","",M26) → 2317.25448
+  N27: FORMULA: =IF(COUNT(L27:M27)>0,SUM(L27:M27),"") → 2750.470751
+--- Row 29 ---
+  D29: (b)
+  E29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  F29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  G29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  H29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  I29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  J29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  K29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  L29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  M29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+  N29: FORMULA: =Translations!$B$1851 → GHG balance by type of monitoring methodology
+--- Row 30 ---
+  E30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  F30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  G30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  H30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  I30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  J30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  K30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  L30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  M30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+  N30: FORMULA: =Translations!$B$1852 → Values below are taken automatically from entries in sheet "B_EmInst" and point (a) above.
+--- Row 31 ---
+  G31: FORMULA: =Translations!$B$221 → Unit
+  H31: FORMULA: =Translations!$B$1853 → Calculation - based (excl. PFC emissions)
+  I31: FORMULA: =Translations!$B$236 → Total PFC emissions
+  J31: FORMULA: =Translations!$B$1854 → Measurement - based
+  K31: FORMULA: =Translations!$B$638 → Other
+--- Row 32 ---
+  E32: FORMULA: =Translations!$B$561 → Emissions
+  G32: FORMULA: =CONST_tCO2eq → tCO2e
+  H32: FORMULA: =IF(CNTR_HasEntriesA,SUM(B_EmInst!AU17:AU91),"") → 433.216271
+  I32: FORMULA: =IF(CNTR_HasEntriesA,K27,"") → ?
+  J32: FORMULA: =IF(CNTR_HasEntriesA,SUM(B_EmInst!AU113:AU122),"") → ?
+  K32: FORMULA: =IF(CNTR_HasEntriesA,SUM(L27)-SUM(H32:J32),"") → ?
+--- Row 34 ---
+  D34: (c)
+  E34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  F34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  G34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  H34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  I34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  J34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  K34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  L34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  M34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+  N34: FORMULA: =Translations!$B$1855 → Information on the data quality and quality assurance
+--- Row 36 ---
+  E36: FORMULA: =Translations!$B$1856 → General information on data quality:
+  F36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  G36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  H36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  I36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  J36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  K36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  L36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  M36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+  N36: FORMULA: =Translations!$B$1857 → Please select from the hierarchical order (descending order) in the drop-down list the predominant approach for determining the installation's direct emissions.
+--- Row 37 ---
+  E37: FORMULA: =Translations!$B$1858 → Justification for use of default values (if relevant):
+  F37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  G37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  H37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  I37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  J37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  K37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  L37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  M37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+  N37: FORMULA: =Translations!$B$1859 → If the predominant method was to use default values published by the European Commission, please select from the drop-down list the most appropriate justification for not achieving higher data quality.
+--- Row 38 ---
+  E38: FORMULA: =Translations!$B$1860 → Information on quality assurance:
+  F38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  G38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  H38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  I38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  J38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  K38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  L38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  M38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+  N38: FORMULA: =Translations!$B$1886 → Please select from the hierarchical order (descending order) in the drop-down list the approach for quality assurance of emissions data.
+--- Row 40 ---
+  D40: i.
+  E40: FORMULA: =Translations!$B$1856 → General information on data quality:
+  H40: Mostly measurements & analyses ⬅ FILL_IN
+  I40: Mostly measurements & analyses ⬅ FILL_IN
+  J40: Mostly measurements & analyses ⬅ FILL_IN
+  K40: Mostly measurements & analyses ⬅ FILL_IN
+  L40: Mostly measurements & analyses ⬅ FILL_IN
+  M40: Mostly measurements & analyses ⬅ FILL_IN
+  N40: Mostly measurements & analyses ⬅ FILL_IN
+--- Row 41 ---
+  D41: ii.
+  E41: FORMULA: =Translations!$B$1858 → Justification for use of default values (if relevant):
+--- Row 42 ---
+  D42: iii.
+  E42: FORMULA: =Translations!$B$1860 → Information on quality assurance:
+  H42: None ⬅ FILL_IN
+  I42: None
+  J42: None
+  K42: None
+  L42: None
+  M42: None
+  N42: None
+--- Row 45 ---
+  A45: ausblenden
+--- Row 46 ---
+  A46: ausblenden
+--- Row 47 ---
+  A47: ausblenden

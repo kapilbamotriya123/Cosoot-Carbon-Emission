@@ -1,0 +1,605 @@
+
+================================================================================
+SHEET: "B_EmInst" (124 rows × 75 cols)
+================================================================================
+--- Row 1 ---
+  A1: ausblenden
+--- Row 2 ---
+  B2: FORMULA: =Translations!$B$127 → Source streams
+  C2: FORMULA: =Translations!$B$127 → Source streams
+  D2: FORMULA: =Translations!$B$127 → Source streams
+  E2: FORMULA: =Translations!$B$11 → Navigation Area:
+  F2: FORMULA: =Translations!$B$11 → Navigation Area:
+  G2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  H2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  I2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  J2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  K2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  L2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  M2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+  N2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+--- Row 3 ---
+  B3: FORMULA: =Translations!$B$127 → Source streams
+  C3: FORMULA: =Translations!$B$127 → Source streams
+  D3: FORMULA: =Translations!$B$127 → Source streams
+  G3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(BA3,$A:$A,0)-1,3),INDEX($BA:$BA,MATCH(BA3,$A:$A,0))),"") → Source streams
+  H3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(BA3,$A:$A,0)-1,3),INDEX($BA:$BA,MATCH(BA3,$A:$A,0))),"") → Source streams
+  I3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(BC3,$A:$A,0)-1,3),INDEX($BA:$BA,MATCH(BC3,$A:$A,0))),"") → PFC (perfluorocarbon) emissions
+  J3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(BC3,$A:$A,0)-1,3),INDEX($BA:$BA,MATCH(BC3,$A:$A,0))),"") → PFC (perfluorocarbon) emissions
+  K3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(BE3,$A:$A,0)-1,3),INDEX($BA:$BA,MATCH(BE3,$A:$A,0))),"") → Emission sources
+  L3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(BE3,$A:$A,0)-1,3),INDEX($BA:$BA,MATCH(BE3,$A:$A,0))),"") → Emission sources
+--- Row 4 ---
+  B4: FORMULA: =Translations!$B$127 → Source streams
+  C4: FORMULA: =Translations!$B$127 → Source streams
+  D4: FORMULA: =Translations!$B$127 → Source streams
+--- Row 6 ---
+  C6: B.
+  D6: FORMULA: =Translations!$B$128 → Sheet "B_EmInst" - Installation's emission at source stream and emission source level
+--- Row 8 ---
+  C8: 1
+  D8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  E8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  F8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  G8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  H8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  I8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  J8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  K8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  L8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  M8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+  N8: FORMULA: =Translations!$B$129 → Source streams and emission sources
+--- Row 10 ---
+  D10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  E10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  F10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  G10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  H10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  I10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  J10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  K10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  L10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  M10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+  N10: FORMULA: =HYPERLINK("#"&ADDRESS(MATCH($BB10,G_FurtherGuidance!$S:$S,0),3,,,G_FurtherGuidance!$U$2),CONST_LinkToGuidanceSheet) → Please click on this link for further guidance on how to complete this section.
+--- Row 12 ---
+  A12: 1
+  C12: (a)
+  D12: FORMULA: =Translations!$B$1958 → Calculation based approaches: Source Streams (excluding PFC emissions)
+--- Row 13 ---
+  C13: FORMULA: =Translations!$B$131 → #
+  D13: FORMULA: =Translations!$B$132 → Method
+  E13: FORMULA: =Translations!$B$133 → Source stream name
+  F13: FORMULA: =Translations!$B$134 → Activity data (AD)
+  G13: FORMULA: =Translations!$B$135 → AD Unit
+  H13: FORMULA: =Translations!$B$136 → Net calorific value (NCV)
+  I13: FORMULA: =Translations!$B$137 → NCV Unit
+  J13: FORMULA: =Translations!$B$138 → Emission factor (EF)
+  K13: FORMULA: =Translations!$B$139 → EF Unit
+  L13: FORMULA: =Translations!$B$140 → Carbon content
+  M13: FORMULA: =Translations!$B$141 → C-Content Unit
+  N13: FORMULA: =Translations!$B$142 → Oxidation factor (OxF)
+  O13: FORMULA: =Translations!$B$143 → OxF Unit
+--- Row 14 ---
+  C14: FORMULA: =Translations!$B$180 → Ex.1
+  D14: FORMULA: =Translations!$B$181 → Combustion
+  E14: FORMULA: =Translations!$B$182 → Heavy fuel oil
+  F14: 252000
+  G14: t
+  H14: 45
+  I14: FORMULA: =IF(E14="","",IF(G14="","", IF(G14=CONST_kNm3,CONST_GJpkNm3,CONST_GJpt))) → GJ/t
+  J14: 73
+  K14: FORMULA: =Translations!$B$184 → tCO2/TJ
+  M14: FORMULA: =IF(D14<>INDEX(CONST_MonitoringApproach,3),"", IF(G14="","", CONST_tC&"/"&IF(G14="",CONST_t,G14))) → ?
+  N14: 100
+  O14: %
+--- Row 15 ---
+  C15: FORMULA: =Translations!$B$185 → Ex.2
+  D15: FORMULA: =Translations!$B$186 → Process Emissions
+  E15: FORMULA: =Translations!$B$187 → Raw meal for clinker
+  F15: 121000
+  G15: t
+  I15: SHARED_FORMULA → GJ/t
+  J15: 0.08794
+  K15: FORMULA: =Translations!$B$188 → tCO2/t
+  M15: SHARED_FORMULA → ?
+  O15: %
+--- Row 16 ---
+  C16: FORMULA: =Translations!$B$189 → Ex.3
+  D16: FORMULA: =Translations!$B$190 → Mass balance
+  E16: FORMULA: =Translations!$B$191 → Steel
+  F16: -1808226
+  G16: t
+  I16: SHARED_FORMULA → GJ/t
+  L16: 0.003878
+  M16: SHARED_FORMULA → tC/t
+  O16: %
+--- Row 17 ---
+  C17: 1
+  D17: Combustion ⬅ FILL_IN
+  E17: Diesel ⬅ FILL_IN
+  F17: 8.57 ⬅ FILL_IN
+  G17: t ⬅ FILL_IN
+  H17: 43 ⬅ FILL_IN
+  I17: SHARED_FORMULA → GJ/t
+  J17: 74.1 ⬅ FILL_IN
+  K17: tCO2/TJ ⬅ FILL_IN
+  M17: FORMULA: =IF(D17<>INDEX(CONST_MonitoringApproach,3),"", IF(G17="","", CONST_tC&"/"&IF(G17="",CONST_t,G17))) → ?
+  O17: %
+--- Row 18 ---
+  C18: 2
+  D18: Combustion ⬅ FILL_IN
+  E18: LPG ⬅ FILL_IN
+  F18: 136 ⬅ FILL_IN
+  G18: t ⬅ FILL_IN
+  H18: 47.3 ⬅ FILL_IN
+  I18: SHARED_FORMULA → GJ/t
+  J18: 63.1 ⬅ FILL_IN
+  K18: tCO2/TJ ⬅ FILL_IN
+  M18: SHARED_FORMULA → ?
+  O18: %
+--- Row 19 ---
+  C19: 3
+  I19: SHARED_FORMULA → ?
+  M19: SHARED_FORMULA → ?
+  O19: %
+--- Row 20 ---
+  C20: 4
+  I20: SHARED_FORMULA → ?
+  M20: SHARED_FORMULA → ?
+  O20: %
+--- Row 21 ---
+  C21: 5
+  I21: SHARED_FORMULA → ?
+  M21: SHARED_FORMULA → ?
+  O21: %
+--- Row 22 ---
+  C22: 6
+  I22: SHARED_FORMULA → ?
+  M22: SHARED_FORMULA → ?
+  O22: %
+--- Row 23 ---
+  C23: 7
+  I23: SHARED_FORMULA → ?
+  M23: SHARED_FORMULA → ?
+  O23: %
+--- Row 24 ---
+  C24: 8
+  I24: SHARED_FORMULA → ?
+  M24: SHARED_FORMULA → ?
+  O24: %
+--- Row 25 ---
+  C25: 9
+  I25: SHARED_FORMULA → ?
+  M25: SHARED_FORMULA → ?
+  O25: %
+--- Row 26 ---
+  C26: 10
+  I26: SHARED_FORMULA → ?
+  M26: SHARED_FORMULA → ?
+  O26: %
+--- Row 27 ---
+  C27: 11
+  I27: SHARED_FORMULA → ?
+  M27: SHARED_FORMULA → ?
+  O27: %
+--- Row 28 ---
+  C28: 12
+  I28: SHARED_FORMULA → ?
+  M28: SHARED_FORMULA → ?
+  O28: %
+--- Row 29 ---
+  C29: 13
+  I29: SHARED_FORMULA → ?
+  M29: SHARED_FORMULA → ?
+  O29: %
+--- Row 30 ---
+  C30: 14
+  I30: SHARED_FORMULA → ?
+  M30: SHARED_FORMULA → ?
+  O30: %
+--- Row 31 ---
+  C31: 15
+  I31: SHARED_FORMULA → ?
+  M31: SHARED_FORMULA → ?
+  O31: %
+--- Row 32 ---
+  C32: 16
+  I32: SHARED_FORMULA → ?
+  M32: SHARED_FORMULA → ?
+  O32: %
+--- Row 33 ---
+  C33: 17
+  I33: SHARED_FORMULA → ?
+  M33: SHARED_FORMULA → ?
+  O33: %
+--- Row 34 ---
+  C34: 18
+  I34: SHARED_FORMULA → ?
+  M34: SHARED_FORMULA → ?
+  O34: %
+--- Row 35 ---
+  C35: 19
+  I35: SHARED_FORMULA → ?
+  M35: SHARED_FORMULA → ?
+  O35: %
+--- Row 36 ---
+  C36: 20
+  I36: SHARED_FORMULA → ?
+  M36: SHARED_FORMULA → ?
+  O36: %
+--- Row 37 ---
+  C37: 21
+  I37: SHARED_FORMULA → ?
+  M37: SHARED_FORMULA → ?
+  O37: %
+--- Row 38 ---
+  C38: 22
+  I38: SHARED_FORMULA → ?
+  M38: SHARED_FORMULA → ?
+  O38: %
+--- Row 39 ---
+  C39: 23
+  I39: SHARED_FORMULA → ?
+  M39: SHARED_FORMULA → ?
+  O39: %
+--- Row 40 ---
+  C40: 24
+  I40: SHARED_FORMULA → ?
+  M40: SHARED_FORMULA → ?
+  O40: %
+--- Row 41 ---
+  C41: 25
+  I41: SHARED_FORMULA → ?
+  M41: SHARED_FORMULA → ?
+  O41: %
+--- Row 42 ---
+  C42: 26
+  I42: SHARED_FORMULA → ?
+  M42: SHARED_FORMULA → ?
+  O42: %
+--- Row 43 ---
+  C43: 27
+  I43: SHARED_FORMULA → ?
+  M43: SHARED_FORMULA → ?
+  O43: %
+--- Row 44 ---
+  C44: 28
+  I44: SHARED_FORMULA → ?
+  M44: SHARED_FORMULA → ?
+  O44: %
+--- Row 45 ---
+  C45: 29
+  I45: SHARED_FORMULA → ?
+  M45: SHARED_FORMULA → ?
+  O45: %
+--- Row 46 ---
+  C46: 30
+  I46: SHARED_FORMULA → ?
+  M46: SHARED_FORMULA → ?
+  O46: %
+--- Row 47 ---
+  C47: 31
+  I47: SHARED_FORMULA → ?
+  M47: SHARED_FORMULA → ?
+  O47: %
+--- Row 48 ---
+  C48: 32
+  I48: SHARED_FORMULA → ?
+  M48: SHARED_FORMULA → ?
+  O48: %
+--- Row 49 ---
+  C49: 33
+  I49: FORMULA: =IF(E49="","",IF(G49="","", IF(G49=CONST_kNm3,CONST_GJpkNm3,CONST_GJpt))) → ?
+  M49: FORMULA: =IF(D49<>INDEX(CONST_MonitoringApproach,3),"", IF(G49="","", CONST_tC&"/"&IF(G49="",CONST_t,G49))) → ?
+  O49: %
+--- Row 50 ---
+  C50: 34
+  I50: SHARED_FORMULA → ?
+  M50: SHARED_FORMULA → ?
+  O50: %
+--- Row 51 ---
+  C51: 35
+  I51: SHARED_FORMULA → ?
+  M51: SHARED_FORMULA → ?
+  O51: %
+--- Row 52 ---
+  C52: 36
+  I52: SHARED_FORMULA → ?
+  M52: SHARED_FORMULA → ?
+  O52: %
+--- Row 53 ---
+  C53: 37
+  I53: SHARED_FORMULA → ?
+  M53: SHARED_FORMULA → ?
+  O53: %
+--- Row 54 ---
+  C54: 38
+  I54: SHARED_FORMULA → ?
+  M54: SHARED_FORMULA → ?
+  O54: %
+--- Row 55 ---
+  C55: 39
+  I55: SHARED_FORMULA → ?
+  M55: SHARED_FORMULA → ?
+  O55: %
+--- Row 56 ---
+  C56: 40
+  I56: SHARED_FORMULA → ?
+  M56: SHARED_FORMULA → ?
+  O56: %
+--- Row 57 ---
+  C57: 41
+  I57: SHARED_FORMULA → ?
+  M57: SHARED_FORMULA → ?
+  O57: %
+--- Row 58 ---
+  C58: 42
+  I58: SHARED_FORMULA → ?
+  M58: SHARED_FORMULA → ?
+  O58: %
+--- Row 59 ---
+  C59: 43
+  I59: SHARED_FORMULA → ?
+  M59: SHARED_FORMULA → ?
+  O59: %
+--- Row 60 ---
+  C60: 44
+  I60: SHARED_FORMULA → ?
+  M60: SHARED_FORMULA → ?
+  O60: %
+--- Row 61 ---
+  C61: 45
+  I61: SHARED_FORMULA → ?
+  M61: SHARED_FORMULA → ?
+  O61: %
+--- Row 62 ---
+  C62: 46
+  I62: SHARED_FORMULA → ?
+  M62: SHARED_FORMULA → ?
+  O62: %
+--- Row 63 ---
+  C63: 47
+  I63: SHARED_FORMULA → ?
+  M63: SHARED_FORMULA → ?
+  O63: %
+--- Row 64 ---
+  C64: 48
+  I64: SHARED_FORMULA → ?
+  M64: SHARED_FORMULA → ?
+  O64: %
+--- Row 65 ---
+  C65: 49
+  I65: SHARED_FORMULA → ?
+  M65: SHARED_FORMULA → ?
+  O65: %
+--- Row 66 ---
+  C66: 50
+  I66: SHARED_FORMULA → ?
+  M66: SHARED_FORMULA → ?
+  O66: %
+--- Row 67 ---
+  C67: 51
+  I67: SHARED_FORMULA → ?
+  M67: SHARED_FORMULA → ?
+  O67: %
+--- Row 68 ---
+  C68: 52
+  I68: SHARED_FORMULA → ?
+  M68: SHARED_FORMULA → ?
+  O68: %
+--- Row 69 ---
+  C69: 53
+  I69: SHARED_FORMULA → ?
+  M69: SHARED_FORMULA → ?
+  O69: %
+--- Row 70 ---
+  C70: 54
+  I70: SHARED_FORMULA → ?
+  M70: SHARED_FORMULA → ?
+  O70: %
+--- Row 71 ---
+  C71: 55
+  I71: SHARED_FORMULA → ?
+  M71: SHARED_FORMULA → ?
+  O71: %
+--- Row 72 ---
+  C72: 56
+  I72: SHARED_FORMULA → ?
+  M72: SHARED_FORMULA → ?
+  O72: %
+--- Row 73 ---
+  C73: 57
+  I73: SHARED_FORMULA → ?
+  M73: SHARED_FORMULA → ?
+  O73: %
+--- Row 74 ---
+  C74: 58
+  I74: SHARED_FORMULA → ?
+  M74: SHARED_FORMULA → ?
+  O74: %
+--- Row 75 ---
+  C75: 59
+  I75: SHARED_FORMULA → ?
+  M75: SHARED_FORMULA → ?
+  O75: %
+--- Row 76 ---
+  C76: 60
+  I76: SHARED_FORMULA → ?
+  M76: SHARED_FORMULA → ?
+  O76: %
+--- Row 77 ---
+  C77: 61
+  I77: SHARED_FORMULA → ?
+  M77: SHARED_FORMULA → ?
+  O77: %
+--- Row 78 ---
+  C78: 62
+  I78: SHARED_FORMULA → ?
+  M78: SHARED_FORMULA → ?
+  O78: %
+--- Row 79 ---
+  C79: 63
+  I79: SHARED_FORMULA → ?
+  M79: SHARED_FORMULA → ?
+  O79: %
+--- Row 80 ---
+  C80: 64
+  I80: SHARED_FORMULA → ?
+  M80: SHARED_FORMULA → ?
+  O80: %
+--- Row 81 ---
+  C81: 65
+  I81: FORMULA: =IF(E81="","",IF(G81="","", IF(G81=CONST_kNm3,CONST_GJpkNm3,CONST_GJpt))) → ?
+  M81: FORMULA: =IF(D81<>INDEX(CONST_MonitoringApproach,3),"", IF(G81="","", CONST_tC&"/"&IF(G81="",CONST_t,G81))) → ?
+  O81: %
+--- Row 82 ---
+  C82: 66
+  I82: SHARED_FORMULA → ?
+  M82: SHARED_FORMULA → ?
+  O82: %
+--- Row 83 ---
+  C83: 67
+  I83: SHARED_FORMULA → ?
+  M83: SHARED_FORMULA → ?
+  O83: %
+--- Row 84 ---
+  C84: 68
+  I84: SHARED_FORMULA → ?
+  M84: SHARED_FORMULA → ?
+  O84: %
+--- Row 85 ---
+  C85: 69
+  I85: SHARED_FORMULA → ?
+  M85: SHARED_FORMULA → ?
+  O85: %
+--- Row 86 ---
+  C86: 70
+  I86: SHARED_FORMULA → ?
+  M86: SHARED_FORMULA → ?
+  O86: %
+--- Row 87 ---
+  C87: 71
+  I87: SHARED_FORMULA → ?
+  M87: SHARED_FORMULA → ?
+  O87: %
+--- Row 88 ---
+  C88: 72
+  I88: SHARED_FORMULA → ?
+  M88: SHARED_FORMULA → ?
+  O88: %
+--- Row 89 ---
+  C89: 73
+  I89: SHARED_FORMULA → ?
+  M89: SHARED_FORMULA → ?
+  O89: %
+--- Row 90 ---
+  C90: 74
+  I90: SHARED_FORMULA → ?
+  M90: SHARED_FORMULA → ?
+  O90: %
+--- Row 91 ---
+  C91: 75
+  I91: SHARED_FORMULA → ?
+  M91: SHARED_FORMULA → ?
+  O91: %
+--- Row 95 ---
+  A95: 2
+  C95: (b)
+  D95: FORMULA: =Translations!$B$1962 → PFC (perfluorocarbon) emissions
+--- Row 96 ---
+  C96: FORMULA: =Translations!$B$131 → #
+  D96: FORMULA: =Translations!$B$132 → Method
+  E96: FORMULA: =Translations!$B$1963 → Technology type
+  F96: FORMULA: =Translations!$B$134 → Activity data (AD)
+  G96: FORMULA: =Translations!$B$135 → AD Unit
+  H96: FORMULA: =Translations!$B$136 → Net calorific value (NCV)
+  I96: FORMULA: =Translations!$B$137 → NCV Unit
+  J96: FORMULA: =Translations!$B$138 → Emission factor (EF)
+  K96: FORMULA: =Translations!$B$139 → EF Unit
+  L96: FORMULA: =Translations!$B$140 → Carbon content
+  M96: FORMULA: =Translations!$B$141 → C-Content Unit
+  N96: FORMULA: =Translations!$B$142 → Oxidation factor (OxF)
+  O96: FORMULA: =Translations!$B$143 → OxF Unit
+--- Row 97 ---
+  C97: FORMULA: =Translations!$B$202 → Ex.
+  D97: FORMULA: =Translations!$B$647 → Slope method
+  E97: FORMULA: =Translations!$B$204 → Centre Worked Pre-Bake (CWPB)
+  F97: 500000
+  G97: FORMULA: =CONST_t → t
+--- Row 98 ---
+  C98: 1
+  G98: SHARED_FORMULA → t
+--- Row 99 ---
+  C99: 2
+  G99: SHARED_FORMULA → t
+--- Row 100 ---
+  C100: 3
+  G100: SHARED_FORMULA → t
+--- Row 101 ---
+  C101: 4
+  G101: SHARED_FORMULA → t
+--- Row 102 ---
+  C102: 5
+  G102: SHARED_FORMULA → t
+--- Row 103 ---
+  C103: 6
+  G103: SHARED_FORMULA → t
+--- Row 104 ---
+  C104: 7
+  G104: SHARED_FORMULA → t
+--- Row 105 ---
+  C105: 8
+  G105: SHARED_FORMULA → t
+--- Row 106 ---
+  C106: 9
+  G106: SHARED_FORMULA → t
+--- Row 107 ---
+  C107: 10
+  G107: SHARED_FORMULA → t
+--- Row 109 ---
+  A109: 3
+  C109: (c)
+  D109: FORMULA: =Translations!$B$1964 → Measurement-Based Approaches: Emissions Sources
+--- Row 110 ---
+  C110: FORMULA: =Translations!$B$131 → #
+  D110: FORMULA: =Translations!$B$122 → Name
+  E110: FORMULA: =Translations!$B$209 → Type of GHG
+  F110: FORMULA: =Translations!$B$134 → Activity data (AD)
+  G110: FORMULA: =Translations!$B$135 → AD Unit
+  H110: FORMULA: =Translations!$B$136 → Net calorific value (NCV)
+  I110: FORMULA: =Translations!$B$137 → NCV Unit
+  J110: FORMULA: =Translations!$B$138 → Emission factor (EF)
+  K110: FORMULA: =Translations!$B$139 → EF Unit
+  L110: FORMULA: =Translations!$B$140 → Carbon content
+  M110: FORMULA: =Translations!$B$141 → C-Content Unit
+  N110: FORMULA: =Translations!$B$142 → Oxidation factor (OxF)
+  O110: FORMULA: =Translations!$B$143 → OxF Unit
+--- Row 111 ---
+  C111: FORMULA: =Translations!$B$180 → Ex.1
+  D111: N2O
+  E111: N2O
+--- Row 112 ---
+  C112: FORMULA: =Translations!$B$185 → Ex.2
+  D112: FORMULA: =Translations!$B$211 → CO2 transfer
+  E112: CO2
+--- Row 113 ---
+  C113: 1
+--- Row 114 ---
+  C114: 2
+--- Row 115 ---
+  C115: 3
+--- Row 116 ---
+  C116: 4
+--- Row 117 ---
+  C117: 5
+--- Row 118 ---
+  C118: 6
+--- Row 119 ---
+  C119: 7
+--- Row 120 ---
+  C120: 8
+--- Row 121 ---
+  C121: 9
+--- Row 122 ---
+  C122: 10
+--- Row 124 ---
+  A124: ausblenden

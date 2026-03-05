@@ -1,0 +1,704 @@
+
+================================================================================
+SHEET: "A_InstData" (125 rows × 35 cols)
+================================================================================
+--- Row 1 ---
+  A1: ausblenden
+--- Row 2 ---
+  B2: FORMULA: =Translations!$B$64 → InstData
+  C2: FORMULA: =Translations!$B$64 → InstData
+  D2: FORMULA: =Translations!$B$64 → InstData
+  E2: FORMULA: =Translations!$B$11 → Navigation Area:
+  F2: FORMULA: =Translations!$B$11 → Navigation Area:
+  G2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  H2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,a_Contents!$U$2),a_Contents!$B$2) → Table of contents
+  I2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  J2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,G_FurtherGuidance!$U$2),G_FurtherGuidance!$B$2) → Further Guidance
+  K2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  L2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Processes!$Y$2),Summary_Processes!$Y$2) → Summary_Processes
+  M2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+  N2: FORMULA: =HYPERLINK("#"&ADDRESS(2,3,,,Summary_Products!$BF$2),Summary_Products!$BF$2) → Summary_Products
+--- Row 3 ---
+  B3: FORMULA: =Translations!$B$64 → InstData
+  C3: FORMULA: =Translations!$B$64 → InstData
+  D3: FORMULA: =Translations!$B$64 → InstData
+  G3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(R3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(R3,$A:$A,0))),"") → Reporting period
+  H3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(R3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(R3,$A:$A,0))),"") → Reporting period
+  I3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(T3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(T3,$A:$A,0))),"") → About the installation
+  J3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(T3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(T3,$A:$A,0))),"") → About the installation
+  K3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(V3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(V3,$A:$A,0))),"") → Verifier
+  L3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(V3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(V3,$A:$A,0))),"") → Verifier
+  M3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(X3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(X3,$A:$A,0))),"") → Goods & precursors
+  N3: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(X3,$A:$A,0)-1,3),INDEX($R:$R,MATCH(X3,$A:$A,0))),"") → Goods & precursors
+--- Row 4 ---
+  B4: FORMULA: =Translations!$B$64 → InstData
+  C4: FORMULA: =Translations!$B$64 → InstData
+  D4: FORMULA: =Translations!$B$64 → InstData
+  G4: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(R4,$A:$A,0)-1,3),INDEX($R:$R,MATCH(R4,$A:$A,0))),"") → Purchased precursors
+  H4: FORMULA: =IFERROR(HYPERLINK("#"&ADDRESS(ROW($A$1)+MATCH(R4,$A:$A,0)-1,3),INDEX($R:$R,MATCH(R4,$A:$A,0))),"") → Purchased precursors
+--- Row 6 ---
+  C6: A.
+  E6: FORMULA: =Translations!$B$65 → Sheet "A_InstData" - General information, production processes and purchased precursors 
+--- Row 9 ---
+  A9: FORMULA: =C9 → 1
+  C9: 1
+  D9: FORMULA: =Translations!$B$67 → Reporting period
+  H9: FORMULA: =Translations!$B$68 → Start:
+  I9: DATE: 2025-04-01 ⬅ FILL_IN
+  J9: DATE: 2025-04-01 ⬅ FILL_IN
+  K9: FORMULA: =Translations!$B$69 → End:
+  L9: DATE: 2025-06-01 ⬅ FILL_IN
+  M9: DATE: 2025-06-01 ⬅ FILL_IN
+--- Row 13 ---
+  E13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  F13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  G13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  H13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  I13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  J13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  K13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  L13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  M13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+  N13: FORMULA: =Translations!$B$1952 → Please enter here the starting date and the end date of the reporting period to which the data entered in this communication template refers to. For example, if you want to report data based on the whole calendar year 2023, the starting date would be 1.1.2023 and the end date 31.12.2023.
+--- Row 14 ---
+  E14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  F14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  G14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  H14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  I14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  J14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  K14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  L14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  M14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+  N14: FORMULA: =Translations!$B$71 → It is important that all data entered in this template (embedded emissions, carbon price due, product properties, etc.) all relate to that same reporting period entered above.
+--- Row 17 ---
+  A17: FORMULA: =C17 → 2
+  C17: 2
+  D17: FORMULA: =Translations!$B$72 → About the installation
+--- Row 19 ---
+  D19: i.
+  E19: FORMULA: =Translations!$B$73 → Name of the installation (optional):
+  F19: FORMULA: =Translations!$B$73 → Name of the installation (optional):
+  G19: FORMULA: =Translations!$B$73 → Name of the installation (optional):
+  H19: FORMULA: =Translations!$B$73 → Name of the installation (optional):
+--- Row 20 ---
+  D20: ii.
+  E20: FORMULA: =Translations!$B$74 → Name of the installation (English name):
+  F20: FORMULA: =Translations!$B$74 → Name of the installation (English name):
+  G20: FORMULA: =Translations!$B$74 → Name of the installation (English name):
+  H20: FORMULA: =Translations!$B$74 → Name of the installation (English name):
+  I20: METAMORPHOSIS ENGITECH INDIA PVT. LTD
+  J20: METAMORPHOSIS ENGITECH INDIA PVT. LTD
+  K20: METAMORPHOSIS ENGITECH INDIA PVT. LTD
+  L20: METAMORPHOSIS ENGITECH INDIA PVT. LTD
+  M20: METAMORPHOSIS ENGITECH INDIA PVT. LTD
+  N20: METAMORPHOSIS ENGITECH INDIA PVT. LTD
+--- Row 21 ---
+  D21: iii.
+  E21: FORMULA: =Translations!$B$75 → Street, Number:
+  F21: FORMULA: =Translations!$B$75 → Street, Number:
+  G21: FORMULA: =Translations!$B$75 → Street, Number:
+  H21: FORMULA: =Translations!$B$75 → Street, Number:
+  I21: Unit 1: - Gate No. 1261,Sanaswadi Pune Nagar Road,Tal: Shirur,Pune 412208, Maharashtra India
+Unit 2: - Gat No. 56/3,4 & 5, Village: Pimple Jagtap,Tal: Shirur, Distt: Pune,Maharashtra-412208,India. ⬅ FILL_IN
+  J21: Unit 1: - Gate No. 1261,Sanaswadi Pune Nagar Road,Tal: Shirur,Pune 412208, Maharashtra India
+Unit 2: - Gat No. 56/3,4 & 5, Village: Pimple Jagtap,Tal: Shirur, Distt: Pune,Maharashtra-412208,India. ⬅ FILL_IN
+  K21: Unit 1: - Gate No. 1261,Sanaswadi Pune Nagar Road,Tal: Shirur,Pune 412208, Maharashtra India
+Unit 2: - Gat No. 56/3,4 & 5, Village: Pimple Jagtap,Tal: Shirur, Distt: Pune,Maharashtra-412208,India. ⬅ FILL_IN
+  L21: Unit 1: - Gate No. 1261,Sanaswadi Pune Nagar Road,Tal: Shirur,Pune 412208, Maharashtra India
+Unit 2: - Gat No. 56/3,4 & 5, Village: Pimple Jagtap,Tal: Shirur, Distt: Pune,Maharashtra-412208,India. ⬅ FILL_IN
+  M21: Unit 1: - Gate No. 1261,Sanaswadi Pune Nagar Road,Tal: Shirur,Pune 412208, Maharashtra India
+Unit 2: - Gat No. 56/3,4 & 5, Village: Pimple Jagtap,Tal: Shirur, Distt: Pune,Maharashtra-412208,India. ⬅ FILL_IN
+  N21: Unit 1: - Gate No. 1261,Sanaswadi Pune Nagar Road,Tal: Shirur,Pune 412208, Maharashtra India
+Unit 2: - Gat No. 56/3,4 & 5, Village: Pimple Jagtap,Tal: Shirur, Distt: Pune,Maharashtra-412208,India. ⬅ FILL_IN
+--- Row 22 ---
+  D22: iv.
+  E22: FORMULA: =Translations!$B$76 → Economic activity:
+  F22: FORMULA: =Translations!$B$76 → Economic activity:
+  G22: FORMULA: =Translations!$B$76 → Economic activity:
+  H22: FORMULA: =Translations!$B$76 → Economic activity:
+--- Row 23 ---
+  D23: v.
+  E23: FORMULA: =Translations!$B$77 → Post code:
+  F23: FORMULA: =Translations!$B$77 → Post code:
+  G23: FORMULA: =Translations!$B$77 → Post code:
+  H23: FORMULA: =Translations!$B$77 → Post code:
+  I23: 412208 ⬅ FILL_IN
+  J23: 412208 ⬅ FILL_IN
+  K23: 412208 ⬅ FILL_IN
+  L23: 412208 ⬅ FILL_IN
+  M23: 412208 ⬅ FILL_IN
+  N23: 412208 ⬅ FILL_IN
+--- Row 24 ---
+  D24: vi.
+  E24: FORMULA: =Translations!$B$78 → P.O. Box:
+  F24: FORMULA: =Translations!$B$78 → P.O. Box:
+  G24: FORMULA: =Translations!$B$78 → P.O. Box:
+  H24: FORMULA: =Translations!$B$78 → P.O. Box:
+--- Row 25 ---
+  D25: vii.
+  E25: FORMULA: =Translations!$B$79 → City:
+  F25: FORMULA: =Translations!$B$79 → City:
+  G25: FORMULA: =Translations!$B$79 → City:
+  H25: FORMULA: =Translations!$B$79 → City:
+  I25: Pune ⬅ FILL_IN
+  J25: Pune ⬅ FILL_IN
+  K25: Pune ⬅ FILL_IN
+  L25: Pune ⬅ FILL_IN
+  M25: Pune ⬅ FILL_IN
+  N25: Pune ⬅ FILL_IN
+--- Row 26 ---
+  D26: viii.
+  E26: FORMULA: =Translations!$B$80 → Country:
+  F26: FORMULA: =Translations!$B$80 → Country:
+  G26: FORMULA: =Translations!$B$80 → Country:
+  H26: FORMULA: =Translations!$B$80 → Country:
+  I26: India ⬅ FILL_IN
+  J26: India ⬅ FILL_IN
+  K26: India ⬅ FILL_IN
+  L26: India ⬅ FILL_IN
+  M26: India ⬅ FILL_IN
+  N26: India ⬅ FILL_IN
+--- Row 27 ---
+  D27: ix.
+  E27: FORMULA: =Translations!$B$81 → UNLOCODE:
+  F27: FORMULA: =Translations!$B$81 → UNLOCODE:
+  G27: FORMULA: =Translations!$B$81 → UNLOCODE:
+  H27: FORMULA: =Translations!$B$81 → UNLOCODE:
+  I27: IN PNQ ⬅ FILL_IN
+  J27: IN PNQ ⬅ FILL_IN
+  K27: IN PNQ ⬅ FILL_IN
+  L27: IN PNQ ⬅ FILL_IN
+  M27: IN PNQ ⬅ FILL_IN
+  N27: IN PNQ ⬅ FILL_IN
+--- Row 28 ---
+  D28: x.
+  E28: FORMULA: =Translations!$B$82 → Coordinates of the main emission source (latitude):
+  F28: FORMULA: =Translations!$B$82 → Coordinates of the main emission source (latitude):
+  G28: FORMULA: =Translations!$B$82 → Coordinates of the main emission source (latitude):
+  H28: FORMULA: =Translations!$B$82 → Coordinates of the main emission source (latitude):
+  I28: 18°38'52.23" ⬅ FILL_IN
+  J28: 18°38'52.23" ⬅ FILL_IN
+  K28: 18°38'52.23" ⬅ FILL_IN
+  L28: 18°38'52.23" ⬅ FILL_IN
+  M28: 18°38'52.23" ⬅ FILL_IN
+  N28: 18°38'52.23" ⬅ FILL_IN
+--- Row 29 ---
+  D29: xi.
+  E29: FORMULA: =Translations!$B$83 → Coordinates of the main emission source (longitude):
+  F29: FORMULA: =Translations!$B$83 → Coordinates of the main emission source (longitude):
+  G29: FORMULA: =Translations!$B$83 → Coordinates of the main emission source (longitude):
+  H29: FORMULA: =Translations!$B$83 → Coordinates of the main emission source (longitude):
+  I29: 18°38'52.23" ⬅ FILL_IN
+  J29: 18°38'52.23" ⬅ FILL_IN
+  K29: 18°38'52.23" ⬅ FILL_IN
+  L29: 18°38'52.23" ⬅ FILL_IN
+  M29: 18°38'52.23" ⬅ FILL_IN
+  N29: 18°38'52.23" ⬅ FILL_IN
+--- Row 30 ---
+  D30: xii.
+  E30: FORMULA: =Translations!$B$84 → Name of authorized representative:
+  F30: FORMULA: =Translations!$B$84 → Name of authorized representative:
+  G30: FORMULA: =Translations!$B$84 → Name of authorized representative:
+  H30: FORMULA: =Translations!$B$84 → Name of authorized representative:
+  I30: Narendra Singh ⬅ FILL_IN
+  J30: Narendra Singh ⬅ FILL_IN
+  K30: Narendra Singh ⬅ FILL_IN
+  L30: Narendra Singh ⬅ FILL_IN
+  M30: Narendra Singh ⬅ FILL_IN
+  N30: Narendra Singh ⬅ FILL_IN
+--- Row 31 ---
+  D31: xiii.
+  E31: FORMULA: =Translations!$B$85 → Email:
+  F31: FORMULA: =Translations!$B$85 → Email:
+  G31: FORMULA: =Translations!$B$85 → Email:
+  H31: FORMULA: =Translations!$B$85 → Email:
+  I31: narendra.singh@metaengitech.com ⬅ FILL_IN
+  J31: narendra.singh@metaengitech.com ⬅ FILL_IN
+  K31: narendra.singh@metaengitech.com ⬅ FILL_IN
+  L31: narendra.singh@metaengitech.com ⬅ FILL_IN
+  M31: narendra.singh@metaengitech.com ⬅ FILL_IN
+  N31: narendra.singh@metaengitech.com ⬅ FILL_IN
+--- Row 32 ---
+  D32: xiv.
+  E32: FORMULA: =Translations!$B$86 → Telephone:
+  F32: FORMULA: =Translations!$B$86 → Telephone:
+  G32: FORMULA: =Translations!$B$86 → Telephone:
+  H32: FORMULA: =Translations!$B$86 → Telephone:
+  I32: 9266775836 ⬅ FILL_IN
+  J32: 9266775836 ⬅ FILL_IN
+  K32: 9266775836 ⬅ FILL_IN
+  L32: 9266775836 ⬅ FILL_IN
+  M32: 9266775836 ⬅ FILL_IN
+  N32: 9266775836 ⬅ FILL_IN
+--- Row 34 ---
+  A34: FORMULA: =C34 → 3
+  C34: 3
+  D34: FORMULA: =Translations!$B$87 → Verifier of the report – only if available and not required during transitional period
+--- Row 36 ---
+  D36: (a)
+  E36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  F36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  G36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  H36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  I36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  J36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  K36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  L36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  M36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+  N36: FORMULA: =Translations!$B$89 → Name and address of the verifier of this report:
+--- Row 37 ---
+  D37: i.
+  E37: FORMULA: =Translations!$B$90 → Company Name:
+  F37: FORMULA: =Translations!$B$90 → Company Name:
+  G37: FORMULA: =Translations!$B$90 → Company Name:
+  H37: FORMULA: =Translations!$B$90 → Company Name:
+--- Row 38 ---
+  D38: ii.
+  E38: FORMULA: =Translations!$B$75 → Street, Number:
+  F38: FORMULA: =Translations!$B$75 → Street, Number:
+  G38: FORMULA: =Translations!$B$75 → Street, Number:
+  H38: FORMULA: =Translations!$B$75 → Street, Number:
+--- Row 39 ---
+  D39: iii.
+  E39: FORMULA: =Translations!$B$79 → City:
+  F39: FORMULA: =Translations!$B$79 → City:
+  G39: FORMULA: =Translations!$B$79 → City:
+  H39: FORMULA: =Translations!$B$79 → City:
+--- Row 40 ---
+  D40: iv.
+  E40: FORMULA: =Translations!$B$91 → Postcode/ZIP:
+  F40: FORMULA: =Translations!$B$91 → Postcode/ZIP:
+  G40: FORMULA: =Translations!$B$91 → Postcode/ZIP:
+  H40: FORMULA: =Translations!$B$91 → Postcode/ZIP:
+--- Row 41 ---
+  D41: v.
+  E41: FORMULA: =Translations!$B$80 → Country:
+  F41: FORMULA: =Translations!$B$80 → Country:
+  G41: FORMULA: =Translations!$B$80 → Country:
+  H41: FORMULA: =Translations!$B$80 → Country:
+--- Row 43 ---
+  D43: (b)
+  E43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  F43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  G43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  H43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  I43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  J43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  K43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  L43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  M43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+  N43: FORMULA: =Translations!$B$92 → Authorised representative of the verifier:
+--- Row 44 ---
+  E44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  F44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  G44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  H44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  I44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  J44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  K44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  L44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  M44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+  N44: FORMULA: =Translations!$B$93 → The nominated person should be familiar with this report. Ideally it is the lead verifier involved with this report.
+--- Row 45 ---
+  D45: i.
+  E45: FORMULA: =Translations!$B$94 → Name:
+  F45: FORMULA: =Translations!$B$94 → Name:
+  G45: FORMULA: =Translations!$B$94 → Name:
+  H45: FORMULA: =Translations!$B$94 → Name:
+--- Row 46 ---
+  D46: ii.
+  E46: FORMULA: =Translations!$B$95 → Email address:
+  F46: FORMULA: =Translations!$B$95 → Email address:
+  G46: FORMULA: =Translations!$B$95 → Email address:
+  H46: FORMULA: =Translations!$B$95 → Email address:
+--- Row 47 ---
+  D47: iii.
+  E47: FORMULA: =Translations!$B$96 → Telephone number:
+  F47: FORMULA: =Translations!$B$96 → Telephone number:
+  G47: FORMULA: =Translations!$B$96 → Telephone number:
+  H47: FORMULA: =Translations!$B$96 → Telephone number:
+--- Row 48 ---
+  D48: iv.
+  E48: FORMULA: =Translations!$B$97 → Fax:
+  F48: FORMULA: =Translations!$B$97 → Fax:
+  G48: FORMULA: =Translations!$B$97 → Fax:
+  H48: FORMULA: =Translations!$B$97 → Fax:
+--- Row 50 ---
+  D50: (c)
+  E50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  F50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  G50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  H50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  I50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  J50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  K50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  L50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  M50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+  N50: FORMULA: =Translations!$B$98 → Information about the verifier's accreditation:
+--- Row 51 ---
+  D51: i.
+  E51: FORMULA: =Translations!$B$99 → Accreditation Member State:
+  F51: FORMULA: =Translations!$B$99 → Accreditation Member State:
+  G51: FORMULA: =Translations!$B$99 → Accreditation Member State:
+  H51: FORMULA: =Translations!$B$99 → Accreditation Member State:
+--- Row 52 ---
+  D52: ii.
+  E52: FORMULA: =Translations!$B$100 → Name of the national accreditation body:
+  F52: FORMULA: =Translations!$B$100 → Name of the national accreditation body:
+  G52: FORMULA: =Translations!$B$100 → Name of the national accreditation body:
+  H52: FORMULA: =Translations!$B$100 → Name of the national accreditation body:
+--- Row 53 ---
+  D53: iii.
+  E53: FORMULA: =Translations!$B$101 → Registration number issued by the Accreditation body:
+  F53: FORMULA: =Translations!$B$101 → Registration number issued by the Accreditation body:
+  G53: FORMULA: =Translations!$B$101 → Registration number issued by the Accreditation body:
+  H53: FORMULA: =Translations!$B$101 → Registration number issued by the Accreditation body:
+--- Row 55 ---
+  A55: FORMULA: =C55 → 4
+  C55: 4
+  D55: FORMULA: =Translations!$B$102 → Aggregated goods categories and relevant production processes
+--- Row 57 ---
+  D57: (a)
+  E57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  F57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  G57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  H57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  I57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  J57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  K57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  L57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  M57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+  N57: FORMULA: =Translations!$B$104 → List of aggregated goods categories, relevant precursors and corresponding production routes
+--- Row 58 ---
+  E58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  F58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  G58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  H58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  I58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  J58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  K58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  L58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  M58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+  N58: FORMULA: =Translations!$B$105 → Please list here ALL aggregated goods categories, including any relevant precursor types produced WITHIN the installation.
+--- Row 59 ---
+  E59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  F59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  G59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  H59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  I59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  J59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  K59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  L59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  M59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+  N59: FORMULA: =Translations!$B$106 → Where relevant, please list all production routes through which the aggregated goods are produced.
+--- Row 61 ---
+  D61: ID
+  E61: FORMULA: =Translations!$B$107 → Aggregated goods category
+  F61: FORMULA: =Translations!$B$107 → Aggregated goods category
+  G61: FORMULA: =Translations!$B$108 → Route
+  H61: FORMULA: =Translations!$B$108 → Route
+  I61: FORMULA: =Translations!$B$109 → Route 1
+  J61: FORMULA: =Translations!$B$110 → Route 2
+  K61: FORMULA: =Translations!$B$111 → Route 3
+  L61: FORMULA: =Translations!$B$112 → Route 4
+  M61: FORMULA: =Translations!$B$113 → Route 5
+  N61: FORMULA: =Translations!$B$114 → Route 6
+--- Row 62 ---
+  D62: G1
+  E62: Iron or steel products ⬅ FILL_IN
+  F62: Iron or steel products ⬅ FILL_IN
+  G62: FORMULA: =IF(E62="","",IF(COUNTIF(INDEX(CONST_MATRIX_ProductionRoute,MATCH(E62,CONST_LIST_Goods,0),),CONST_NA)=9,CONST_AllProdRoutes,CONST_PleaseSelect)) → All production routes
+  H62: FORMULA: =IF(E62="","",IF(COUNTIF(INDEX(CONST_MATRIX_ProductionRoute,MATCH(E62,CONST_LIST_Goods,0),),CONST_NA)=9,CONST_AllProdRoutes,CONST_PleaseSelect)) → All production routes
+  I62: All production routes ⬅ FILL_IN
+  J62: All production routes ⬅ FILL_IN
+  K62: All production routes ⬅ FILL_IN
+  L62: All production routes ⬅ FILL_IN
+  M62: All production routes ⬅ FILL_IN
+--- Row 63 ---
+  D63: G1
+  G63: SHARED_FORMULA → ?
+  H63: SHARED_FORMULA → ?
+--- Row 64 ---
+  D64: G3
+  G64: SHARED_FORMULA → ?
+  H64: SHARED_FORMULA → ?
+--- Row 65 ---
+  D65: G4
+  G65: SHARED_FORMULA → ?
+  H65: SHARED_FORMULA → ?
+--- Row 66 ---
+  D66: G5
+  G66: SHARED_FORMULA → ?
+  H66: SHARED_FORMULA → ?
+--- Row 67 ---
+  D67: G6
+  G67: SHARED_FORMULA → ?
+  H67: SHARED_FORMULA → ?
+--- Row 68 ---
+  D68: G7
+  G68: SHARED_FORMULA → ?
+  H68: SHARED_FORMULA → ?
+--- Row 69 ---
+  D69: G8
+  G69: SHARED_FORMULA → ?
+  H69: SHARED_FORMULA → ?
+--- Row 70 ---
+  D70: G9
+  G70: SHARED_FORMULA → ?
+  H70: SHARED_FORMULA → ?
+--- Row 71 ---
+  D71: G10
+  G71: SHARED_FORMULA → ?
+  H71: SHARED_FORMULA → ?
+--- Row 73 ---
+  E73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  F73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  G73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  H73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  I73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  J73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  K73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  L73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  M73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+  N73: FORMULA: =Translations!$B$1953 → For information, emissions from the following precursors are relevant for the embedded emissions of the types of aggregated goods listed above. Where those precursors are actually relevant for your production processes, please make sure those are also listed either as products in the table above (if produced within your installation) or under section 5 "purchased precursors" below (where produced in other installations). Please note that for some goods the same aggregated good category itself can be a relevant precursor (e.g. iron & steel products, aluminium products, mixed fertilisers).
+--- Row 74 ---
+  E74: FORMULA: =Translations!$B$116 → Relevant precursors:
+  G74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:G74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:G74),CONST_CNTR_PrecNumbering,0))) → Crude steel
+  H74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:H74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:H74),CONST_CNTR_PrecNumbering,0))) → Direct reduced iron
+  I74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:I74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:I74),CONST_CNTR_PrecNumbering,0))) → Pig iron
+  J74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:J74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:J74),CONST_CNTR_PrecNumbering,0))) → Alloys (FeMn, FeCr, FeNi)
+  K74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:K74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:K74),CONST_CNTR_PrecNumbering,0))) → Sintered Ore
+  L74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:L74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:L74),CONST_CNTR_PrecNumbering,0))) → Hydrogen
+  M74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:M74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:M74),CONST_CNTR_PrecNumbering,0))) → ?
+  N74: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G74:N74))=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G74:N74),CONST_CNTR_PrecNumbering,0))) → ?
+--- Row 75 ---
+  G75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:G75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:G75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  H75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:H75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:H75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  I75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:I75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:I75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  J75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:J75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:J75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  K75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:K75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:K75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  L75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:L75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:L75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  M75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:M75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:M75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+  N75: FORMULA: =IF(COUNTIF(CONST_CNTR_PrecNumbering,COLUMNS($G75:N75)+8)=0,"",INDEX(CONST_LIST_Goods,MATCH(COLUMNS($G75:N75)+8,CONST_CNTR_PrecNumbering,0))) → ?
+--- Row 77 ---
+  D77: (b)
+  E77: FORMULA: =Translations!$B$117 → Relevant production processes
+  F77: FORMULA: =Translations!$B$117 → Relevant production processes
+  G77: FORMULA: =Translations!$B$117 → Relevant production processes
+  H77: FORMULA: =Translations!$B$117 → Relevant production processes
+  I77: FORMULA: =Translations!$B$117 → Relevant production processes
+  J77: FORMULA: =Translations!$B$117 → Relevant production processes
+  K77: FORMULA: =Translations!$B$117 → Relevant production processes
+  L77: FORMULA: =Translations!$B$117 → Relevant production processes
+  M77: FORMULA: =Translations!$B$117 → Relevant production processes
+  N77: FORMULA: =Translations!$B$117 → Relevant production processes
+--- Row 78 ---
+  E78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  F78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  G78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  H78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  I78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  J78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  K78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  L78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  M78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+  N78: FORMULA: =Translations!$B$1954 → Based on the list under (a), please list here only aggregated goods categories (G1, G2, etc.) for which you want to establish distinct "production process" and assign all aggregated goods categories and relevant precursors that will be covered by its system boundary. Where the selected "production process" only includes the one aggregated goods category selected, please select "only direct production" in column F.
+--- Row 79 ---
+  E79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  F79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  G79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  H79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  I79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  J79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  K79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  L79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  M79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+  N79: FORMULA: =Translations!$B$1955 → Example: If "ammonia" and "nitric acid" are both produced in your installation, you may either create a separate production process for each of these good types, or report them combined under 'nitric acid' under a 'bubble approach'. In the case of the latter, please select as of column F which other process you want to include under this 'bubble approach'. Note: the 'bubble approach' is only allowed if all ammonia produced is processed into nitric acid. If parts of the ammonia are exported from the installation, two separate production processes have to be entered here.
+--- Row 81 ---
+  D81: ID
+  E81: FORMULA: =Translations!$B$107 → Aggregated goods category
+  F81: FORMULA: =Translations!$B$121 → Included goods categories listed under (a)
+  G81: FORMULA: =Translations!$B$121 → Included goods categories listed under (a)
+  H81: FORMULA: =Translations!$B$121 → Included goods categories listed under (a)
+  I81: FORMULA: =Translations!$B$121 → Included goods categories listed under (a)
+  J81: FORMULA: =Translations!$B$121 → Included goods categories listed under (a)
+  K81: FORMULA: =Translations!$B$121 → Included goods categories listed under (a)
+  L81: FORMULA: =Translations!$B$122 → Name
+  M81: FORMULA: =Translations!$B$122 → Name
+  N81: FORMULA: =Translations!$B$123 → Error message
+--- Row 82 ---
+  D82: ID
+  E82: FORMULA: =Translations!$B$107 → Aggregated goods category
+  F82: 1
+  G82: 2
+  H82: 3
+  I82: 4
+  J82: 5
+  K82: 6
+  L82: FORMULA: =Translations!$B$122 → Name
+  M82: FORMULA: =Translations!$B$122 → Name
+  N82: FORMULA: =Translations!$B$123 → Error message
+--- Row 83 ---
+  D83: P1
+  E83: Iron or steel products ⬅ FILL_IN
+  F83: Only direct production ⬅ FILL_IN
+  G83: n.a. ⬅ FILL_IN
+  H83: n.a. ⬅ FILL_IN
+  I83: n.a. ⬅ FILL_IN
+  J83: n.a. ⬅ FILL_IN
+  K83: n.a. ⬅ FILL_IN
+  L83: ERW tubes, CEW tubes ⬅ FILL_IN
+  M83: ERW tubes, CEW tubes ⬅ FILL_IN
+  N83: FORMULA: =IF(E83="","",IF(OR(L83="",AND(AF83=FALSE,COUNTA(F83:K83)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M83,L83)>1,CONST_ERR_Duplicate,IF(COUNTIF(X83:AC83,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 84 ---
+  D84: P2
+  N84: FORMULA: =IF(E84="","",IF(OR(L84="",AND(AF84=FALSE,COUNTA(F84:K84)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M84,L84)>1,CONST_ERR_Duplicate,IF(COUNTIF(X84:AC84,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 85 ---
+  D85: P3
+  N85: FORMULA: =IF(E85="","",IF(OR(L85="",AND(AF85=FALSE,COUNTA(F85:K85)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M85,L85)>1,CONST_ERR_Duplicate,IF(COUNTIF(X85:AC85,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 86 ---
+  D86: P4
+  N86: FORMULA: =IF(E86="","",IF(OR(L86="",AND(AF86=FALSE,COUNTA(F86:K86)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M86,L86)>1,CONST_ERR_Duplicate,IF(COUNTIF(X86:AC86,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 87 ---
+  D87: P5
+  N87: FORMULA: =IF(E87="","",IF(OR(L87="",AND(AF87=FALSE,COUNTA(F87:K87)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M87,L87)>1,CONST_ERR_Duplicate,IF(COUNTIF(X87:AC87,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 88 ---
+  D88: P6
+  N88: FORMULA: =IF(E88="","",IF(OR(L88="",AND(AF88=FALSE,COUNTA(F88:K88)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M88,L88)>1,CONST_ERR_Duplicate,IF(COUNTIF(X88:AC88,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 89 ---
+  D89: P7
+  N89: FORMULA: =IF(E89="","",IF(OR(L89="",AND(AF89=FALSE,COUNTA(F89:K89)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M89,L89)>1,CONST_ERR_Duplicate,IF(COUNTIF(X89:AC89,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 90 ---
+  D90: P8
+  N90: FORMULA: =IF(E90="","",IF(OR(L90="",AND(AF90=FALSE,COUNTA(F90:K90)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M90,L90)>1,CONST_ERR_Duplicate,IF(COUNTIF(X90:AC90,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 91 ---
+  D91: P9
+  N91: FORMULA: =IF(E91="","",IF(OR(L91="",AND(AF91=FALSE,COUNTA(F91:K91)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M91,L91)>1,CONST_ERR_Duplicate,IF(COUNTIF(X91:AC91,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 92 ---
+  D92: P10
+  N92: FORMULA: =IF(E92="","",IF(OR(L92="",AND(AF92=FALSE,COUNTA(F92:K92)=0)),CONST_ERR_Incomplete,IF(COUNTIF(L$83:M92,L92)>1,CONST_ERR_Duplicate,IF(COUNTIF(X92:AC92,NA())>0,CONST_ERR_Inconsistent,"")))) → ?
+--- Row 94 ---
+  G94: FORMULA: =Translations!$B$1956 → Completeness check:
+  H94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+  I94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+  J94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+  K94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+  L94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+  M94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+  N94: FORMULA: =IF(COUNTIF(AE62:AE71,TRUE)>0,CONST_MsgMissingProdProc,"") → ?
+--- Row 96 ---
+  A96: FORMULA: =C96 → 5
+  C96: 5
+  D96: FORMULA: =Translations!$B$124 → Purchased precursors
+--- Row 98 ---
+  E98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  F98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  G98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  H98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  I98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  J98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  K98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  L98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  M98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+  N98: FORMULA: =Translations!$B$125 → Please list here all precursors that are produced OUTSIDE the installation (e.g. purchased) and consumed within the installation.
+--- Row 99 ---
+  E99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  F99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  G99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  H99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  I99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  J99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  K99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  L99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  M99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+  N99: FORMULA: =Translations!$B$126 → Please also list the country in which the relevant precursor was produced (see sheet "c_CodeLists" to find the correct country codes) and the relevant production routes, if known.
+--- Row 101 ---
+  D101: ID
+  E101: FORMULA: =Translations!$B$120 → Production process
+  F101: FORMULA: =Translations!$B$1957 → Country code
+  G101: FORMULA: =Translations!$B$109 → Route 1
+  H101: FORMULA: =Translations!$B$110 → Route 2
+  I101: FORMULA: =Translations!$B$111 → Route 3
+  J101: FORMULA: =Translations!$B$112 → Route 4
+  K101: FORMULA: =Translations!$B$113 → Route 5
+  L101: FORMULA: =Translations!$B$122 → Name
+  M101: FORMULA: =Translations!$B$122 → Name
+  N101: FORMULA: =Translations!$B$123 → Error message
+--- Row 102 ---
+  D102: PP1
+  E102: Iron or steel products ⬅ FILL_IN
+  F102: IN ⬅ FILL_IN
+  G102: All production routes ⬅ FILL_IN
+  H102: All production routes ⬅ FILL_IN
+  I102: All production routes ⬅ FILL_IN
+  J102: All production routes ⬅ FILL_IN
+  K102: All production routes ⬅ FILL_IN
+  L102: MS STEEL COIL ⬅ FILL_IN
+  M102: MS STEEL COIL ⬅ FILL_IN
+  N102: FORMULA: =IF(E102="","",IF(COUNTIF(X102:AB102,NA())>0,CONST_ERR_Inconsistent,IF(OR(F102="",L102="",AND(AH102=FALSE,COUNTA(G102:K102)=0)),CONST_ERR_Incomplete,""))) → ?
+--- Row 103 ---
+  D103: PP2
+  N103: SHARED_FORMULA → ?
+--- Row 104 ---
+  D104: PP3
+  N104: SHARED_FORMULA → ?
+--- Row 105 ---
+  D105: PP4
+  N105: SHARED_FORMULA → ?
+--- Row 106 ---
+  D106: PP5
+  N106: SHARED_FORMULA → ?
+--- Row 107 ---
+  D107: PP6
+  N107: SHARED_FORMULA → ?
+--- Row 108 ---
+  D108: PP7
+  N108: SHARED_FORMULA → ?
+--- Row 109 ---
+  D109: PP8
+  N109: SHARED_FORMULA → ?
+--- Row 110 ---
+  D110: PP9
+  N110: SHARED_FORMULA → ?
+--- Row 111 ---
+  D111: PP10
+  N111: SHARED_FORMULA → ?
+--- Row 112 ---
+  D112: PP11
+  N112: SHARED_FORMULA → ?
+--- Row 113 ---
+  D113: PP12
+  N113: SHARED_FORMULA → ?
+--- Row 114 ---
+  D114: PP13
+  N114: SHARED_FORMULA → ?
+--- Row 115 ---
+  D115: PP14
+  N115: SHARED_FORMULA → ?
+--- Row 116 ---
+  D116: PP15
+  N116: SHARED_FORMULA → ?
+--- Row 117 ---
+  D117: PP16
+  N117: SHARED_FORMULA → ?
+--- Row 118 ---
+  D118: PP17
+  N118: SHARED_FORMULA → ?
+--- Row 119 ---
+  D119: PP18
+  N119: SHARED_FORMULA → ?
+--- Row 120 ---
+  D120: PP19
+  N120: SHARED_FORMULA → ?
+--- Row 121 ---
+  D121: PP20
+  N121: SHARED_FORMULA → ?
+--- Row 123 ---
+  A123: ausblenden
+--- Row 124 ---
+  A124: ausblenden
+  J124: CNTR_HasEntriesA
+  K124: FORMULA: =COUNTA(I9,L9,I19:N32,E62:F71,E102:E121)>0 → true
+--- Row 125 ---
+  A125: ausblenden
