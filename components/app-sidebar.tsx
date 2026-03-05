@@ -9,6 +9,7 @@ import {
   User2,
   ChevronUp,
   BarChart3,
+  FileSpreadsheet,
 } from "lucide-react";
 
 import {
@@ -54,6 +55,11 @@ const adminMenuItems = [
     title: "Data Upload",
     href: "/dashboard/data-upload",
     icon: Upload,
+  },
+  {
+    title: "Report Generation",
+    href: "/dashboard/reports",
+    icon: FileSpreadsheet,
   },
 ];
 
