@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAuth } from "@/lib/auth";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
 
@@ -10,6 +11,9 @@ import { initializeSchema } from "@/lib/schema";
 // - Highest/lowest emitting products
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

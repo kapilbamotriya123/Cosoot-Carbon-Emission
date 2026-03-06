@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import type { ProductListResponse } from "@/lib/product-flows-shakambhari/types";
 
 // GET /api/product-flows-shakambhari?companySlug=shakambhari&page=1&pageSize=50
@@ -8,6 +9,9 @@ import type { ProductListResponse } from "@/lib/product-flows-shakambhari/types"
 // Returns paginated list of unique products from production_data_shakambhari table.
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

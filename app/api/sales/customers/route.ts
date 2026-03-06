@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 import { COMPANIES } from "@/lib/constants";
 import type { CompanySlug } from "@/lib/constants";
 
 // GET /api/sales/customers?company={slug}&year={year}&quarter={Q1|Q2|Q3|Q4}
 // Returns distinct customer codes from sales_data, optionally filtered by period.
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   const company = request.nextUrl.searchParams.get("company");
   const year = request.nextUrl.searchParams.get("year");
   const quarter = request.nextUrl.searchParams.get("quarter");

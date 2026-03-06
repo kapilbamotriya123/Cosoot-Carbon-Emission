@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { pool } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 import { validateCompany } from "@/lib/analytics/utils";
 import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 
@@ -13,6 +14,9 @@ import { uploadToGCS, formatUploadDate } from "@/lib/storage";
  * multipart/form-data: file, company, year, quarter
  */
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;

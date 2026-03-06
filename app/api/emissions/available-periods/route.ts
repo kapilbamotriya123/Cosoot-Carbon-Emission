@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from "@/lib/auth";
 import { Pool } from 'pg';
 import { validateCompany } from '@/lib/analytics/utils';
 
@@ -17,6 +18,9 @@ function monthToQuarter(month: number): string {
 }
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const company = searchParams.get('company');

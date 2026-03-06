@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 
 // GET /api/uploads
 //
@@ -11,6 +12,9 @@ import { initializeSchema } from "@/lib/schema";
 //   - limit (optional): max records to return, default 20
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

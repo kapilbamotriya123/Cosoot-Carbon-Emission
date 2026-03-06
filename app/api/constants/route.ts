@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import { getDefaultConstants } from "@/lib/emissions/constants-loader";
 import { validateCompany } from "@/lib/analytics/utils";
 
@@ -11,6 +12,9 @@ import { validateCompany } from "@/lib/analytics/utils";
  * Falls back to most recent previous quarter, then to hardcoded defaults.
  */
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 
@@ -106,6 +110,9 @@ export async function GET(request: NextRequest) {
  * Body: { company, year, quarter, constants }
  */
 export async function PUT(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

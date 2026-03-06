@@ -15,12 +15,13 @@ import {
   EmissionsRankedTable,
   RankedEmission,
 } from "@/components/overview/emissions-ranked-table";
+import { COMPANIES } from "@/lib/constants";
 
 type ViewType = "process" | "product";
 
 function DashboardContent() {
   const searchParams = useSearchParams();
-  const company = searchParams.get("company");
+  const company = searchParams.get("company") ?? COMPANIES[0].slug;
 
   const [viewType, setViewType] = useState<ViewType>("process");
 
@@ -159,17 +160,6 @@ function DashboardContent() {
         fetchProductData(currentYear, currentQuarter);
       }
     }
-  }
-
-  if (!company) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">Overview</h1>
-        <p className="text-muted-foreground">
-          Please select a company from the top bar to view the overview.
-        </p>
-      </div>
-    );
   }
 
   return (

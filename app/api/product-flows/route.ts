@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import type { RoutingData } from "@/lib/parsers/types";
 import type { ProductListResponse } from "@/lib/product-flows/types";
 
@@ -10,6 +11,9 @@ import type { ProductListResponse } from "@/lib/product-flows/types";
 // extracted from the routing_data JSONB.
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

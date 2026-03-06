@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import {
   uploadToGCS,
   getSignedDownloadUrl,
@@ -36,6 +37,9 @@ import type { CompanySlug } from "@/lib/constants";
 //   5. Return a signed download URL
 
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

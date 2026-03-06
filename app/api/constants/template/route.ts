@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import ExcelJS from "exceljs";
 import { pool } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 import { getDefaultConstants } from "@/lib/emissions/constants-loader";
 import { validateCompany } from "@/lib/analytics/utils";
 import type { MetaEngitechConstants, ShakambhariConstants } from "@/lib/emissions/constants-loader";
@@ -12,6 +13,9 @@ import type { MetaEngitechConstants, ShakambhariConstants } from "@/lib/emission
  * Admin can modify values in the file and re-upload via /api/constants/upload.
  */
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     const { searchParams } = request.nextUrl;
     const company = searchParams.get("company");

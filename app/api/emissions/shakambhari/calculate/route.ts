@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAuth } from "@/lib/auth";
 import { initializeSchema } from "@/lib/schema";
 import { triggerShakambhariEmissionCalculation } from "@/lib/emissions/shakambhari/engine";
 
@@ -10,10 +11,8 @@ import { triggerShakambhariEmissionCalculation } from "@/lib/emissions/shakambha
 // Body: { companySlug: string, year: number, month: number }
 
 export async function POST(request: NextRequest) {
-  // const { userId } = await auth();
-  // if (!userId) {
-  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  // }
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
 
   try {
     await initializeSchema();

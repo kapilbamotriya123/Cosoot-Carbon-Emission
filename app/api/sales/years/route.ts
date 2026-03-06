@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
+import { requireAuth } from "@/lib/auth";
 import { COMPANIES } from "@/lib/constants";
 import type { CompanySlug } from "@/lib/constants";
 
@@ -13,6 +14,9 @@ function monthToQuarter(month: number): string {
 // GET /api/sales/periods?company={slug}
 // Returns available year/quarter combos from sales_data, sorted descending.
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   const company = request.nextUrl.searchParams.get("company");
 
   if (!company) {

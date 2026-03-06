@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getProductionParser } from "@/lib/parsers/production";
 import { triggerShakambhariEmissionCalculation } from "@/lib/emissions/shakambhari/engine";
@@ -21,6 +22,9 @@ import { triggerShakambhariEmissionCalculation } from "@/lib/emissions/shakambha
 //   5. Transaction: delete existing records for affected dates, then insert new ones
 
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

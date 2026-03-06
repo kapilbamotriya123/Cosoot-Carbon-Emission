@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getConsumptionParser } from "@/lib/parsers/consumption";
 import { triggerEmissionCalculation } from "@/lib/emissions/engine";
@@ -21,6 +22,9 @@ import { triggerEmissionCalculation } from "@/lib/emissions/engine";
 //   5. Upsert the parsed consumption data in the consumption_data table
 
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

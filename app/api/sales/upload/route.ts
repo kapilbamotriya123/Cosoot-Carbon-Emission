@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getSalesParser } from "@/lib/parsers/sales";
 
@@ -17,6 +18,9 @@ import { getSalesParser } from "@/lib/parsers/sales";
 // found in the file, then INSERT all new rows. Wrapped in a transaction.
 
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

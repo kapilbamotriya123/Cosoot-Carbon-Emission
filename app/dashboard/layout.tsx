@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { UserButton } from "@clerk/nextjs";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { AppSidebar } from "@/components/app-sidebar";
@@ -23,10 +24,7 @@ export default function DashboardLayout({
             <CompanySelector />
           </Suspense>
           <div className="ml-auto flex items-center gap-2">
-            {/* Placeholder for user avatar — will come from auth */}
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-medium text-muted-foreground">
-              A
-            </div>
+            <UserButton afterSignOutUrl="/sign-in" />
           </div>
         </header>
 

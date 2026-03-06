@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import type { RoutingData } from "@/lib/parsers/types";
 import { buildGraph, buildFuelProfile } from "@/lib/product-flows/build-graph";
 import type { ProductFlowResponse } from "@/lib/product-flows/types";
@@ -15,6 +16,9 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ productId: string }> }
 ) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

@@ -14,12 +14,13 @@ import { EmissionsByScope } from "@/components/analytics/EmissionsByScope";
 import { EmissionsBySource } from "@/components/analytics/EmissionsBySource";
 import { EmissionsByProcess } from "@/components/analytics/EmissionsByProcess";
 import { EmissionsByProduct } from "@/components/analytics/EmissionsByProduct";
+import { COMPANIES } from "@/lib/constants";
 
 type ViewType = "scope" | "source" | "process" | "product" | "asset";
 
 function AnalyticsContent() {
   const searchParams = useSearchParams();
-  const company = searchParams.get("company");
+  const company = searchParams.get("company") ?? COMPANIES[0].slug;
 
   const [view, setView] = useState<ViewType>("scope");
   const [year, setYear] = useState<string>("2025");
@@ -27,25 +28,7 @@ function AnalyticsContent() {
 
   // Get company display name
   const companyName =
-    company === "meta_engitech_pune"
-      ? "Meta Engitech"
-      : company === "shakambhari"
-      ? "Shakambhari"
-      : "Select a company";
-
-  // If no company selected, show message
-  if (!company) {
-    return (
-      <div className="space-y-4">
-        <div>
-          <h1 className="text-2xl font-bold">Analytics</h1>
-          <p className="text-muted-foreground mt-1">
-            Please select a company from the top bar to view emission analytics.
-          </p>
-        </div>
-      </div>
-    );
-  }
+    COMPANIES.find((c) => c.slug === company)?.label ?? company;
 
   return (
     <div className="space-y-6">

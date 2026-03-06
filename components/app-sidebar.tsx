@@ -7,10 +7,14 @@ import {
   GitBranch,
   Upload,
   User2,
+  Users,
   ChevronUp,
   BarChart3,
   FileSpreadsheet,
+  LogOut,
 } from "lucide-react";
+import { useUser, useClerk } from "@clerk/nextjs";
+import { useAuthRole } from "@/hooks/use-auth-role";
 
 import {
   Sidebar,
@@ -48,14 +52,6 @@ const mainMenuItems = [
     href: "/dashboard/product-flows",
     icon: GitBranch,
   },
-];
-
-const adminMenuItems = [
-  {
-    title: "Data Upload",
-    href: "/dashboard/data-upload",
-    icon: Upload,
-  },
   {
     title: "Report Generation",
     href: "/dashboard/reports",
@@ -63,9 +59,25 @@ const adminMenuItems = [
   },
 ];
 
+const adminOnlyMenuItems = [
+  {
+    title: "Data Upload",
+    href: "/dashboard/data-upload",
+    icon: Upload,
+  },
+  {
+    title: "Users",
+    href: "/dashboard/users",
+    icon: Users,
+  },
+];
+
 export function AppSidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { user } = useUser();
+  const { role } = useAuthRole();
+  const { signOut } = useClerk();
 
   // Preserve company param when navigating
   function buildHref(basePath: string) {
@@ -121,30 +133,33 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarSeparator />
-
-        {/* Admin section — visible by default since auth is disabled */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Data Management</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {adminMenuItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={isActive(item.href)}
-                    tooltip={item.title}
-                  >
-                    <Link href={buildHref(item.href)}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* Admin-only section */}
+        {role === "admin" && (
+          <>
+            <SidebarSeparator />
+            <SidebarGroup>
+              <SidebarGroupLabel>Data Management</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {adminOnlyMenuItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive(item.href)}
+                        tooltip={item.title}
+                      >
+                        <Link href={buildHref(item.href)}>
+                          <item.icon />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        )}
       </SidebarContent>
 
       <SidebarFooter>
@@ -154,20 +169,24 @@ export function AppSidebar() {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <User2 />
-                  {/* Placeholder — will come from auth */}
                   <div className="flex flex-col gap-0.5 leading-none">
-                    <span className="font-medium">Admin</span>
+                    <span className="font-medium">
+                      {user?.fullName ?? "User"}
+                    </span>
                     <span className="text-xs text-muted-foreground">
-                      admin@cosoot.com
+                      {user?.primaryEmailAddress?.emailAddress ?? ""}
                     </span>
                   </div>
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" align="start" className="w-56">
-                {/* Placeholder items — will be functional when auth is enabled */}
-                <DropdownMenuItem disabled>Profile</DropdownMenuItem>
-                <DropdownMenuItem disabled>Sign out</DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => signOut({ redirectUrl: "/sign-in" })}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign out
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

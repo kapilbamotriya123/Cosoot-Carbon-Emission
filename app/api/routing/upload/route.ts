@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import { uploadToGCS, formatUploadDate } from "@/lib/storage";
 import { getParser } from "@/lib/parsers";
 
@@ -18,6 +19,9 @@ import { getParser } from "@/lib/parsers";
 //   5. Upsert the parsed routing data in the routing_data table
 
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     // Ensure tables exist (safe to call multiple times — CREATE TABLE IF NOT EXISTS)
     await initializeSchema();

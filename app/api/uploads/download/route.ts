@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
+import { requireAuth } from "@/lib/auth";
 import { getSignedDownloadUrl } from "@/lib/storage";
 
 // GET /api/uploads/download?id=123
@@ -9,6 +10,9 @@ import { getSignedDownloadUrl } from "@/lib/storage";
 // The signed URL expires after 15 minutes.
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 

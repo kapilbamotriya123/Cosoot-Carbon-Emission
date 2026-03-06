@@ -7,21 +7,10 @@ import { COMPANIES } from "@/lib/constants";
 
 function ReportGenerationContent() {
   const searchParams = useSearchParams();
-  const company = searchParams.get("company");
+  const company = searchParams.get("company") ?? COMPANIES[0].slug;
 
   const companyLabel =
-    COMPANIES.find((c) => c.slug === company)?.label ?? "Select a company";
-
-  if (!company) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">Report Generation</h1>
-        <p className="text-muted-foreground">
-          Please select a company from the top bar to generate a report.
-        </p>
-      </div>
-    );
-  }
+    COMPANIES.find((c) => c.slug === company)?.label ?? company;
 
   return (
     <div className="space-y-8">

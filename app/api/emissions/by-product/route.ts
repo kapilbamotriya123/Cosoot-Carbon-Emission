@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from "@/lib/auth";
 import { Pool } from 'pg';
 import { validateCompany, parseTimeRange, TimePeriod } from '@/lib/analytics/utils';
 import { getProductEmissions } from '@/lib/analytics/by-product';
@@ -11,6 +12,9 @@ const pool = new Pool({
 });
 
 export async function GET(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     const searchParams = request.nextUrl.searchParams;
     const company = searchParams.get('company');

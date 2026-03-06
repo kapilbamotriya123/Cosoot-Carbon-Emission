@@ -14,24 +14,13 @@ import { COMPANIES } from "@/lib/constants";
 
 function DataUploadContent() {
   const searchParams = useSearchParams();
-  const company = searchParams.get("company");
+  const company = searchParams.get("company") ?? COMPANIES[0].slug;
 
   // Refresh key — increment after a successful upload to refetch history
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
   const refreshHistory = () => setHistoryRefreshKey((k) => k + 1);
 
-  const companyLabel = COMPANIES.find((c) => c.slug === company)?.label ?? "Select a company";
-
-  if (!company) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">Data Upload</h1>
-        <p className="text-muted-foreground">
-          Please select a company from the top bar to upload data.
-        </p>
-      </div>
-    );
-  }
+  const companyLabel = COMPANIES.find((c) => c.slug === company)?.label ?? company;
 
   const tabs = getUploadTabs(company);
   const defaultTab = tabs[0]?.key ?? "consumption";

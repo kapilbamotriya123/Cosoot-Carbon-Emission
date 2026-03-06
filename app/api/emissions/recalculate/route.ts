@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { requireAuth } from "@/lib/auth";
 import { pool } from "@/lib/db";
 import { initializeSchema } from "@/lib/schema";
 import { triggerEmissionCalculation } from "@/lib/emissions/engine";
@@ -18,6 +19,9 @@ import { validateCompany, parseTimeRange } from "@/lib/analytics/utils";
  *   - scope: "quarter" (just this quarter) or "forward" (this quarter through today)
  */
 export async function POST(request: NextRequest) {
+  const authResult = await requireAuth();
+  if (!authResult.authenticated) return authResult.response;
+
   try {
     await initializeSchema();
 
