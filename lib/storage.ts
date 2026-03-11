@@ -1,11 +1,17 @@
 import { Storage } from "@google-cloud/storage";
 
-// GCP authenticates via a service account key file.
-// The key file is a JSON containing the service account's credentials.
-// We point to it via an env var so the credentials never end up in code.
-const storage = new Storage({
-  keyFilename: process.env.GCP_SERVICE_ACCOUNT_KEY_PATH,
-});
+// GCP authentication: supports two methods:
+// 1. GCP_SERVICE_ACCOUNT_KEY_JSON — the full JSON string (for prod/cloud deployments)
+// 2. GCP_SERVICE_ACCOUNT_KEY_PATH — path to a JSON file on disk (for local dev)
+function createStorage() {
+  const jsonKey = process.env.GCP_SERVICE_ACCOUNT_KEY_JSON;
+  if (jsonKey) {
+    return new Storage({ credentials: JSON.parse(jsonKey) });
+  }
+  return new Storage({ keyFilename: process.env.GCP_SERVICE_ACCOUNT_KEY_PATH });
+}
+
+const storage = createStorage();
 
 const bucketName = process.env.GCP_BUCKET_NAME!;
 

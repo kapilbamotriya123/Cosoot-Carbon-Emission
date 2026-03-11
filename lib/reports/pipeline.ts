@@ -153,7 +153,10 @@ export async function generateReport(
   const rawBuffer = await workbook.xlsx.writeBuffer();
   const buffer = Buffer.from(rawBuffer);
 
-  const fileName = `CBAM_Report_${companySlug}_${startStr}_to_${endStr}.xlsx`;
+  // Include material ID in filename when generating for a single material
+  const materialSuffix =
+    materialIds.length === 1 ? `_${materialIds[0]}` : "";
+  const fileName = `CBAM_Report_${companySlug}_${startStr}_to_${endStr}${materialSuffix}.xlsx`;
 
   console.log(
     `[reports] Generated: ${fileName} ` +

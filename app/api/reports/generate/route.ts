@@ -18,23 +18,23 @@ import type { CompanySlug } from "@/lib/constants";
 //   startDate: string,       // ISO date e.g. "2025-04-01"
 //   endDate: string,         // ISO date e.g. "2025-06-30"
 //   customerCode: string,
-//   materialIds: string[]
+//   materialIds: string[],
+//   mode?: "combined" | "individual"  // default: "combined"
 // }
 //
-// Response: {
-//   success: true,
-//   fileName: string,
-//   fileUrl: string,     // gs:// URL stored in DB
-//   downloadUrl: string, // signed HTTPS URL valid for 15 minutes
-//   sheetsProcessed: string[]
-// }
+// mode = "combined" (default):
+//   Generates ONE report for all materialIds summed together.
+//   Response: { success, reports: [{ fileName, downloadUrl, materialIds, sheetsProcessed }] }
+//
+// mode = "individual":
+//   Generates ONE report PER materialId.
+//   Response: { success, reports: [{ fileName, downloadUrl, materialIds, sheetsProcessed }, ...] }
 //
 // Flow:
 //   1. Validate inputs
-//   2. Run the report generation pipeline
-//   3. Upload the generated Excel to GCS
-//   4. Log the report in file_uploads (for audit trail)
-//   5. Return a signed download URL
+//   2. Determine material groups based on mode
+//   3. For each group: generate report → upload to GCS → log in file_uploads
+//   4. Return signed download URLs for all reports
 
 export async function POST(request: NextRequest) {
   const authResult = await requireAuth();
@@ -134,23 +134,17 @@ export async function POST(request: NextRequest) {
     const validatedCustomerCode = (customerCode as string).trim();
     const validatedMaterialIds = (materialIds as string[]).map((id) => id.trim());
 
-    // -- Generate the report -------------------------------------------
+    // -- Determine mode ------------------------------------------------
 
-    const result = await generateReport(
-      companySlug as CompanySlug,
-      startDate,
-      endDate,
-      validatedCustomerCode,
-      validatedMaterialIds
-    );
+    const mode = body.mode === "individual" ? "individual" : "combined";
 
-    // -- Upload to GCS -------------------------------------------------
+    // Build material groups: combined = one group with all, individual = one group per material
+    const materialGroups: string[][] =
+      mode === "individual"
+        ? validatedMaterialIds.map((id) => [id])
+        : [validatedMaterialIds];
 
-    const uploadDate = formatUploadDate();
-    const gcsPath = `reports/${companySlug}/${uploadDate}_${result.fileName}`;
-    const fileUrl = await uploadToGCS(result.buffer, gcsPath);
-
-    // -- Log in file_uploads -------------------------------------------
+    // -- Generate reports ----------------------------------------------
 
     await pool.query(
       `INSERT INTO companies (slug, display_name, clerk_user_id)
@@ -159,34 +153,60 @@ export async function POST(request: NextRequest) {
       [companySlug, companySlug, "anonymous"]
     );
 
-    await pool.query(
-      `INSERT INTO file_uploads
-         (company_slug, upload_type, file_name, file_url, file_size_bytes, metadata)
-       VALUES ($1, 'report', $2, $3, $4, $5)`,
-      [
-        companySlug,
-        result.fileName,
-        fileUrl,
-        result.buffer.length,
-        JSON.stringify({
-          startDate: startDateStr,
-          endDate: endDateStr,
-          sheetsProcessed: result.sheetsProcessed,
-          generatedAt: new Date().toISOString(),
-        }),
-      ]
-    );
+    const reports: Array<{
+      fileName: string;
+      downloadUrl: string;
+      materialIds: string[];
+      sheetsProcessed: string[];
+    }> = [];
 
-    // -- Get signed download URL ---------------------------------------
+    for (const groupMaterialIds of materialGroups) {
+      const result = await generateReport(
+        companySlug as CompanySlug,
+        startDate,
+        endDate,
+        validatedCustomerCode,
+        groupMaterialIds
+      );
 
-    const downloadUrl = await getSignedDownloadUrl(fileUrl);
+      // Upload to GCS
+      const uploadDate = formatUploadDate();
+      const gcsPath = `reports/${companySlug}/${uploadDate}_${result.fileName}`;
+      const fileUrl = await uploadToGCS(result.buffer, gcsPath);
+
+      // Log in file_uploads
+      await pool.query(
+        `INSERT INTO file_uploads
+           (company_slug, upload_type, file_name, file_url, file_size_bytes, metadata)
+         VALUES ($1, 'report', $2, $3, $4, $5)`,
+        [
+          companySlug,
+          result.fileName,
+          fileUrl,
+          result.buffer.length,
+          JSON.stringify({
+            startDate: startDateStr,
+            endDate: endDateStr,
+            materialIds: groupMaterialIds,
+            sheetsProcessed: result.sheetsProcessed,
+            generatedAt: new Date().toISOString(),
+          }),
+        ]
+      );
+
+      const downloadUrl = await getSignedDownloadUrl(fileUrl);
+
+      reports.push({
+        fileName: result.fileName,
+        downloadUrl,
+        materialIds: groupMaterialIds,
+        sheetsProcessed: result.sheetsProcessed,
+      });
+    }
 
     return NextResponse.json({
       success: true,
-      fileName: result.fileName,
-      fileUrl,
-      downloadUrl,
-      sheetsProcessed: result.sheetsProcessed,
+      reports,
     });
   } catch (error) {
     console.error("[reports] Generation failed:", error);

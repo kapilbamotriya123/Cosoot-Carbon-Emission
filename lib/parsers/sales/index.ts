@@ -1,5 +1,6 @@
 import type { SalesParser } from "./types";
 import { parseMetaEngitechPuneSales } from "./meta-engitech-pune";
+import { parseShakambhariSales } from "./shakambhari";
 
 /**
  * Sales parser registry — maps company slug to its parser function.
@@ -7,6 +8,7 @@ import { parseMetaEngitechPuneSales } from "./meta-engitech-pune";
  */
 const salesParserRegistry: Record<string, SalesParser> = {
   meta_engitech_pune: parseMetaEngitechPuneSales,
+  shakambhari: parseShakambhariSales,
 };
 
 export function getSalesParser(companySlug: string): SalesParser {

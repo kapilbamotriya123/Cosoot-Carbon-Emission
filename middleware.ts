@@ -25,6 +25,9 @@ export default clerkMiddleware(async (auth, request) => {
   const role = metadata?.role ?? "user";
   const userCompany = metadata?.companySlug || "meta_engitech_pune";
 
+  // Debug: remove this after confirming metadata is correct
+  console.log("[middleware]", { userId, role, userCompany, metadata: user.publicMetadata, path: url.pathname, company: url.searchParams.get("company") });
+
   // Redirect root "/" to dashboard
   if (url.pathname === "/") {
     url.pathname = "/dashboard";

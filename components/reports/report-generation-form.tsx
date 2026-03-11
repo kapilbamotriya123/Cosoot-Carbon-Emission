@@ -49,6 +49,7 @@ function getQuarterDates(year: string, quarter: string) {
 interface ReportResult {
   fileName: string;
   downloadUrl: string;
+  materialIds: string[];
 }
 
 export function ReportGenerationForm({ company }: Props) {
@@ -78,7 +79,7 @@ export function ReportGenerationForm({ company }: Props) {
   // Form submission state
   const [status, setStatus] = useState<"idle" | "generating" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [result, setResult] = useState<ReportResult | null>(null);
+  const [results, setResults] = useState<ReportResult[]>([]);
 
   // Derived: available quarters for the selected year
   const availableQuarters = periods.find((p) => p.year === year)?.quarters ?? [];
@@ -231,16 +232,14 @@ export function ReportGenerationForm({ company }: Props) {
     setSelectedMaterials([...materials]);
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-
+  async function handleGenerate(mode: "combined" | "individual") {
     if (!startDate || !endDate || !customerCode || selectedMaterials.length === 0) {
       return;
     }
 
     setStatus("generating");
     setErrorMessage("");
-    setResult(null);
+    setResults([]);
 
     try {
       const res = await fetch("/api/reports/generate", {
@@ -252,6 +251,7 @@ export function ReportGenerationForm({ company }: Props) {
           endDate,
           customerCode,
           materialIds: selectedMaterials,
+          mode,
         }),
       });
 
@@ -264,10 +264,13 @@ export function ReportGenerationForm({ company }: Props) {
       }
 
       setStatus("success");
-      setResult({
-        fileName: data.fileName,
-        downloadUrl: data.downloadUrl,
-      });
+      setResults(
+        data.reports.map((r: { fileName: string; downloadUrl: string; materialIds: string[] }) => ({
+          fileName: r.fileName,
+          downloadUrl: r.downloadUrl,
+          materialIds: r.materialIds,
+        }))
+      );
     } catch {
       setStatus("error");
       setErrorMessage("Network error — is the server running?");
@@ -281,7 +284,7 @@ export function ReportGenerationForm({ company }: Props) {
 
   return (
     <Card className="p-6">
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
         {/* Date Range Section */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">Reporting Period</h2>
@@ -506,47 +509,99 @@ export function ReportGenerationForm({ company }: Props) {
         </div>
 
         {/* Submit */}
-        <div className="flex items-center gap-4 pt-2">
-          <Button
-            type="submit"
-            disabled={!isFormValid || status === "generating"}
-            className="min-w-[180px]"
-          >
-            {status === "generating" ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Generating Report...
-              </>
-            ) : (
-              "Generate Report"
-            )}
-          </Button>
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          {selectedMaterials.length > 1 ? (
+            <>
+              <Button
+                type="button"
+                disabled={!isFormValid || status === "generating"}
+                className="min-w-[200px]"
+                onClick={() => handleGenerate("combined")}
+              >
+                {status === "generating" ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  "Combined Report"
+                )}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={!isFormValid || status === "generating"}
+                className="min-w-[200px]"
+                onClick={() => handleGenerate("individual")}
+              >
+                {status === "generating" ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  `Individual Reports (${selectedMaterials.length})`
+                )}
+              </Button>
+            </>
+          ) : (
+            <Button
+              type="button"
+              disabled={!isFormValid || status === "generating"}
+              className="min-w-[180px]"
+              onClick={() => handleGenerate("combined")}
+            >
+              {status === "generating" ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Generating Report...
+                </>
+              ) : (
+                "Generate Report"
+              )}
+            </Button>
+          )}
         </div>
 
         {/* Success Result */}
-        {status === "success" && result && (
+        {status === "success" && results.length > 0 && (
           <div className="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900 dark:bg-green-950">
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="mt-0.5 h-5 w-5 text-green-600 dark:text-green-400" />
-              <div className="space-y-2">
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600 dark:text-green-400" />
+              <div className="space-y-3 w-full">
                 <p className="font-medium text-green-800 dark:text-green-200">
-                  Report generated successfully
+                  {results.length === 1
+                    ? "Report generated successfully"
+                    : `${results.length} reports generated successfully`}
                 </p>
-                <p className="text-sm text-green-700 dark:text-green-300">
-                  {result.fileName}
-                </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="mt-2"
-                  onClick={() => window.open(result.downloadUrl, "_blank")}
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  Download Report
-                </Button>
-                <p className="text-xs text-green-600 dark:text-green-400 mt-1">
-                  Download link valid for 15 minutes
+                {results.map((r, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-wrap items-center gap-3 rounded-md border border-green-200 bg-white/60 px-3 py-2 dark:border-green-800 dark:bg-green-900/30"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-green-800 dark:text-green-200 truncate">
+                        {r.fileName}
+                      </p>
+                      {results.length > 1 && (
+                        <p className="text-xs text-green-600 dark:text-green-400">
+                          {r.materialIds.join(", ")}
+                        </p>
+                      )}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => window.open(r.downloadUrl, "_blank")}
+                    >
+                      <Download className="mr-2 h-4 w-4" />
+                      Download
+                    </Button>
+                  </div>
+                ))}
+                <p className="text-xs text-green-600 dark:text-green-400">
+                  Download links valid for 15 minutes
                 </p>
               </div>
             </div>

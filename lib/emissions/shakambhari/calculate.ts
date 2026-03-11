@@ -1,10 +1,10 @@
 import type { ProductionRecord, ProductionSource } from "@/lib/parsers/production/types";
+import type { ShakambhariConstants } from "../constants-loader";
 import type {
-  SourceEmissionResult,
   ProductEmissionResult,
   ShakambhariEmissionResults,
+  SourceEmissionResult,
 } from "./types";
-import type { ShakambhariConstants } from "../constants-loader";
 
 /**
  * Classify a source into one of 4 categories:
