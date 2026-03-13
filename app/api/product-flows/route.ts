@@ -47,10 +47,10 @@ export async function GET(request: NextRequest) {
     const routingData = result.rows[0].data as RoutingData;
     const allProducts = routingData.products;
 
-    // Build list: productId + count of unique work centers
+    // Build list: productId + count of work center appearances (including duplicates)
     const productList = allProducts.map((p) => ({
       productId: p.productId,
-      workCenterCount: new Set(p.rows.map((r) => r.workCenter)).size,
+      workCenterCount: p.rows.filter((r) => r.workCenter).length,
     }));
 
     // Sort alphabetically for stable pagination

@@ -72,9 +72,10 @@ export function calculateByProcess(
 /**
  * Calculate emission intensities for all products.
  *
- * For each product, we find its unique work centers from routing data,
- * then sum up each matched work center's intensity.
- * This is "Approach A" — sum of individual WC intensities, as specified by the client.
+ * For each product, we iterate ALL work center appearances in routing data
+ * (including duplicates). A product can pass through the same work center
+ * multiple times for different operations, and each pass contributes emissions.
+ * This is "Approach A" — sum of WC intensities per routing row, as confirmed by client.
  */
 export function calculateByProduct(
   routing: RoutingData,
@@ -96,19 +97,20 @@ export function calculateByProduct(
   }
 
   return routing.products.map((product) => {
-    // Get unique work centers for this product
-    const uniqueWCs = new Set<string>();
-    for (const row of product.rows) {
-      if (row.workCenter) {
-        uniqueWCs.add(row.workCenter);
-      }
-    }
+    // Collect ALL work center appearances (including duplicates).
+    // A product can pass through the same WC multiple times for different
+    // operations (e.g. BAFFUR for annealing AND stress relieving),
+    // and each pass contributes emissions — confirmed by client.
+    const allWCs = product.rows
+      .map((row) => row.workCenter)
+      .filter((wc): wc is string => !!wc);
 
     const shouldLog = debugProductIds.has(product.productId);
 
     if (shouldLog) {
+      const uniqueCount = new Set(allWCs).size;
       console.log(`[emissions:debug] ── Product: ${product.productId}`);
-      console.log(`[emissions:debug]    Routing rows: ${product.rows.length}, Unique WCs: ${[...uniqueWCs].join(", ")}`);
+      console.log(`[emissions:debug]    Routing rows: ${product.rows.length}, WC appearances: ${allWCs.length}, Unique WCs: ${uniqueCount}`);
     }
 
     let elec = 0;
@@ -116,7 +118,7 @@ export function calculateByProduct(
     let diesel = 0;
     let matched = 0;
 
-    for (const wcCode of uniqueWCs) {
+    for (const wcCode of allWCs) {
       const wcEmission = wcMap.get(wcCode);
       if (wcEmission) {
         matched++;
@@ -137,13 +139,13 @@ export function calculateByProduct(
     const total = scope1 + scope2;
 
     if (shouldLog) {
-      console.log(`[emissions:debug]    RESULT → matched ${matched}/${uniqueWCs.size} WCs | elec=${elec.toFixed(8)} | lpg=${lpg.toFixed(8)} | diesel=${diesel.toFixed(8)} | total=${total.toFixed(8)}`);
+      console.log(`[emissions:debug]    RESULT → matched ${matched}/${allWCs.length} WC appearances | elec=${elec.toFixed(8)} | lpg=${lpg.toFixed(8)} | diesel=${diesel.toFixed(8)} | total=${total.toFixed(8)}`);
       console.log(`[emissions:debug]    SCOPES → scope1(LPG+Diesel)=${scope1.toFixed(8)} | scope2(Elec)=${scope2.toFixed(8)}\n`);
     }
 
     return {
       productId: product.productId,
-      workCenterCount: uniqueWCs.size,
+      workCenterCount: allWCs.length,
       matchedWorkCenterCount: matched,
       electricityIntensity: elec,
       lpgIntensity: lpg,
