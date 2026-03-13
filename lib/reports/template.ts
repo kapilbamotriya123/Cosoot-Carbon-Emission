@@ -14,25 +14,39 @@
 import ExcelJS from "exceljs";
 import path from "path";
 import fs from "fs/promises";
+import type { CompanySlug } from "@/lib/constants";
 
-const TEMPLATE_PATH = path.join(
-  process.cwd(),
-  "lib",
-  "reports",
-  "templates",
-  "Report Sample ALTA.xlsx"
-);
+const TEMPLATES_DIR = path.join(process.cwd(), "lib", "reports", "templates");
+
+/** Maps company slug to its template file name. */
+const TEMPLATE_FILES: Record<CompanySlug, string> = {
+  meta_engitech_pune: "Report Sample ALTA.xlsx",
+  shakambhari: "Report Sample ALTA - shakambhari.xlsx",
+};
 
 /**
  * Load the Excel template into an ExcelJS Workbook.
+ *
+ * Each company has its own template file with pre-filled static data
+ * (e.g. different goods categories, process layouts). The pipeline
+ * selects the right template based on the company slug.
  *
  * ExcelJS reads the .xlsx file into memory and gives us a mutable object.
  * We write cell values in place, then serialize back to a Buffer.
  * All formula cells are preserved — ExcelJS only changes what we explicitly set.
  */
-export async function loadTemplate(): Promise<ExcelJS.Workbook> {
+export async function loadTemplate(companySlug: CompanySlug): Promise<ExcelJS.Workbook> {
+  const fileName = TEMPLATE_FILES[companySlug];
+  if (!fileName) {
+    throw new Error(
+      `[reports] No template file configured for company "${companySlug}". ` +
+        `Available: [${Object.keys(TEMPLATE_FILES).join(", ")}]`
+    );
+  }
+
+  const templatePath = path.join(TEMPLATES_DIR, fileName);
   const workbook = new ExcelJS.Workbook();
-  const fileBuffer = await fs.readFile(TEMPLATE_PATH);
+  const fileBuffer = await fs.readFile(templatePath);
   // ExcelJS.xlsx.load expects an ArrayBuffer; convert the Node.js Buffer.
   const arrayBuffer = fileBuffer.buffer.slice(
     fileBuffer.byteOffset,

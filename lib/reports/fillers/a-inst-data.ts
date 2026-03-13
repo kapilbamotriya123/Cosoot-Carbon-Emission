@@ -84,60 +84,86 @@ export function fillAInstData(ctx: ReportContext): void {
   // Section 4a: Aggregated Goods Categories
   //
   // Row 61: Headers (formula-driven, no FILL_IN)
-  // Row 62 (G1): First (and only, for now) goods category entry
-  //   E62 / F62  = goods category name
-  //   G62 / H62  = route (formula: auto-fills "All production routes" or
-  //                "Please select" based on E62. No direct FILL_IN)
-  //   I62 – M62  = Route 1–5 cells (FILL_IN: "All production routes")
+  // Rows 62–71 (G1–G10): goods category entries
+  //   E/F  = goods category name
+  //   G/H  = route (formula: auto-fills based on E)
+  //   I–M  = Route 1–5 (FILL_IN: "All production routes")
   //
-  // Rows 63–71 (G2–G10): Additional goods categories.
-  // We only have one, so these are left empty.
+  // Meta Engitech: 1 row (one category).
+  // Shakambhari: 1 row per selected product (all same category).
   // ------------------------------------------------------------------
-  setCellValue(sheet, "E62", p.goodsCategory);
-  setCellValue(sheet, "F62", p.goodsCategory);
-  for (const col of ["I", "J", "K", "L", "M"] as const) {
-    setCellValue(sheet, `${col}62`, p.productionRoutes);
+  if (ctx.companySlug === "shakambhari") {
+    // One goods-category row per selected product
+    for (let i = 0; i < ctx.materialIds.length && i < 10; i++) {
+      const row = 62 + i;
+      setCellValue(sheet, `E${row}`, p.goodsCategory);
+      setCellValue(sheet, `F${row}`, p.goodsCategory);
+      setCellValue(sheet, `I${row}`, p.productionRoutes);
+      setCellValue(sheet, `J${row}`, p.productionRoutes);
+    }
+  } else {
+    // Meta Engitech: single row
+    setCellValue(sheet, "E62", p.goodsCategory);
+    setCellValue(sheet, "F62", p.goodsCategory);
+    for (const col of ["I", "J", "K", "L", "M"] as const) {
+      setCellValue(sheet, `${col}62`, p.productionRoutes);
+    }
   }
 
   // ------------------------------------------------------------------
   // Section 4b: Production Processes
   //
   // Row 81–82: Headers (formula-driven)
-  // Row 83 (P1): First (and only) production process entry
-  //   E83       = aggregated goods category reference (same as E62)
-  //   F83       = scope ("Only direct production")
-  //   G83–K83   = included goods 1–6 ("n.a." when scope is "direct only")
-  //   L83 / M83 = process name
-  //   N83       = error check formula — not a FILL_IN cell
+  // Rows 83–92 (P1–P10): production process entries
+  //   E       = aggregated goods category reference
+  //   F       = scope ("Only direct production")
+  //   G–K     = included goods 1–6 ("n.a." when scope is "direct only")
+  //   L / M   = process name
+  //   N       = error check formula — not a FILL_IN cell
   //
-  // Rows 84–92 (P2–P10): Additional processes — left empty.
+  // Meta Engitech: 1 row (one process).
+  // Shakambhari: 1 row per selected product (dynamic names from materialIds).
   // ------------------------------------------------------------------
-  setCellValue(sheet, "E83", p.goodsCategory);
-  setCellValue(sheet, "F83", p.processScope);
-  for (const col of ["G", "H", "I", "J", "K"] as const) {
-    setCellValue(sheet, `${col}83`, "n.a.");
+  if (ctx.companySlug === "shakambhari") {
+    // One process row per selected product
+    for (let i = 0; i < ctx.materialIds.length && i < 10; i++) {
+      const row = 83 + i;
+      setCellValue(sheet, `E${row}`, p.goodsCategory);
+      setCellValue(sheet, `F${row}`, p.processScope);
+      setCellValue(sheet, `L${row}`, ctx.materialIds[i]);
+      setCellValue(sheet, `M${row}`, ctx.materialIds[i]);
+    }
+  } else {
+    // Meta Engitech: single row
+    setCellValue(sheet, "E83", p.goodsCategory);
+    setCellValue(sheet, "F83", p.processScope);
+    for (const col of ["G", "H", "I", "J", "K"] as const) {
+      setCellValue(sheet, `${col}83`, "n.a.");
+    }
+    setCellValue(sheet, "L83", p.processName);
+    setCellValue(sheet, "M83", p.processName);
   }
-  setCellValue(sheet, "L83", p.processName);
-  setCellValue(sheet, "M83", p.processName);
 
   // ------------------------------------------------------------------
   // Section 5: Purchased Precursors
   //
-  // Row 101: Headers (formula-driven)
-  // Row 102 (PP1): First (and only) purchased precursor
-  //   E102       = production process reference ("Iron or steel products")
-  //   F102       = country code of precursor origin ("IN")
-  //   G102–K102  = production routes
-  //   L102 / M102 = precursor name
-  //   N102       = error check formula — not a FILL_IN cell
+  // Rows 102–121 (PP1–PP20): purchased precursor entries
+  //   E       = production process reference
+  //   F       = country code
+  //   G–K     = production routes
+  //   L / M   = precursor name
+  //   N       = error check formula — not a FILL_IN cell
   //
-  // Rows 103–121 (PP2–PP20): Additional precursors — left empty.
+  // Meta Engitech: 1 precursor (MS STEEL COIL).
+  // Shakambhari: No precursors — section left empty.
   // ------------------------------------------------------------------
-  setCellValue(sheet, "E102", p.goodsCategory);
-  setCellValue(sheet, "F102", p.precursorCountryCode);
-  for (const col of ["G", "H", "I", "J", "K"] as const) {
-    setCellValue(sheet, `${col}102`, p.productionRoutes);
+  if (ctx.companySlug !== "shakambhari") {
+    setCellValue(sheet, "E102", p.goodsCategory);
+    setCellValue(sheet, "F102", p.precursorCountryCode);
+    for (const col of ["G", "H", "I", "J", "K"] as const) {
+      setCellValue(sheet, `${col}102`, p.productionRoutes);
+    }
+    setCellValue(sheet, "L102", p.precursorName);
+    setCellValue(sheet, "M102", p.precursorName);
   }
-  setCellValue(sheet, "L102", p.precursorName);
-  setCellValue(sheet, "M102", p.precursorName);
 }

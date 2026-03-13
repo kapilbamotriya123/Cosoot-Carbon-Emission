@@ -9,7 +9,7 @@
 
 import type ExcelJS from "exceljs";
 import type { CompanySlug } from "@/lib/constants";
-import type { MetaEngitechConstants } from "@/lib/emissions/constants-loader";
+import type { MetaEngitechConstants, ShakambhariConstants } from "@/lib/emissions/constants-loader";
 
 // ---- Reporting Period ------------------------------------------------
 
@@ -82,6 +82,33 @@ export interface CompanyProfile {
   summarySteelMillId: number; // Q10 — e.g. 0
 }
 
+// ---- Shakambhari B_EmInst source streams -----------------------------
+
+/**
+ * A single aggregated source stream for the B_EmInst sheet.
+ *
+ * For inputs: method="Process emissions", use emissionFactor (= carbonContent × 44/12)
+ * For outputs (main_product/byproduct): method="Mass Balance", use carbonContent directly
+ * Activity data is negative for outputs (mass balance convention).
+ */
+export interface AggregatedSourceStream {
+  compName: string;
+  category: "input" | "byproduct" | "main_product";
+  totalQuantity: number; // tonnes — positive for inputs, negative for outputs
+  carbonContent: number; // mass fraction (0–1), e.g. 0.82 for coke
+  emissionFactor: number; // tCO2/t = carbonContent × 44/12 (used for inputs)
+}
+
+/**
+ * All aggregated source streams for one product in the reporting period.
+ * Each product gets a "group" in B_EmInst: header row + input rows + output rows.
+ */
+export interface ShakambhariProductStreams {
+  productName: string; // e.g. "FeMn" or "SiMn" (short label for the sheet)
+  inputs: AggregatedSourceStream[];
+  outputs: AggregatedSourceStream[]; // main_product + byproducts
+}
+
 // ---- Report Context --------------------------------------------------
 
 /**
@@ -107,17 +134,46 @@ export interface ReportContext {
   // Emission constants for the quarter (NCV, EF values from DB or fallback)
   emissionConstants?: MetaEngitechConstants;
 
+  // Shakambhari: emission constants (carbon content map, electricity EF)
+  shakambhariConstants?: ShakambhariConstants;
+
+  // Shakambhari B_EmInst: aggregated source streams per product for the period.
+  // Each product has input streams (positive qty, EF) and output streams (negative qty, carbon content).
+  shakambhariSourceStreams?: ShakambhariProductStreams[];
+
   // D_Processes+: customer + material selection (required for complete report)
   customerCode: string;
   materialIds: string[];
 
-  // D_Processes: aggregated data for the selected customer + materials
+  // Summary_Products: CN code per material (materialId → 8-digit CN code)
+  cnCodes: Record<string, string>;
+
+  // D_Processes: aggregated data for the selected customer + materials (Meta Engitech)
   dProcesses?: {
     totalQuantityMT: number; // sum of quantity_mt sold to this customer for selected materials
     totalDirectEmissionsCO2e: number; // sum of (scope1_intensity × quantity_mt) per product
     totalElectricityMWh: number; // sum of (scope2_intensity × quantity_mt / electricity_ef_MWh) per product
     electricityEF: number; // emission factor for electricity (tCO2/MWh), e.g. 0.598
   };
+
+  // D_Processes: per-product data for Shakambhari (one entry per process/product)
+  // Each product maps to one "Production process N" block in the D_Processes sheet.
+  shakambhariDProcesses?: ShakambhariProductDProcesses[];
+}
+
+/**
+ * Per-product data for one D_Processes block (Shakambhari).
+ *
+ * Each selected materialId gets its own production process section in the sheet.
+ * Data comes from: sales_data (quantity sold) + emission_results_shakambhari
+ * (scope1 intensity, electricity consumption per tonne of production).
+ */
+export interface ShakambhariProductDProcesses {
+  materialId: string;        // e.g. "Ferro Manganese (70-75) Prime"
+  quantitySoldMT: number;    // tonnes sold to the customer in the period
+  directEmissionsCO2e: number; // scope1_intensity × quantitySoldMT
+  electricityMWh: number;    // (total electricity kWh for product / total production) × quantitySoldMT / 1000
+  electricityEF: number;     // tCO2/MWh from constants (currently 0 per founder)
 }
 
 // ---- Sheet Filler ----------------------------------------------------

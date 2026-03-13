@@ -46,6 +46,12 @@ function getQuarterDates(year: string, quarter: string) {
   };
 }
 
+interface CNCode {
+  code: string;
+  name: string;
+  category: string;
+}
+
 interface ReportResult {
   fileName: string;
   downloadUrl: string;
@@ -75,6 +81,13 @@ export function ReportGenerationForm({ company }: Props) {
   const [materials, setMaterials] = useState<string[]>([]);
   const [materialsLoading, setMaterialsLoading] = useState(false);
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
+
+  // CN codes state (for Summary_Products sheet)
+  const [cnCodesList, setCnCodesList] = useState<CNCode[]>([]);
+  const [cnCodesMap, setCnCodesMap] = useState<Record<string, string>>({}); // materialId → CN code
+  const [cnSearchQueries, setCnSearchQueries] = useState<Record<string, string>>({}); // materialId → search text
+  const [cnDropdownOpen, setCnDropdownOpen] = useState<string | null>(null); // materialId of open dropdown
+  const cnRef = useRef<HTMLDivElement>(null);
 
   // Form submission state
   const [status, setStatus] = useState<"idle" | "generating" | "success" | "error">("idle");
@@ -185,6 +198,30 @@ export function ReportGenerationForm({ company }: Props) {
     fetchMaterials();
   }, [fetchMaterials]);
 
+  // Fetch CN codes list once on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/reports/cn-codes");
+        const data = await res.json();
+        if (data.success) setCnCodesList(data.data);
+      } catch {
+        // CN codes are optional — form still works without them
+      }
+    })();
+  }, []);
+
+  // Close CN code dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (cnRef.current && !cnRef.current.contains(e.target as Node)) {
+        setCnDropdownOpen(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   // Close customer dropdown on click outside
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -251,6 +288,7 @@ export function ReportGenerationForm({ company }: Props) {
           endDate,
           customerCode,
           materialIds: selectedMaterials,
+          cnCodes: cnCodesMap,
           mode,
         }),
       });
@@ -277,8 +315,13 @@ export function ReportGenerationForm({ company }: Props) {
     }
   }
 
+  // CN codes are mandatory for every selected material
+  const allCnCodesAssigned =
+    selectedMaterials.length === 0 ||
+    selectedMaterials.every((m) => cnCodesMap[m]);
+
   const isFormValid =
-    startDate && endDate && customerCode && selectedMaterials.length > 0;
+    startDate && endDate && customerCode && selectedMaterials.length > 0 && allCnCodesAssigned;
 
   const availableYears = periods.map((p) => p.year);
 
@@ -507,6 +550,96 @@ export function ReportGenerationForm({ company }: Props) {
             </p>
           )}
         </div>
+
+        {/* CN Codes Section — shown when materials are selected */}
+        {selectedMaterials.length > 0 && cnCodesList.length > 0 && (
+          <div className="space-y-4" ref={cnRef}>
+            <h2 className="text-lg font-semibold">
+              CN Codes <span className="text-destructive">*</span>
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Assign a CN (Combined Nomenclature) code to each product. Required for report generation.
+            </p>
+            <div className="space-y-3">
+              {selectedMaterials.map((materialId) => {
+                const selectedCode = cnCodesMap[materialId];
+                const query = cnSearchQueries[materialId] || "";
+                const isOpen = cnDropdownOpen === materialId;
+                const selectedCN = cnCodesList.find((c) => c.code === selectedCode);
+
+                // Filter codes by search query (match code or name)
+                const filteredCodes = query.length >= 2
+                  ? cnCodesList.filter(
+                      (c) =>
+                        c.code.includes(query) ||
+                        c.name.toLowerCase().includes(query.toLowerCase()) ||
+                        c.category.toLowerCase().includes(query.toLowerCase())
+                    ).slice(0, 20)
+                  : cnCodesList.slice(0, 20);
+
+                return (
+                  <div key={materialId} className="flex items-start gap-3">
+                    <span className="text-sm font-medium min-w-[200px] pt-2 truncate" title={materialId}>
+                      {materialId}
+                    </span>
+                    <div className="relative flex-1 max-w-md">
+                      <Input
+                        type="text"
+                        placeholder={selectedCode ? `${selectedCode} — ${selectedCN?.name?.substring(0, 40) || ""}` : "Search CN code or description..."}
+                        value={isOpen ? query : (selectedCode ? `${selectedCode} — ${selectedCN?.name?.substring(0, 50) || ""}` : "")}
+                        onChange={(e) => {
+                          setCnSearchQueries((prev) => ({ ...prev, [materialId]: e.target.value }));
+                          setCnDropdownOpen(materialId);
+                        }}
+                        onFocus={() => setCnDropdownOpen(materialId)}
+                        className={`text-sm ${!selectedCode ? "border-destructive" : ""}`}
+                        autoComplete="off"
+                      />
+                      {isOpen && (
+                        <div className="absolute z-50 mt-1 w-full max-h-48 overflow-y-auto rounded-md border bg-popover p-1 shadow-md">
+                          {filteredCodes.length > 0 ? (
+                            filteredCodes.map((cn) => (
+                              <button
+                                key={cn.code}
+                                type="button"
+                                onClick={() => {
+                                  setCnCodesMap((prev) => ({ ...prev, [materialId]: cn.code }));
+                                  setCnSearchQueries((prev) => ({ ...prev, [materialId]: "" }));
+                                  setCnDropdownOpen(null);
+                                }}
+                                className={`w-full rounded-sm px-2 py-1.5 text-left text-sm hover:bg-accent hover:text-accent-foreground ${
+                                  cn.code === selectedCode ? "bg-accent text-accent-foreground" : ""
+                                }`}
+                              >
+                                <span className="font-mono font-medium">{cn.code}</span>
+                                <span className="text-muted-foreground"> — {cn.name.substring(0, 60)}</span>
+                                <span className="block text-xs text-muted-foreground">{cn.category}</span>
+                              </button>
+                            ))
+                          ) : (
+                            <p className="px-2 py-1.5 text-sm text-muted-foreground">
+                              {query.length < 2 ? "Type at least 2 characters to search" : "No matching CN codes"}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    {selectedCode ? (
+                      <CheckCircle2 className="mt-2.5 h-4 w-4 shrink-0 text-green-600" />
+                    ) : (
+                      <AlertCircle className="mt-2.5 h-4 w-4 shrink-0 text-destructive" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {!allCnCodesAssigned && (
+              <p className="text-sm text-destructive">
+                {selectedMaterials.filter((m) => !cnCodesMap[m]).length} of {selectedMaterials.length} material(s) missing a CN code
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Submit */}
         <div className="flex flex-wrap items-center gap-3 pt-2">

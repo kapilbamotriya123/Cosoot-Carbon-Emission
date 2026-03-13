@@ -19,7 +19,8 @@ import type { CompanySlug } from "@/lib/constants";
 //   endDate: string,         // ISO date e.g. "2025-06-30"
 //   customerCode: string,
 //   materialIds: string[],
-//   mode?: "combined" | "individual"  // default: "combined"
+//   cnCodes?: Record<string, string>,  // optional: materialId → CN code (e.g. "72021120")
+//   mode?: "combined" | "individual"   // default: "combined"
 // }
 //
 // mode = "combined" (default):
@@ -134,6 +135,10 @@ export async function POST(request: NextRequest) {
     const validatedCustomerCode = (customerCode as string).trim();
     const validatedMaterialIds = (materialIds as string[]).map((id) => id.trim());
 
+    // CN codes mapping (optional — used for Summary_Products sheet)
+    const cnCodes: Record<string, string> =
+      body.cnCodes && typeof body.cnCodes === "object" ? body.cnCodes : {};
+
     // -- Determine mode ------------------------------------------------
 
     const mode = body.mode === "individual" ? "individual" : "combined";
@@ -166,7 +171,8 @@ export async function POST(request: NextRequest) {
         startDate,
         endDate,
         validatedCustomerCode,
-        groupMaterialIds
+        groupMaterialIds,
+        cnCodes
       );
 
       // Upload to GCS

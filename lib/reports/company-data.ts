@@ -76,35 +76,38 @@ const COMPANY_PROFILES: Record<CompanySlug, CompanyProfile> = {
   },
 
   shakambhari: {
-    // TODO: Get actual legal details from Shakambhari client
-    legalName: "SHAKAMBHARI",
-    streetAddress: "",
-    postCode: "",
-    city: "",
+    legalName: "Shakambhari Ispat and Power Limited",
+    streetAddress: "Madandih",
+    postCode: "723121",
+    city: "Purulia",
     country: "India",
-    unlocode: "",
-    latitude: "",
-    longitude: "",
-    authorizedRepName: "",
-    email: "",
-    telephone: "",
-    goodsCategory: "",
-    productionRoutes: "",
-    processScope: "",
+    unlocode: "", // TODO: Confirm UNLOCODE with client
+    latitude: "", // TODO: Get coordinates from client
+    longitude: "", // TODO: Get coordinates from client
+    authorizedRepName: "Mridul Agarwal",
+    email: "mridul.agarwal@shakambharigroup.in",
+    telephone: "+918373055383",
+
+    goodsCategory: "Alloys (FeMn, FeCr, FeNi)",
+    productionRoutes: "All production routes",
+    processScope: "Only direct production",
+    // processName is dynamic for Shakambhari — populated per-report from materialIds.
+    // The filler writes directly from ctx.materialIds instead of using this field.
     processName: "",
-    precursorCountryCode: "IN",
+
+    // No purchased precursors for Shakambhari
+    precursorCountryCode: "",
     precursorName: "",
 
-    dataQualityApproach: "",
-    qualityAssuranceApproach: "",
+    dataQualityApproach: "", // TODO: Confirm with client
+    qualityAssuranceApproach: "", // TODO: Confirm with client
 
-    // TODO: Confirm D_Processes static values for Shakambhari
     measurableHeatApplicable: false,
     wasteGasesApplicable: false,
-    electricityEFSource: "",
+    electricityEFSource: "", // TODO: Confirm with client
 
-    // TODO: Confirm E_PurchPrec static values for Shakambhari
-    precursorWasteMultiplier: 1.1,
+    // No precursors — all zeros
+    precursorWasteMultiplier: 1,
     precursorSEEDirect: 0,
     precursorSEEDirectSource: "",
     precursorElecConsumption: 0,
@@ -113,7 +116,7 @@ const COMPANY_PROFILES: Record<CompanySlug, CompanyProfile> = {
     precursorElecEFSource: "",
     precursorDefaultJustification: "",
 
-    // TODO: Confirm Summary_Products static values for Shakambhari
+    // Summary_Products is also dynamic for Shakambhari — multiple products per report
     summaryProcessName: "",
     summaryCNCode: "",
     summaryProductName: "",

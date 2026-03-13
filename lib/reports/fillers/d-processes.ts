@@ -2,42 +2,63 @@
  * Sheet filler for "D_Processes" — Production process level emissions.
  *
  * This sheet calculates Specific Embedded Emissions (SEE) for each production
- * process. Meta Engitech has 1 process: "ERW tubes, CEW tubes".
+ * process. The template supports up to 10 processes, each in a 65-row block.
  *
- * Only Production process 1 (rows 11–72) is filled. The template supports up
- * to 10 processes (rows 76+, 141+, etc.) but Meta only has one.
+ * --- Meta Engitech ---
+ * Single process: "ERW tubes, CEW tubes". Uses ctx.dProcesses (aggregated).
  *
- * FILL_IN cells for process 1:
+ * --- Shakambhari ---
+ * One process per selected material (e.g. FeMn, SiMn). Each gets its own
+ * 65-row block. Uses ctx.shakambhariDProcesses (per-product array).
  *
- *   L16  — Total production level (tonnes sold to customer for selected materials)
- *   L27  — Produced for the market (same as L16, all production is for market)
- *   L41  — Consumed for non-CBAM goods (always 0 for Meta)
- *   K50  — Measurable heat applicable (static: false/true per company)
- *   L50  — Waste gases applicable (static: false/true per company)
- *   L54  — Directly attributable emissions (tCO2e) — scope1_intensity × quantity
- *   L65  — Electricity consumption (MWh) — back-calculated from scope2_intensity
- *   L66  — Emission factor of electricity (tCO2/MWh) — constant, e.g. 0.598
- *   L67  — Source of emission factor (static: "Mix")
- *   L71  — Electricity exported (MWh) — always 0
- *   L72  — Emission factor of exported electricity (tCO2/MWh) — same constant
+ * Template layout per process block (process N):
+ *   Block start row = 11 + (N-1) × 65   (process 1 = row 11, 2 = 76, 3 = 141)
  *
- * Columns/cells NOT to write (formulas):
- *   L24 (=SUM(L16:L23)), L28, L29, L42, M50 (auto from goods category),
- *   K54, K65, K66, K67, K71, K72 (all unit labels are formulas)
+ *   FILL_IN cells (offsets from block start):
+ *     +5  (L16/L81/L146)  — Total production level (tonnes)
+ *     +16 (L27/L92/L157)  — Produced for the market (same value)
+ *     +30 (L41/L106/L171) — Consumed for non-CBAM goods (0)
+ *     +39 K (K50/K115)    — Measurable heat applicable (false)
+ *     +39 L (L50/L115)    — Waste gases applicable (false)
+ *     +43 (L54/L119)      — Directly attributable emissions (tCO2e)
+ *     +54 (L65/L130)      — Electricity consumption (MWh)
+ *     +55 (L66/L131)      — Emission factor of electricity (tCO2/MWh)
+ *     +56 (L67/L132)      — Source of emission factor
+ *     +60 (L71/L136)      — Electricity exported (MWh) — 0
+ *     +61 (L72/L137)      — EF of exported electricity — same as L66
  */
 
 import type { ReportContext } from "../types";
 import { getSheet, setCellValue } from "../template";
 
+/** Row offset for each FILL_IN cell within a process block. */
+const OFFSETS = {
+  totalProduction: 5,    // L16, L81, L146...
+  producedForMarket: 16, // L27, L92, L157...
+  nonCbamGoods: 30,      // L41, L106, L171...
+  measurableHeat: 39,    // K50, K115...
+  wasteGases: 39,        // L50, L115...
+  directEmissions: 43,   // L54, L119...
+  elecConsumption: 54,   // L65, L130...
+  elecEF: 55,            // L66, L131...
+  elecEFSource: 56,      // L67, L132...
+  elecExported: 60,      // L71, L136...
+  elecExportedEF: 61,    // L72, L137...
+} as const;
+
+/** Each process block starts 65 rows after the previous one. */
+const BLOCK_SIZE = 65;
+const FIRST_BLOCK_START = 11; // Process 1 header row
+
 export function fillDProcesses(ctx: ReportContext): void {
   const sheet = getSheet(ctx.workbook, "D_Processes");
 
-  if (ctx.companySlug !== "meta_engitech_pune") {
-    console.log(
-      `[reports] D_Processes: skipping for ${ctx.companySlug} (not yet implemented)`
-    );
+  if (ctx.companySlug === "shakambhari") {
+    fillShakambhari(ctx);
     return;
   }
+
+  // --- Meta Engitech: single process ---
 
   if (!ctx.dProcesses) {
     throw new Error(
@@ -72,4 +93,60 @@ export function fillDProcesses(ctx: ReportContext): void {
   // (k) L71–L72: Electricity exported — always 0, but EF still filled
   setCellValue(sheet, "L71", 0);
   setCellValue(sheet, "L72", d.electricityEF);
+}
+
+/**
+ * Fill D_Processes for Shakambhari — one process block per selected material.
+ *
+ * Process 1 starts at row 11, process 2 at row 76, process 3 at row 141, etc.
+ * Each block has the same layout, just shifted by 65 rows.
+ */
+function fillShakambhari(ctx: ReportContext): void {
+  const sheet = getSheet(ctx.workbook, "D_Processes");
+  const products = ctx.shakambhariDProcesses;
+  const p = ctx.companyProfile;
+
+  if (!products || products.length === 0) {
+    console.log(
+      "[reports] D_Processes: no Shakambhari product data — skipping"
+    );
+    return;
+  }
+
+  for (let i = 0; i < products.length; i++) {
+    const product = products[i];
+    const blockStart = FIRST_BLOCK_START + i * BLOCK_SIZE;
+
+    // (a) Total production level = quantity sold to customer
+    setCellValue(sheet, `L${blockStart + OFFSETS.totalProduction}`, product.quantitySoldMT);
+
+    // (b) Produced for the market = same
+    setCellValue(sheet, `L${blockStart + OFFSETS.producedForMarket}`, product.quantitySoldMT);
+
+    // (d) Consumed for non-CBAM goods = 0
+    setCellValue(sheet, `L${blockStart + OFFSETS.nonCbamGoods}`, 0);
+
+    // (f) Applicable elements: measurable heat = false, waste gases = false
+    setCellValue(sheet, `K${blockStart + OFFSETS.measurableHeat}`, p.measurableHeatApplicable);
+    setCellValue(sheet, `L${blockStart + OFFSETS.wasteGases}`, p.wasteGasesApplicable);
+
+    // (g) Directly attributable emissions (scope 1)
+    setCellValue(sheet, `L${blockStart + OFFSETS.directEmissions}`, product.directEmissionsCO2e);
+
+    // (j) Electricity consumption + EF + source
+    setCellValue(sheet, `L${blockStart + OFFSETS.elecConsumption}`, product.electricityMWh);
+    setCellValue(sheet, `L${blockStart + OFFSETS.elecEF}`, product.electricityEF);
+    setCellValue(sheet, `L${blockStart + OFFSETS.elecEFSource}`, p.electricityEFSource || "D.4.1");
+
+    // (k) Electricity exported = 0, EF same
+    setCellValue(sheet, `L${blockStart + OFFSETS.elecExported}`, 0);
+    setCellValue(sheet, `L${blockStart + OFFSETS.elecExportedEF}`, product.electricityEF);
+
+    console.log(
+      `[reports] D_Processes block ${i + 1} (row ${blockStart}): ` +
+        `${product.materialId} — ${product.quantitySoldMT}t, ` +
+        `${product.directEmissionsCO2e.toFixed(2)} tCO2e, ` +
+        `${product.electricityMWh.toFixed(2)} MWh`
+    );
+  }
 }

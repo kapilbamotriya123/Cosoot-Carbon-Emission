@@ -22,7 +22,8 @@ import { loadTemplate } from "./template";
 import { getCompanyProfile } from "./company-data";
 import { FILLER_REGISTRY } from "./fillers";
 import { pool } from "@/lib/db";
-import { loadMetaEngitechConstants } from "@/lib/emissions/constants-loader";
+import { loadMetaEngitechConstants, loadShakambhariConstants } from "@/lib/emissions/constants-loader";
+import type { ShakambhariProductStreams, AggregatedSourceStream, ShakambhariProductDProcesses } from "./types";
 
 /**
  * Build a ReportingPeriod from arbitrary start/end dates.
@@ -98,7 +99,8 @@ export async function generateReport(
   startDate: Date,
   endDate: Date,
   customerCode: string,
-  materialIds: string[]
+  materialIds: string[],
+  cnCodes: Record<string, string> = {}
 ): Promise<ReportResult> {
   const startStr = formatDateCompact(startDate);
   const endStr = formatDateCompact(endDate);
@@ -106,8 +108,8 @@ export async function generateReport(
     `[reports] Starting generation: ${companySlug}, ${startStr} → ${endStr}`
   );
 
-  // 1. Load the template workbook
-  const workbook = await loadTemplate();
+  // 1. Load the template workbook (company-specific template)
+  const workbook = await loadTemplate(companySlug);
   console.log(
     `[reports] Template loaded: ${workbook.worksheets.length} sheets`
   );
@@ -123,12 +125,16 @@ export async function generateReport(
     period,
     customerCode,
     materialIds,
+    cnCodes,
   };
 
-  // 2b. Load DB data needed by fillers (Meta Engitech only for now)
+  // 2b. Load DB data needed by fillers
   if (companySlug === "meta_engitech_pune") {
     await loadMetaEngitechData(ctx);
     await loadDProcessesData(ctx);
+  } else if (companySlug === "shakambhari") {
+    await loadShakambhariData(ctx);
+    await loadShakambhariDProcessesData(ctx);
   }
 
   // 3. Run fillers sequentially — fail-fast on error
@@ -342,5 +348,245 @@ async function loadDProcessesData(ctx: ReportContext): Promise<void> {
       `directCO2e=${totalDirectEmissionsCO2e.toFixed(4)}, ` +
       `elecMWh=${totalElectricityMWh.toFixed(4)} ` +
       `(customer=${customerCode}, ${materialIds.length} material(s))`
+  );
+}
+
+/**
+ * Load Shakambhari DB data into the report context.
+ *
+ * Data source: emission_results_shakambhari table.
+ * Each row is one production batch with a source_breakdowns JSONB array
+ * containing per-source details (compName, category, quantity, carbonContent, co2e).
+ *
+ * We aggregate source_breakdowns across all production records for the selected
+ * products in the date range, grouping by (product_name, compName, category).
+ *
+ * The result is structured as ShakambhariProductStreams[] — one per product,
+ * each with input streams and output streams ready for the B_EmInst filler.
+ */
+async function loadShakambhariData(ctx: ReportContext): Promise<void> {
+  const { period, materialIds } = ctx;
+  const ym = period.yearMonths;
+
+  // 1. Load Shakambhari emission constants (carbon content map, electricity EF)
+  ctx.shakambhariConstants = await loadShakambhariConstants(
+    ym[0].year,
+    ym[0].month
+  );
+  const CO2_PER_C = ctx.shakambhariConstants.co2_per_carbon; // 44/12 = 3.667
+  const electricityEF = ctx.shakambhariConstants.electricity_ef; // tCO2/kWh (e.g. 0.000598)
+
+  // 2. Query emission_results for the selected products in the date range.
+  //    We need the source_breakdowns JSONB to aggregate source streams.
+  const ymClause = buildYearMonthClause(ym, 2);
+  const paramIdx = ymClause.nextParamIdx;
+
+  const result = await pool.query(
+    `SELECT product_name, source_breakdowns
+     FROM emission_results_shakambhari
+     WHERE company_slug = $1
+       AND ${ymClause.clause}
+       AND product_name = ANY($${paramIdx})`,
+    ["shakambhari", ...ymClause.params, materialIds]
+  );
+
+  // 3. Aggregate: for each product × compName × category, sum quantities.
+  //    Also sum electricity kWh separately for indirect emissions (C_Emissions&Energy sheet).
+  //    Key = "productName|compName|category"
+  let totalElectricityKWh = 0;
+  const aggMap = new Map<
+    string,
+    {
+      productName: string;
+      compName: string;
+      category: "input" | "byproduct" | "main_product";
+      totalQty: number;
+      carbonContent: number;
+    }
+  >();
+
+  for (const row of result.rows) {
+    const productName = row.product_name as string;
+    const breakdowns = row.source_breakdowns as Array<{
+      compName: string;
+      category: string;
+      quantity: number;
+      carbonContent: number | null;
+    }>;
+
+    for (const src of breakdowns) {
+      // Electricity is not a source stream in B_EmInst, but we need the
+      // total kWh for indirect emissions (C_Emissions&Energy M26).
+      if (src.category === "electricity") {
+        totalElectricityKWh += src.quantity;
+        continue;
+      }
+
+      const cat = src.category as "input" | "byproduct" | "main_product";
+      const key = `${productName}|${src.compName}|${cat}`;
+
+      const existing = aggMap.get(key);
+      if (existing) {
+        existing.totalQty += src.quantity;
+      } else {
+        aggMap.set(key, {
+          productName,
+          compName: src.compName,
+          category: cat,
+          totalQty: src.quantity,
+          carbonContent: src.carbonContent ?? 0,
+        });
+      }
+    }
+  }
+
+  // 3b. Indirect emissions: total electricity kWh × electricity EF
+  ctx.quarterIndirectCO2e = totalElectricityKWh * electricityEF;
+
+  // 4. Group into per-product streams
+  const productMap = new Map<string, { inputs: AggregatedSourceStream[]; outputs: AggregatedSourceStream[] }>();
+
+  for (const agg of aggMap.values()) {
+    if (!productMap.has(agg.productName)) {
+      productMap.set(agg.productName, { inputs: [], outputs: [] });
+    }
+    const group = productMap.get(agg.productName)!;
+
+    const stream: AggregatedSourceStream = {
+      compName: agg.compName,
+      category: agg.category,
+      // Inputs are positive, outputs are negative (mass balance convention)
+      totalQuantity: agg.category === "input" ? agg.totalQty : -agg.totalQty,
+      carbonContent: agg.carbonContent,
+      emissionFactor: agg.carbonContent * CO2_PER_C, // tCO2/t
+    };
+
+    if (agg.category === "input") {
+      group.inputs.push(stream);
+    } else {
+      group.outputs.push(stream);
+    }
+  }
+
+  // 5. Build final array in materialIds order, with short labels for the sheet
+  ctx.shakambhariSourceStreams = materialIds
+    .filter((id) => productMap.has(id))
+    .map((id) => {
+      const group = productMap.get(id)!;
+      // Short label: "Ferro Manganese (70-75) Prime" → "FeMn" or "SiMn"
+      // Use the first word(s) that distinguish the product
+      const shortLabel = id.includes("Ferro") ? "FeMn" : id.includes("Silico") ? "SiMn" : id;
+      return {
+        productName: shortLabel,
+        inputs: group.inputs,
+        outputs: group.outputs,
+      } satisfies ShakambhariProductStreams;
+    });
+
+  console.log(
+    `[reports] Shakambhari data loaded: ` +
+      `${result.rows.length} emission records, ` +
+      `${ctx.shakambhariSourceStreams.length} product(s) with source streams, ` +
+      `indirect=${ctx.quarterIndirectCO2e?.toFixed(4)} tCO2e ` +
+      `(${totalElectricityKWh.toFixed(0)} kWh × ${electricityEF} tCO2/kWh)`
+  );
+}
+
+/**
+ * Load Shakambhari D_Processes data: per-product sales, scope1 intensity, and
+ * electricity consumption for each selected material.
+ *
+ * For each product:
+ *   1. quantity sold = SUM(quantity_mt) from sales_data for this customer + material + period
+ *   2. scope1 intensity = SUM(net_scope1_co2e) / SUM(production_qty) from emission_results
+ *   3. electricity per tonne = SUM(electricity kWh from source_breakdowns) / SUM(production_qty)
+ *   4. directEmissions = scope1_intensity × quantitySold
+ *   5. electricityMWh = (elecKwhPerTonne × quantitySold) / 1000
+ *   6. electricityEF = from constants (tCO2/kWh × 1000 → tCO2/MWh)
+ */
+async function loadShakambhariDProcessesData(ctx: ReportContext): Promise<void> {
+  const { period, customerCode, materialIds } = ctx;
+  const ym = period.yearMonths;
+
+  // Electricity EF: stored as tCO2/kWh, convert to tCO2/MWh for the report
+  const electricityEFMWh = (ctx.shakambhariConstants?.electricity_ef ?? 0) * 1000;
+
+  // 1. Sales: quantity sold per material for this customer in the period
+  const salesYM = buildYearMonthClause(ym, 2);
+  let paramIdx = salesYM.nextParamIdx;
+  const salesResult = await pool.query(
+    `SELECT material_id, SUM(quantity_mt) as total_qty
+     FROM sales_data
+     WHERE company_slug = $1
+       AND ${salesYM.clause}
+       AND customer_code = $${paramIdx}
+       AND material_id = ANY($${paramIdx + 1})
+     GROUP BY material_id`,
+    ["shakambhari", ...salesYM.params, customerCode, materialIds]
+  );
+
+  const salesMap = new Map<string, number>();
+  for (const row of salesResult.rows) {
+    salesMap.set(row.material_id, Number(row.total_qty) || 0);
+  }
+
+  // 2. Emission results: per-product scope1 intensity and electricity kWh/tonne
+  //    We query emission_results_shakambhari for the same period (all products, not
+  //    just the customer's — intensity is installation-wide, not customer-specific).
+  const emYM = buildYearMonthClause(ym, 2);
+  paramIdx = emYM.nextParamIdx;
+  const emResult = await pool.query(
+    `SELECT product_name,
+            SUM(production_qty) as total_production,
+            SUM(net_scope1_co2e) as total_scope1,
+            SUM(electricity_co2e) as total_elec_co2e
+     FROM emission_results_shakambhari
+     WHERE company_slug = $1
+       AND ${emYM.clause}
+       AND product_name = ANY($${paramIdx})
+     GROUP BY product_name`,
+    ["shakambhari", ...emYM.params, materialIds]
+  );
+
+  // Build intensity lookup: materialId → { scope1PerTonne, elecKwhPerTonne }
+  const intensityMap = new Map<string, { scope1PerTonne: number; elecKwhPerTonne: number }>();
+  const elecEFkWh = ctx.shakambhariConstants?.electricity_ef ?? 0;
+
+  for (const row of emResult.rows) {
+    const totalProd = Number(row.total_production) || 0;
+    if (totalProd === 0) continue;
+
+    const scope1PerTonne = (Number(row.total_scope1) || 0) / totalProd;
+    // Back-calculate kWh from co2e: co2e / EF = kWh. If EF is 0, kWh is 0.
+    const totalElecKwh = elecEFkWh > 0
+      ? (Number(row.total_elec_co2e) || 0) / elecEFkWh
+      : 0;
+    const elecKwhPerTonne = totalElecKwh / totalProd;
+
+    intensityMap.set(row.product_name, { scope1PerTonne, elecKwhPerTonne });
+  }
+
+  // 3. Build per-product D_Processes data
+  ctx.shakambhariDProcesses = materialIds.map((materialId) => {
+    const qtySold = salesMap.get(materialId) ?? 0;
+    const intensity = intensityMap.get(materialId);
+    const scope1PerTonne = intensity?.scope1PerTonne ?? 0;
+    const elecKwhPerTonne = intensity?.elecKwhPerTonne ?? 0;
+
+    return {
+      materialId,
+      quantitySoldMT: qtySold,
+      directEmissionsCO2e: scope1PerTonne * qtySold,
+      electricityMWh: (elecKwhPerTonne * qtySold) / 1000,
+      electricityEF: electricityEFMWh,
+    } satisfies ShakambhariProductDProcesses;
+  });
+
+  console.log(
+    `[reports] Shakambhari D_Processes loaded: ` +
+      `${ctx.shakambhariDProcesses.length} product(s), ` +
+      ctx.shakambhariDProcesses
+        .map((p) => `${p.materialId}: ${p.quantitySoldMT}t sold, ${p.directEmissionsCO2e.toFixed(2)} tCO2e direct, ${p.electricityMWh.toFixed(2)} MWh`)
+        .join("; ")
   );
 }
