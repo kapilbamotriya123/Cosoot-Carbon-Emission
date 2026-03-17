@@ -89,14 +89,24 @@ export const parseMetaEngitechPuneConsumption: ConsumptionParser = async (
       );
     }
 
+    // Parse raw energy values
+    const rawTotalEnergy = toNumberOrNull(row.getCell(COL.totalEnergyKWh).value);
+    const rawMSEB = COL.energyMSEB ? toNumberOrNull(row.getCell(COL.energyMSEB).value) : null;
+    const rawSolar = COL.energySolar ? toNumberOrNull(row.getCell(COL.energySolar).value) : null;
+
+    // Total energy fallback: "Total Energy in KWh" first, then "Energy MSEB KWh".
+    // The constants are already calibrated to use total electricity — no need to
+    // separate solar vs grid.
+    const effectiveEnergy = rawTotalEnergy ?? rawMSEB;
+
     const entry: WorkCenterConsumption = {
       sequence: Number(sequenceRaw) || 0,
       description: String(row.getCell(COL.description).value ?? "").trim(),
       productionMT: toNumberOrNull(row.getCell(COL.productionMT).value),
       uomProduction: String(row.getCell(COL.uomProduction).value ?? "").trim(),
-      totalEnergyKWh: toNumberOrNull(row.getCell(COL.totalEnergyKWh).value),
-      energyMSEBKWh: COL.energyMSEB ? toNumberOrNull(row.getCell(COL.energyMSEB).value) : null,
-      energySolarKWh: COL.energySolar ? toNumberOrNull(row.getCell(COL.energySolar).value) : null,
+      totalEnergyKWh: effectiveEnergy,
+      energyMSEBKWh: rawMSEB,
+      energySolarKWh: rawSolar,
       uomElectEnergy: String(row.getCell(COL.uomElect).value ?? "").trim(),
       lpgConsumptionKg: toNumberOrNull(row.getCell(COL.lpgKg).value),
       uomLPG: String(row.getCell(COL.uomLPG).value ?? "").trim(),
