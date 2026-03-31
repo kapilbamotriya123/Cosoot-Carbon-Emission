@@ -53,6 +53,11 @@ function buildPeriod(startDate: Date, endDate: Date): ReportingPeriod {
   return { startDate, endDate, yearMonths };
 }
 
+/** Normalize a string for case+space-insensitive comparison. */
+function normalize(s: string): string {
+  return s.toLowerCase().replace(/\s+/g, "");
+}
+
 /**
  * Build a SQL condition for (year, month) IN (...) from yearMonths array.
  *
@@ -378,26 +383,43 @@ async function loadShakambhariData(ctx: ReportContext): Promise<void> {
 
   // 2. Query emission_results for the selected products in the date range.
   //    We need the source_breakdowns JSONB to aggregate source streams.
+  //
+  //    materialIds come from sales_data where they're stored as product names
+  //    (e.g. "Ferro Manganese (75-80) Prime"), but emission_results stores a
+  //    numeric product_id (e.g. "70000057") with the name in product_name.
+  //    We match on product_name using case+space-insensitive comparison.
   const ymClause = buildYearMonthClause(ym, 2);
   const paramIdx = ymClause.nextParamIdx;
 
+  const normalizedNames = materialIds.map((id) => normalize(id));
   const result = await pool.query(
-    `SELECT product_name, source_breakdowns
+    `SELECT product_id, product_name, source_breakdowns
      FROM emission_results_shakambhari
      WHERE company_slug = $1
        AND ${ymClause.clause}
-       AND product_name = ANY($${paramIdx})`,
-    ["shakambhari", ...ymClause.params, materialIds]
+       AND LOWER(REGEXP_REPLACE(product_name, '\\s+', '', 'g')) = ANY($${paramIdx})`,
+    ["shakambhari", ...ymClause.params, normalizedNames]
   );
 
-  // 3. Aggregate: for each product × compName × category, sum quantities.
-  //    Also sum electricity kWh separately for indirect emissions (C_Emissions&Energy sheet).
-  //    Key = "productName|compName|category"
+  // 3. Build reverse lookup: normalized product_name → original materialId.
+  //    This lets us key aggregation maps by the materialId the rest of the
+  //    pipeline expects (the product name string from sales_data).
+  const normToMaterialId = new Map<string, string>();
+  for (const id of materialIds) {
+    normToMaterialId.set(normalize(id), id);
+  }
+
+  // Helper: resolve a DB row's product_name to the matching materialId
+  const resolveMatId = (productName: string): string | null =>
+    normToMaterialId.get(normalize(productName)) ?? null;
+
+  // 4. Aggregate: for each materialId × compName × category, sum quantities.
+  //    Also sum electricity kWh separately for indirect emissions.
   let totalElectricityKWh = 0;
   const aggMap = new Map<
     string,
     {
-      productName: string;
+      materialId: string;
       compName: string;
       category: "input" | "byproduct" | "main_product";
       totalQty: number;
@@ -406,7 +428,9 @@ async function loadShakambhariData(ctx: ReportContext): Promise<void> {
   >();
 
   for (const row of result.rows) {
-    const productName = row.product_name as string;
+    const materialId = resolveMatId(row.product_name as string);
+    if (!materialId) continue; // shouldn't happen, but guard
+
     const breakdowns = row.source_breakdowns as Array<{
       compName: string;
       category: string;
@@ -423,14 +447,14 @@ async function loadShakambhariData(ctx: ReportContext): Promise<void> {
       }
 
       const cat = src.category as "input" | "byproduct" | "main_product";
-      const key = `${productName}|${src.compName}|${cat}`;
+      const key = `${materialId}|${src.compName}|${cat}`;
 
       const existing = aggMap.get(key);
       if (existing) {
         existing.totalQty += src.quantity;
       } else {
         aggMap.set(key, {
-          productName,
+          materialId,
           compName: src.compName,
           category: cat,
           totalQty: src.quantity,
@@ -440,17 +464,17 @@ async function loadShakambhariData(ctx: ReportContext): Promise<void> {
     }
   }
 
-  // 3b. Indirect emissions: total electricity kWh × electricity EF
+  // 4b. Indirect emissions: total electricity kWh × electricity EF
   ctx.quarterIndirectCO2e = totalElectricityKWh * electricityEF;
 
-  // 4. Group into per-product streams
+  // 5. Group into per-materialId streams
   const productMap = new Map<string, { inputs: AggregatedSourceStream[]; outputs: AggregatedSourceStream[] }>();
 
   for (const agg of aggMap.values()) {
-    if (!productMap.has(agg.productName)) {
-      productMap.set(agg.productName, { inputs: [], outputs: [] });
+    if (!productMap.has(agg.materialId)) {
+      productMap.set(agg.materialId, { inputs: [], outputs: [] });
     }
-    const group = productMap.get(agg.productName)!;
+    const group = productMap.get(agg.materialId)!;
 
     const stream: AggregatedSourceStream = {
       compName: agg.compName,
@@ -468,13 +492,12 @@ async function loadShakambhariData(ctx: ReportContext): Promise<void> {
     }
   }
 
-  // 5. Build final array in materialIds order, with short labels for the sheet
+  // 6. Build final array in materialIds order, with short labels for the sheet
   ctx.shakambhariSourceStreams = materialIds
     .filter((id) => productMap.has(id))
     .map((id) => {
       const group = productMap.get(id)!;
       // Short label: "Ferro Manganese (70-75) Prime" → "FeMn" or "SiMn"
-      // Use the first word(s) that distinguish the product
       const shortLabel = id.includes("Ferro") ? "FeMn" : id.includes("Silico") ? "SiMn" : id;
       return {
         productName: shortLabel,
@@ -533,8 +556,10 @@ async function loadShakambhariDProcessesData(ctx: ReportContext): Promise<void> 
   // 2. Emission results: per-product scope1 intensity and electricity kWh/tonne
   //    We query emission_results_shakambhari for the same period (all products, not
   //    just the customer's — intensity is installation-wide, not customer-specific).
+  //    Match on product_name (case+space-insensitive) since materialIds are product names.
   const emYM = buildYearMonthClause(ym, 2);
   paramIdx = emYM.nextParamIdx;
+  const normalizedNames = materialIds.map((id) => normalize(id));
   const emResult = await pool.query(
     `SELECT product_name,
             SUM(production_qty) as total_production,
@@ -543,10 +568,16 @@ async function loadShakambhariDProcessesData(ctx: ReportContext): Promise<void> 
      FROM emission_results_shakambhari
      WHERE company_slug = $1
        AND ${emYM.clause}
-       AND product_name = ANY($${paramIdx})
+       AND LOWER(REGEXP_REPLACE(product_name, '\\s+', '', 'g')) = ANY($${paramIdx})
      GROUP BY product_name`,
-    ["shakambhari", ...emYM.params, materialIds]
+    ["shakambhari", ...emYM.params, normalizedNames]
   );
+
+  // Build reverse lookup: normalized product_name → original materialId
+  const normToMaterialId = new Map<string, string>();
+  for (const id of materialIds) {
+    normToMaterialId.set(normalize(id), id);
+  }
 
   // Build intensity lookup: materialId → { scope1PerTonne, elecKwhPerTonne }
   const intensityMap = new Map<string, { scope1PerTonne: number; elecKwhPerTonne: number }>();
@@ -563,7 +594,11 @@ async function loadShakambhariDProcessesData(ctx: ReportContext): Promise<void> 
       : 0;
     const elecKwhPerTonne = totalElecKwh / totalProd;
 
-    intensityMap.set(row.product_name, { scope1PerTonne, elecKwhPerTonne });
+    // Key by the original materialId, not the DB's product_name
+    const materialId = normToMaterialId.get(normalize(row.product_name as string));
+    if (materialId) {
+      intensityMap.set(materialId, { scope1PerTonne, elecKwhPerTonne });
+    }
   }
 
   // 3. Build per-product D_Processes data

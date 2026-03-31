@@ -5,19 +5,11 @@ import { resolveColumns, toNumberOrNull } from "../utils";
 /**
  * Parser for Shakambhari's sales data Excel format.
  *
- * Shakambhari's sales export contains multiple sheets (typically 5), where:
- *   - Sheet1: Prime products only, 19 columns (no financial data)
- *   - Sheet3: ALL products including by-products (slag, shots, fines), 43 columns
- *   - Sheet4/5: Subsets of Sheet1 — different plants or export-only
- *   - Sheet2: Pivot table (no material description) — skipped
+ * We only parse Sheet1 (the first sheet) which contains the primary sales data.
  *
- * Sheet1 + Sheet3 = complete dataset with zero overlap.
- * Sheet4/5 are strict subsets of Sheet1. We parse ALL sheets with the right
- * header pattern and deduplicate, so the parser is resilient to any combination.
- *
- * Header pattern (columns A–F in sheets 1/3/4/5):
+ * Header pattern (columns A–F):
  *   A: INVNO          — Invoice number (used for deduplication)
- *   B: INV DT         — Invoice date (Date object)
+ *   B: INV DT         — Invoice date (Date object or DD/MM/YY string)
  *   C: SOLD TO CODE   — Customer code (e.g. "60001073")
  *   D: SOLD TO NAME   — Customer name (not stored, just for debugging)
  *   E: MATERIAL DESCRIPTION — Product name (used as materialId since no numeric code exists)
@@ -26,10 +18,6 @@ import { resolveColumns, toNumberOrNull } from "../utils";
  * Row filtering:
  *   - Skip rows with qty ≤ 0 (qty=0 are header/container lines, negative = credit notes/returns)
  *   - Skip rows with empty material description or customer code
- *
- * Deduplication:
- *   Key = invNo|customerCode|materialDescription|qty
- *   This handles Sheet4/5 being subsets of Sheet1 without double-counting.
  */
 
 const EXPECTED_HEADERS = {
@@ -77,6 +65,12 @@ function tryResolveHeaders(
 
 /**
  * Extract year and month from an Excel date cell value.
+ *
+ * Handles:
+ *   - Native Date objects (ExcelJS auto-parses date-formatted cells)
+ *   - DD/MM/YY or DD/MM/YYYY strings (Indian date format used by Shakambhari)
+ *   - ISO strings like "2025-03-30"
+ *   - Formula results that resolve to any of the above
  */
 function parseDateCell(
   value: ExcelJS.CellValue
@@ -95,8 +89,23 @@ function parseDateCell(
     }
   }
 
-  // Try parsing as string
-  const d = new Date(String(value));
+  const str = String(value).trim();
+
+  // DD/MM/YY or DD/MM/YYYY (Indian date format)
+  const ddmmyy = str.match(/^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{2,4})$/);
+  if (ddmmyy) {
+    const day = parseInt(ddmmyy[1], 10);
+    const month = parseInt(ddmmyy[2], 10);
+    let year = parseInt(ddmmyy[3], 10);
+    // 2-digit year: 00-49 → 2000s, 50-99 → 1900s
+    if (year < 100) year += year < 50 ? 2000 : 1900;
+    if (month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+      return { year, month };
+    }
+  }
+
+  // Fallback: try native Date parsing (handles ISO strings etc.)
+  const d = new Date(str);
   if (!isNaN(d.getTime())) {
     return { year: d.getFullYear(), month: d.getMonth() + 1 };
   }
@@ -114,76 +123,60 @@ export const parseShakambhariSales: SalesParser = async (
     throw new Error("No worksheets found in the uploaded file");
   }
 
-  // Collect rows from all sheets that match the header pattern.
-  // Deduplicate using a composite key to avoid double-counting when
-  // multiple sheets contain the same invoice line items.
-  const seen = new Set<string>();
-  const records: SalesRecord[] = [];
-  let sheetsMatched = 0;
+  // Only parse Sheet1 (the first sheet) — it contains the primary sales data.
+  const ws = workbook.worksheets[0];
+  const COL = tryResolveHeaders(ws);
 
-  for (const ws of workbook.worksheets) {
-    const COL = tryResolveHeaders(ws);
-    if (!COL) continue; // sheet doesn't have the right headers
-
-    sheetsMatched++;
-
-    for (let rowNum = 2; rowNum <= ws.rowCount; rowNum++) {
-      const row = ws.getRow(rowNum);
-
-      const qty = toNumberOrNull(row.getCell(COL.invQty).value);
-      if (qty === null || qty <= 0) continue; // skip zero/negative/empty
-
-      const invNo = String(row.getCell(COL.invNo).value ?? "").trim();
-      const customerCode = String(
-        row.getCell(COL.soldToCode).value ?? ""
-      ).trim();
-      const materialDesc = String(
-        row.getCell(COL.materialDesc).value ?? ""
-      ).trim();
-
-      if (!customerCode || !materialDesc) continue;
-
-      // Deduplicate across sheets
-      const dedupeKey = `${invNo}|${customerCode}|${materialDesc}|${qty}`;
-      if (seen.has(dedupeKey)) continue;
-      seen.add(dedupeKey);
-
-      const parsed = parseDateCell(row.getCell(COL.invDate).value);
-      if (!parsed) {
-        throw new Error(
-          `Invalid date at row ${rowNum} in sheet "${ws.name}". ` +
-            `Value: "${row.getCell(COL.invDate).value}"`
-        );
-      }
-
-      records.push({
-        year: parsed.year,
-        month: parsed.month,
-        customerCode,
-        materialId: materialDesc, // Shakambhari has no numeric material code
-        quantityMT: qty,
-      });
-    }
-  }
-
-  if (sheetsMatched === 0) {
+  if (!COL) {
     throw new Error(
-      "No worksheet with the expected headers found. " +
+      `Sheet "${ws.name}" does not have the expected headers. ` +
         "Expected columns: INVNO, INV DT, SOLD TO CODE, MATERIAL DESCRIPTION, Inv Qty"
     );
   }
 
+  const records: SalesRecord[] = [];
+
+  for (let rowNum = 2; rowNum <= ws.rowCount; rowNum++) {
+    const row = ws.getRow(rowNum);
+
+    const qty = toNumberOrNull(row.getCell(COL.invQty).value);
+    if (qty === null || qty <= 0) continue; // skip zero/negative/empty
+
+    const customerCode = String(
+      row.getCell(COL.soldToCode).value ?? ""
+    ).trim();
+    const materialDesc = String(
+      row.getCell(COL.materialDesc).value ?? ""
+    ).trim();
+
+    if (!customerCode || !materialDesc) continue;
+
+    const parsed = parseDateCell(row.getCell(COL.invDate).value);
+    if (!parsed) {
+      throw new Error(
+        `Invalid date at row ${rowNum} in sheet "${ws.name}". ` +
+          `Value: "${row.getCell(COL.invDate).value}"`
+      );
+    }
+
+    records.push({
+      year: parsed.year,
+      month: parsed.month,
+      customerCode,
+      materialId: materialDesc, // Shakambhari has no numeric material code
+      quantityMT: qty,
+    });
+  }
+
   if (records.length === 0) {
     throw new Error(
-      `Found ${sheetsMatched} sheet(s) with correct headers but no valid sales rows ` +
+      `Sheet "${ws.name}" has the correct headers but no valid sales rows ` +
         "(all quantities were zero, negative, or missing)."
     );
   }
 
   console.log(
-    `[sales-parser] Shakambhari: parsed ${records.length} records ` +
-      `from ${sheetsMatched} sheet(s), ` +
-      `${seen.size} unique line items`
+    `[sales-parser] Shakambhari: parsed ${records.length} records from sheet "${ws.name}"`
   );
 
   return records;
