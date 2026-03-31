@@ -68,14 +68,7 @@ function fillShakambhari(ctx: ReportContext): void {
     const row = 10 + i;
     const materialId = materialIds[i];
 
-    // Process name must match D_Processes — use the short label
-    // "Ferro Manganese (70-75) Prime" → "Ferro Manganese"
-    // "Silico Manganese (65-70) Prime" → "Silico Manganese"
-    const processName = materialId.includes("Ferro")
-      ? "Ferro Manganese"
-      : materialId.includes("Silico")
-        ? "Silico Manganese"
-        : materialId;
+    const processName = materialId;
 
     // CN code from user selection (or empty if not provided)
     const cnCode = cnCodes[materialId] || "";
