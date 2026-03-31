@@ -160,7 +160,15 @@ export async function generateReport(
     }
   }
 
-  // 4. Serialize the modified workbook to a Buffer
+  // 4. Force Excel to recalculate all formulas on open.
+  //    ExcelJS preserves cached formula results from the template. Since we
+  //    cleared data cells, the cached results are stale (e.g. "Silico Manganese"
+  //    still appears in formula cells that reference now-empty source cells).
+  //    Setting calcProperties.fullCalcOnLoad makes Excel recalculate everything
+  //    when the file is opened, so users never see stale cached values.
+  workbook.calcProperties = { fullCalcOnLoad: true };
+
+  // 5. Serialize the modified workbook to a Buffer
   const rawBuffer = await workbook.xlsx.writeBuffer();
   const buffer = Buffer.from(rawBuffer);
 
@@ -560,11 +568,19 @@ async function loadShakambhariDProcessesData(ctx: ReportContext): Promise<void> 
   const emYM = buildYearMonthClause(ym, 2);
   paramIdx = emYM.nextParamIdx;
   const normalizedNames = materialIds.map((id) => normalize(id));
+  // Query emission results with electricity kWh extracted directly from
+  // source_breakdowns (category='electricity') instead of back-calculating
+  // from electricity_co2e — because when electricity_ef is 0, the co2e is
+  // also 0 and back-calculation gives 0 kWh even though consumption exists.
   const emResult = await pool.query(
     `SELECT product_name,
             SUM(production_qty) as total_production,
             SUM(net_scope1_co2e) as total_scope1,
-            SUM(electricity_co2e) as total_elec_co2e
+            SUM(
+              (SELECT COALESCE(SUM((elem->>'quantity')::numeric), 0)
+               FROM jsonb_array_elements(source_breakdowns) AS elem
+               WHERE elem->>'category' = 'electricity')
+            ) as total_elec_kwh
      FROM emission_results_shakambhari
      WHERE company_slug = $1
        AND ${emYM.clause}
@@ -581,18 +597,13 @@ async function loadShakambhariDProcessesData(ctx: ReportContext): Promise<void> 
 
   // Build intensity lookup: materialId → { scope1PerTonne, elecKwhPerTonne }
   const intensityMap = new Map<string, { scope1PerTonne: number; elecKwhPerTonne: number }>();
-  const elecEFkWh = ctx.shakambhariConstants?.electricity_ef ?? 0;
 
   for (const row of emResult.rows) {
     const totalProd = Number(row.total_production) || 0;
     if (totalProd === 0) continue;
 
     const scope1PerTonne = (Number(row.total_scope1) || 0) / totalProd;
-    // Back-calculate kWh from co2e: co2e / EF = kWh. If EF is 0, kWh is 0.
-    const totalElecKwh = elecEFkWh > 0
-      ? (Number(row.total_elec_co2e) || 0) / elecEFkWh
-      : 0;
-    const elecKwhPerTonne = totalElecKwh / totalProd;
+    const elecKwhPerTonne = (Number(row.total_elec_kwh) || 0) / totalProd;
 
     // Key by the original materialId, not the DB's product_name
     const materialId = normToMaterialId.get(normalize(row.product_name as string));

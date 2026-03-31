@@ -1,12 +1,11 @@
 /**
  * Sales data types.
  *
- * A SalesRecord represents one row from the sales Excel file:
- * a single customer buying a single material in a given month.
+ * A SalesRecord represents one customer+material+month combination.
  *
- * The parser returns an array of these records — no aggregation,
- * no deduplication. Raw rows are preserved as-is from the Excel.
- * Aggregation happens at query time (report generation).
+ * For Shakambhari, the parser aggregates all invoice lines (positive
+ * and negative) by (year, month, customerCode, materialId) and returns
+ * the net quantity. Only net-positive totals are returned.
  */
 
 export interface SalesRecord {

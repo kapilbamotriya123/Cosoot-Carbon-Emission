@@ -19,7 +19,7 @@
  */
 
 import type { ReportContext } from "../types";
-import { getSheet, setCellValue, setRowRange } from "../template";
+import { getSheet, setCellValue, setRowRange, clearCell } from "../template";
 
 export function fillAInstData(ctx: ReportContext): void {
   const sheet = getSheet(ctx.workbook, "A_InstData");
@@ -93,6 +93,15 @@ export function fillAInstData(ctx: ReportContext): void {
   // Shakambhari: 1 row per selected product (all same category).
   // ------------------------------------------------------------------
   if (ctx.companySlug === "shakambhari") {
+    // Clear all 10 goods-category slots first (rows 62–71), then fill only what we need.
+    // The template ships with sample data in rows 62–63 that would bleed through.
+    const GOODS_COLS = ["E", "F", "I", "J"] as const;
+    for (let r = 62; r <= 71; r++) {
+      for (const col of GOODS_COLS) {
+        clearCell(sheet, `${col}${r}`);
+      }
+    }
+
     // One goods-category row per selected product
     for (let i = 0; i < ctx.materialIds.length && i < 10; i++) {
       const row = 62 + i;
@@ -125,6 +134,15 @@ export function fillAInstData(ctx: ReportContext): void {
   // Shakambhari: 1 row per selected product (dynamic names from materialIds).
   // ------------------------------------------------------------------
   if (ctx.companySlug === "shakambhari") {
+    // Clear all 10 process slots first (rows 83–92), then fill only what we need.
+    // The template ships with sample data in rows 83–84 that would bleed through.
+    const PROC_COLS = ["E", "F", "L", "M"] as const;
+    for (let r = 83; r <= 92; r++) {
+      for (const col of PROC_COLS) {
+        clearCell(sheet, `${col}${r}`);
+      }
+    }
+
     // One process row per selected product
     for (let i = 0; i < ctx.materialIds.length && i < 10; i++) {
       const row = 83 + i;

@@ -15,9 +15,10 @@ import { resolveColumns, toNumberOrNull } from "../utils";
  *   E: MATERIAL DESCRIPTION — Product name (used as materialId since no numeric code exists)
  *   F: Inv Qty        — Quantity in metric tonnes
  *
- * Row filtering:
- *   - Skip rows with qty ≤ 0 (qty=0 are header/container lines, negative = credit notes/returns)
- *   - Skip rows with empty material description or customer code
+ * Row filtering & aggregation:
+ *   - Skip rows with qty=0 or null (header/container lines)
+ *   - Negative quantities (credit notes/returns) are included in aggregation
+ *   - All rows are aggregated by (year, month, customerCode, materialId) with summed quantities
  */
 
 const EXPECTED_HEADERS = {
@@ -89,6 +90,16 @@ function parseDateCell(
     }
   }
 
+  // Handle Excel serial date numbers (e.g. 45726 = March 10, 2025).
+  // ExcelJS sometimes returns raw serial numbers for date-formatted cells.
+  if (typeof value === "number" && value > 1 && value < 200000) {
+    // Excel epoch: Jan 1, 1900 = serial 1 (with the famous Lotus 1-2-3
+    // leap year bug: serial 60 = Feb 29, 1900 which doesn't exist).
+    const excelEpoch = new Date(Date.UTC(1899, 11, 30)); // Dec 30, 1899
+    const d = new Date(excelEpoch.getTime() + value * 86400000);
+    return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1 };
+  }
+
   const str = String(value).trim();
 
   // DD/MM/YY or DD/MM/YYYY (Indian date format)
@@ -104,10 +115,10 @@ function parseDateCell(
     }
   }
 
-  // Fallback: try native Date parsing (handles ISO strings etc.)
-  const d = new Date(str);
-  if (!isNaN(d.getTime())) {
-    return { year: d.getFullYear(), month: d.getMonth() + 1 };
+  // ISO format fallback: YYYY-MM-DD
+  const iso = str.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    return { year: parseInt(iso[1], 10), month: parseInt(iso[2], 10) };
   }
 
   return null;
@@ -134,13 +145,18 @@ export const parseShakambhariSales: SalesParser = async (
     );
   }
 
-  const records: SalesRecord[] = [];
+  // Aggregate quantities by (year, month, customerCode, materialId).
+  // A single customer+material may appear across many invoice lines — some
+  // positive (shipments) and some negative (credit notes / returns).
+  // We sum everything and keep only net-positive totals.
+  const aggMap = new Map<string, { year: number; month: number; customerCode: string; materialId: string; qty: number }>();
+  let rawRowCount = 0;
 
   for (let rowNum = 2; rowNum <= ws.rowCount; rowNum++) {
     const row = ws.getRow(rowNum);
 
     const qty = toNumberOrNull(row.getCell(COL.invQty).value);
-    if (qty === null || qty <= 0) continue; // skip zero/negative/empty
+    if (qty === null || qty === 0) continue; // skip zero/empty, keep negatives
 
     const customerCode = String(
       row.getCell(COL.soldToCode).value ?? ""
@@ -159,24 +175,42 @@ export const parseShakambhariSales: SalesParser = async (
       );
     }
 
+    rawRowCount++;
+    const key = `${parsed.year}|${parsed.month}|${customerCode}|${materialDesc}`;
+    const existing = aggMap.get(key);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      aggMap.set(key, {
+        year: parsed.year,
+        month: parsed.month,
+        customerCode,
+        materialId: materialDesc,
+        qty,
+      });
+    }
+  }
+
+  const records: SalesRecord[] = [];
+  for (const agg of aggMap.values()) {
     records.push({
-      year: parsed.year,
-      month: parsed.month,
-      customerCode,
-      materialId: materialDesc, // Shakambhari has no numeric material code
-      quantityMT: qty,
+      year: agg.year,
+      month: agg.month,
+      customerCode: agg.customerCode,
+      materialId: agg.materialId,
+      quantityMT: Math.abs(agg.qty),
     });
   }
 
   if (records.length === 0) {
     throw new Error(
       `Sheet "${ws.name}" has the correct headers but no valid sales rows ` +
-        "(all quantities were zero, negative, or missing)."
+        "(all quantities were zero or missing)."
     );
   }
 
   console.log(
-    `[sales-parser] Shakambhari: parsed ${records.length} records from sheet "${ws.name}"`
+    `[sales-parser] Shakambhari: ${rawRowCount} raw rows → ${records.length} aggregated records from sheet "${ws.name}"`
   );
 
   return records;

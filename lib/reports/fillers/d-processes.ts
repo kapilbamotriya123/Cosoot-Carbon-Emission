@@ -29,7 +29,7 @@
  */
 
 import type { ReportContext } from "../types";
-import { getSheet, setCellValue } from "../template";
+import { getSheet, setCellValue, clearCell } from "../template";
 
 /** Row offset for each FILL_IN cell within a process block. */
 const OFFSETS = {
@@ -111,6 +111,29 @@ function fillShakambhari(ctx: ReportContext): void {
       "[reports] D_Processes: no Shakambhari product data — skipping"
     );
     return;
+  }
+
+  // Clear all process blocks first (up to 10 blocks).
+  // The template ships with sample data in blocks 1–3 that would bleed
+  // through if the user selects fewer products than the template had.
+  const MAX_BLOCKS = 10;
+  const CLEAR_OFFSETS = [
+    OFFSETS.totalProduction,
+    OFFSETS.producedForMarket,
+    OFFSETS.nonCbamGoods,
+    OFFSETS.directEmissions,
+    OFFSETS.elecConsumption,
+    OFFSETS.elecEF,
+    OFFSETS.elecEFSource,
+    OFFSETS.elecExported,
+    OFFSETS.elecExportedEF,
+  ];
+  for (let i = 0; i < MAX_BLOCKS; i++) {
+    const blockStart = FIRST_BLOCK_START + i * BLOCK_SIZE;
+    for (const offset of CLEAR_OFFSETS) {
+      clearCell(sheet, `L${blockStart + offset}`);
+    }
+    clearCell(sheet, `K${blockStart + OFFSETS.measurableHeat}`);
   }
 
   for (let i = 0; i < products.length; i++) {

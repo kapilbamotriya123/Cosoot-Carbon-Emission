@@ -134,6 +134,24 @@ export function setRowRange(
   }
 }
 
+/**
+ * Clear a cell's value, but only if it's not a formula cell.
+ * Returns true if the cell was cleared, false if it was a formula (left intact).
+ */
+export function clearCell(
+  sheet: ExcelJS.Worksheet,
+  cellRef: string
+): boolean {
+  const cell = sheet.getCell(cellRef);
+  const v = cell.value;
+  const isFormula =
+    v !== null && v !== undefined && typeof v === "object" &&
+    ("formula" in v || "sharedFormula" in v);
+  if (isFormula) return false;
+  cell.value = null;
+  return true;
+}
+
 // ---- Internal helpers -----------------------------------------------
 
 /**

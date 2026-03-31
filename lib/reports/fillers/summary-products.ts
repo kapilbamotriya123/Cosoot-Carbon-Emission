@@ -23,7 +23,7 @@
  */
 
 import type { ReportContext } from "../types";
-import { getSheet, setCellValue } from "../template";
+import { getSheet, setCellValue, clearCell } from "../template";
 
 export function fillSummaryProducts(ctx: ReportContext): void {
   const sheet = getSheet(ctx.workbook, "Summary_Products");
@@ -54,6 +54,15 @@ function fillShakambhari(ctx: ReportContext): void {
   const sheet = getSheet(ctx.workbook, "Summary_Products");
   const materialIds = ctx.materialIds;
   const cnCodes = ctx.cnCodes;
+
+  // Clear all 10 product slots (rows 10–19) first.
+  // The template ships with sample data in rows 10–11 that would bleed through.
+  const SUMMARY_COLS = ["D", "F", "H", "P", "Q"] as const;
+  for (let r = 10; r <= 19; r++) {
+    for (const col of SUMMARY_COLS) {
+      clearCell(sheet, `${col}${r}`);
+    }
+  }
 
   for (let i = 0; i < materialIds.length; i++) {
     const row = 10 + i;
