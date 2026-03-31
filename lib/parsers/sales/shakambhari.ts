@@ -100,7 +100,8 @@ function parseDateCell(
     return { year: d.getUTCFullYear(), month: d.getUTCMonth() + 1 };
   }
 
-  const str = String(value).trim();
+  // Strip non-printable / zero-width chars that Excel sometimes embeds
+  const str = String(value).replace(/[^\x20-\x7E]/g, "").trim();
 
   // DD/MM/YY or DD/MM/YYYY (Indian date format)
   const ddmmyy = str.match(/^(\d{1,2})[/\-.](\d{1,2})[/\-.](\d{2,4})$/);
