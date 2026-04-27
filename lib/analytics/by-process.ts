@@ -24,13 +24,22 @@ export async function calculateProcessEmissionsMetaEngitech(
   pool: Pool,
   year: string,
   period: TimePeriod,
-  timeRange: TimeRange
+  timeRange: TimeRange,
+  search?: string
 ): Promise<ProcessEmission[]> {
   const { months } = timeRange;
 
   // Get previous period for comparison (QoQ if quarter, YoY if full year)
   const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
   const prevTimeRange = parseTimeRange(prevPeriod);
+
+  const searchTerm = search?.trim();
+  const currentParams: unknown[] = [year, months];
+  let searchClause = '';
+  if (searchTerm) {
+    currentParams.push(`%${searchTerm}%`);
+    searchClause = `AND (work_center ILIKE $${currentParams.length} OR description ILIKE $${currentParams.length})`;
+  }
 
   // Get current year data
   const currentQuery = `
@@ -42,11 +51,12 @@ export async function calculateProcessEmissionsMetaEngitech(
     WHERE company_slug = 'meta_engitech_pune'
       AND year = $1
       AND CAST(month AS INTEGER) = ANY($2)
+      ${searchClause}
     GROUP BY work_center, description
     ORDER BY total_emissions DESC
   `;
 
-  const currentResult = await pool.query(currentQuery, [year, months]);
+  const currentResult = await pool.query(currentQuery, currentParams);
 
   // Get previous year data
   const previousQuery = `
@@ -96,13 +106,22 @@ export async function calculateProcessEmissionsShakambhari(
   pool: Pool,
   year: string,
   period: TimePeriod,
-  timeRange: TimeRange
+  timeRange: TimeRange,
+  search?: string
 ): Promise<ProcessEmission[]> {
   const { months } = timeRange;
 
   // Get previous period for comparison (QoQ if quarter, YoY if full year)
   const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
   const prevTimeRange = parseTimeRange(prevPeriod);
+
+  const searchTerm = search?.trim();
+  const currentParams: unknown[] = [year, months];
+  let searchClause = '';
+  if (searchTerm) {
+    currentParams.push(`%${searchTerm}%`);
+    searchClause = `AND work_center ILIKE $${currentParams.length}`;
+  }
 
   // Get current year data from pre-calculated emission_results_shakambhari
   const currentQuery = `
@@ -113,11 +132,12 @@ export async function calculateProcessEmissionsShakambhari(
     WHERE company_slug = 'shakambhari'
       AND year = $1
       AND CAST(month AS INTEGER) = ANY($2)
+      ${searchClause}
     GROUP BY work_center
     ORDER BY total_emissions DESC
   `;
 
-  const currentResult = await pool.query(currentQuery, [year, months]);
+  const currentResult = await pool.query(currentQuery, currentParams);
 
   // Build work center map from aggregated results
   const workCenterMap = new Map<string, number>();
@@ -183,13 +203,14 @@ export async function getProcessEmissions(
   company: string,
   year: string,
   period: TimePeriod,
-  timeRange: TimeRange
+  timeRange: TimeRange,
+  search?: string
 ): Promise<ProcessEmissionsResponse> {
   const isMetaEngitech = company === 'meta_engitech_pune';
 
   const data = isMetaEngitech
-    ? await calculateProcessEmissionsMetaEngitech(pool, year, period, timeRange)
-    : await calculateProcessEmissionsShakambhari(pool, year, period, timeRange);
+    ? await calculateProcessEmissionsMetaEngitech(pool, year, period, timeRange, search)
+    : await calculateProcessEmissionsShakambhari(pool, year, period, timeRange, search);
 
   const totalEmissions = data.reduce((sum, item) => sum + item.emissions, 0);
 

@@ -2,9 +2,9 @@
 
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Search, X } from "lucide-react";
+import { Search, X, Loader2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -17,37 +17,43 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { COMPANIES } from "@/lib/constants";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import type { ProductListItem as MetaProductListItem, ProductListResponse as MetaProductListResponse } from "@/lib/product-flows/types";
 import type { ProductListItem as ShakProductListItem, ProductListResponse as ShakProductListResponse } from "@/lib/product-flows-shakambhari/types";
 
-// Union type to handle both company formats
 type ProductItem = (MetaProductListItem | ShakProductListItem) & {
   productId: string;
   productName?: string;
   workCenterCount?: number;
 };
 
+const SEARCH_DEBOUNCE_MS = 500;
+const PAGE_SIZE = 50;
+
 function ProductFlowsContent() {
   const searchParams = useSearchParams();
   const company = searchParams.get("company") ?? COMPANIES[0].slug;
   const isShakambhari = company === "shakambhari";
 
-  const [allProducts, setAllProducts] = useState<ProductItem[]>([]);
+  const [products, setProducts] = useState<ProductItem[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebouncedValue(searchInput, SEARCH_DEBOUNCE_MS);
+  const isSearching = searchInput !== debouncedSearch;
 
-  const pageSize = 50;
-
-  // Reset page when company changes
+  // Reset to page 1 when company changes (search persists per Kapil's call)
   useEffect(() => {
     setPage(1);
-    setSearchQuery("");
   }, [company]);
 
-  // Fetch all products when search is active, otherwise fetch paginated
+  // Reset to page 1 when search term changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -55,26 +61,25 @@ function ProductFlowsContent() {
       setLoading(true);
       setError(null);
       try {
-        // Determine which API endpoint to use based on company
-        const isShakambhari = company === "shakambhari";
         const baseEndpoint = isShakambhari
           ? "/api/product-flows-shakambhari"
           : "/api/product-flows";
+        const params = new URLSearchParams({
+          companySlug: company,
+          page: String(page),
+          pageSize: String(PAGE_SIZE),
+        });
+        const trimmed = debouncedSearch.trim();
+        if (trimmed) params.set("search", trimmed);
 
-        // If searching, fetch all products; otherwise paginate
-        const fetchAll = searchQuery.trim().length > 0;
-        const url = fetchAll
-          ? `${baseEndpoint}?companySlug=${company}&page=1&pageSize=10000`
-          : `${baseEndpoint}?companySlug=${company}&page=${page}&pageSize=${pageSize}`;
-
-        const res = await fetch(url);
+        const res = await fetch(`${baseEndpoint}?${params.toString()}`);
         if (!res.ok) {
           const body = await res.json().catch(() => ({}));
           throw new Error(body.error ?? `HTTP ${res.status}`);
         }
         const data: MetaProductListResponse | ShakProductListResponse = await res.json();
         if (!cancelled) {
-          setAllProducts(data.products as ProductItem[]);
+          setProducts(data.products as ProductItem[]);
           setTotal(data.total);
         }
       } catch (err) {
@@ -90,36 +95,9 @@ function ProductFlowsContent() {
     return () => {
       cancelled = true;
     };
-  }, [company, page, searchQuery]);
+  }, [company, isShakambhari, page, debouncedSearch]);
 
-  // Filter products based on search query (client-side)
-  const filteredProducts = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return allProducts;
-    }
-    const query = searchQuery.toLowerCase().trim();
-    return allProducts.filter((p) =>
-      p.productId.toLowerCase().includes(query)
-    );
-  }, [allProducts, searchQuery]);
-
-  // Pagination for filtered results
-  const paginatedProducts = useMemo(() => {
-    if (searchQuery.trim()) {
-      // When searching, show all filtered results (no pagination)
-      return filteredProducts;
-    }
-    // When not searching, already paginated from API
-    return allProducts;
-  }, [searchQuery, filteredProducts, allProducts]);
-
-  const totalPages = searchQuery.trim()
-    ? 1
-    : Math.ceil(total / pageSize);
-
-  const displayedTotal = searchQuery.trim()
-    ? filteredProducts.length
-    : total;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <div>
@@ -127,8 +105,8 @@ function ProductFlowsContent() {
         <div>
           <h1 className="text-2xl font-bold mb-1">Product Flows</h1>
           <p className="text-sm text-muted-foreground">
-            {displayedTotal > 0
-              ? `${displayedTotal} product${displayedTotal === 1 ? "" : "s"} found. Click "View Flow" to see the manufacturing route.`
+            {total > 0
+              ? `${total} product${total === 1 ? "" : "s"} found. Click "View Flow" to see the manufacturing route.`
               : "Select a company to view product flows."}
           </p>
         </div>
@@ -138,19 +116,22 @@ function ProductFlowsContent() {
       <div className="mb-4 relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder="Search by product ID..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by product ID or work center..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
           className="pl-9 pr-9"
         />
-        {searchQuery && (
+        {isSearching || (loading && debouncedSearch.trim()) ? (
+          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+        ) : searchInput ? (
           <button
-            onClick={() => setSearchQuery("")}
+            onClick={() => setSearchInput("")}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+            aria-label="Clear search"
           >
             <X className="h-4 w-4" />
           </button>
-        )}
+        ) : null}
       </div>
 
       {error && (
@@ -193,10 +174,10 @@ function ProductFlowsContent() {
                     </TableCell>
                   </TableRow>
                 ))
-              : paginatedProducts.map((p, i) => (
+              : products.map((p, i) => (
                   <TableRow key={p.productId}>
                     <TableCell className="text-muted-foreground">
-                      {searchQuery.trim() ? i + 1 : (page - 1) * pageSize + i + 1}
+                      {(page - 1) * PAGE_SIZE + i + 1}
                     </TableCell>
                     <TableCell className="font-mono text-sm">
                       {p.productId}
@@ -219,11 +200,11 @@ function ProductFlowsContent() {
                     </TableCell>
                   </TableRow>
                 ))}
-            {!loading && paginatedProducts.length === 0 && !error && (
+            {!loading && products.length === 0 && !error && (
               <TableRow>
                 <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                  {searchQuery.trim()
-                    ? `No products found matching "${searchQuery}"`
+                  {debouncedSearch.trim()
+                    ? `No products found matching "${debouncedSearch.trim()}"`
                     : "No products found. Upload routing data first."}
                 </TableCell>
               </TableRow>
@@ -232,8 +213,8 @@ function ProductFlowsContent() {
         </Table>
       </div>
 
-      {/* Pagination (hidden when searching) */}
-      {!searchQuery.trim() && totalPages > 1 && (
+      {/* Pagination */}
+      {totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
           <p className="text-sm text-muted-foreground">
             Page {page} of {totalPages}
@@ -257,13 +238,6 @@ function ProductFlowsContent() {
             </Button>
           </div>
         </div>
-      )}
-
-      {/* Search results info */}
-      {searchQuery.trim() && !loading && (
-        <p className="text-sm text-muted-foreground mt-4">
-          Showing {paginatedProducts.length} of {allProducts.length} products
-        </p>
       )}
     </div>
   );

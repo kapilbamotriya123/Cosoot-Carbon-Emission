@@ -20,6 +20,7 @@ export async function GET(request: NextRequest) {
     const company = searchParams.get('company');
     const year = searchParams.get('year');
     const period = searchParams.get('period') as TimePeriod | null;
+    const search = searchParams.get('search') || undefined;
 
     const { isValid } = validateCompany(company);
     if (!isValid) {
@@ -39,7 +40,7 @@ export async function GET(request: NextRequest) {
     const timePeriod = period || 'FULL_YEAR';
     const timeRange = parseTimeRange(timePeriod);
 
-    const result = await getProcessEmissions(pool, company!, year, timePeriod, timeRange);
+    const result = await getProcessEmissions(pool, company!, year, timePeriod, timeRange, search);
 
     return NextResponse.json({
       success: true,

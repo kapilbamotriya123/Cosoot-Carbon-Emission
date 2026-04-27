@@ -19,28 +19,43 @@ export async function GET(request: NextRequest) {
     const companySlug = searchParams.get("companySlug") ?? "shakambhari";
     const page = parseInt(searchParams.get("page") ?? "1");
     const pageSize = parseInt(searchParams.get("pageSize") ?? "50");
+    const search = (searchParams.get("search") ?? "").trim();
 
-    // Fetch distinct products ordered by product_id
-    const result = await pool.query(
-      `
-      SELECT DISTINCT product_id, product_name
-      FROM production_data_shakambhari
-      WHERE company_slug = $1
-      ORDER BY product_id ASC
-      `,
-      [companySlug]
+    const offset = (page - 1) * pageSize;
+    const params: unknown[] = [companySlug];
+    let whereSearch = "";
+    if (search) {
+      params.push(`%${search}%`);
+      whereSearch = `AND (product_id ILIKE $${params.length} OR product_name ILIKE $${params.length})`;
+    }
+
+    const baseFrom = `
+      FROM (
+        SELECT DISTINCT product_id, product_name
+        FROM production_data_shakambhari
+        WHERE company_slug = $1 ${whereSearch}
+      ) AS distinct_products
+    `;
+
+    const totalResult = await pool.query(
+      `SELECT COUNT(*)::int AS total ${baseFrom}`,
+      params
+    );
+    const total = totalResult.rows[0]?.total ?? 0;
+    const totalPages = Math.ceil(total / pageSize);
+
+    const pageParams = [...params, pageSize, offset];
+    const pageResult = await pool.query(
+      `SELECT product_id, product_name ${baseFrom}
+       ORDER BY product_id ASC
+       LIMIT $${pageParams.length - 1} OFFSET $${pageParams.length}`,
+      pageParams
     );
 
-    const allProducts = result.rows.map((r) => ({
+    const products = pageResult.rows.map((r) => ({
       productId: r.product_id,
       productName: r.product_name,
     }));
-
-    const total = allProducts.length;
-    const totalPages = Math.ceil(total / pageSize);
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    const products = allProducts.slice(start, end);
 
     const response: ProductListResponse = {
       products,

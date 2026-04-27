@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -11,7 +12,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Loader2 } from "lucide-react";
+import { Loader2, Search, X } from "lucide-react";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
+
+const SEARCH_DEBOUNCE_MS = 500;
 
 interface ProcessEmission {
   workCenter: string;
@@ -37,6 +41,9 @@ export function EmissionsByProcess({ company, year, period, viewLabel = "process
   const [data, setData] = useState<ProcessEmissionsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebouncedValue(searchInput, SEARCH_DEBOUNCE_MS);
+  const isDebouncing = searchInput !== debouncedSearch;
 
   useEffect(() => {
     async function fetchData() {
@@ -44,9 +51,11 @@ export function EmissionsByProcess({ company, year, period, viewLabel = "process
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/emissions/by-process?company=${company}&year=${year}&period=${period}`
-        );
+        const params = new URLSearchParams({ company, year, period });
+        const trimmed = debouncedSearch.trim();
+        if (trimmed) params.set("search", trimmed);
+
+        const response = await fetch(`/api/emissions/by-process?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch emissions data");
@@ -55,7 +64,11 @@ export function EmissionsByProcess({ company, year, period, viewLabel = "process
         const result = await response.json();
 
         if (!result.hasData) {
-          setError("No data available for selected period");
+          setError(
+            trimmed
+              ? `No ${isAssetView ? "assets" : "processes"} found matching "${trimmed}"`
+              : "No data available for selected period"
+          );
           setData(null);
         } else {
           setData({
@@ -72,9 +85,38 @@ export function EmissionsByProcess({ company, year, period, viewLabel = "process
     }
 
     fetchData();
-  }, [company, year, period]);
+  }, [company, year, period, debouncedSearch, isAssetView]);
 
-  if (loading) {
+  const searchBar = (
+    <div className="mb-4 relative max-w-sm">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+      <Input
+        placeholder={
+          isAssetView
+            ? "Search by work center or description..."
+            : "Search by process or work center..."
+        }
+        value={searchInput}
+        onChange={(e) => setSearchInput(e.target.value)}
+        className="pl-9 pr-9"
+      />
+      {isDebouncing || (loading && debouncedSearch.trim()) ? (
+        <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+      ) : searchInput ? (
+        <button
+          type="button"
+          onClick={() => setSearchInput("")}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+          aria-label="Clear search"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      ) : null}
+    </div>
+  );
+
+  // Initial load (no data yet)
+  if (loading && !data) {
     return (
       <Card className="p-8 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -82,10 +124,15 @@ export function EmissionsByProcess({ company, year, period, viewLabel = "process
     );
   }
 
-  if (error || !data) {
+  // No data — empty/error state, but keep search bar reachable
+  if (!data) {
     return (
-      <Card className="p-8">
-        <div className="text-center text-muted-foreground">
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">
+          {isAssetView ? "Asset Wise Emissions" : "Process Wise Emissions"}
+        </h2>
+        {searchBar}
+        <div className="text-center py-8 text-muted-foreground">
           {error || "No data available"}
         </div>
       </Card>
@@ -137,10 +184,11 @@ export function EmissionsByProcess({ company, year, period, viewLabel = "process
       {/* Table */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">{isAssetView ? "Asset Wise Emissions" : "Process Wise Emissions"}</h2>
+        {searchBar}
         <div className="mb-4 text-sm text-muted-foreground">
           Total Emissions: <span className="font-semibold text-foreground">{data.totalEmissions.toFixed(2)} Metric Tons</span>
         </div>
-        <div className="overflow-auto max-h-[600px]">
+        <div className={`overflow-auto max-h-[600px] transition-opacity ${loading ? "opacity-50" : ""}`}>
           <Table>
             <TableHeader className="sticky top-0 bg-background">
               <TableRow>

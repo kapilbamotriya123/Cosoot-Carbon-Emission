@@ -27,13 +27,22 @@ export async function calculateProductEmissionsMetaEngitech(
   pool: Pool,
   year: string,
   period: TimePeriod,
-  timeRange: TimeRange
+  timeRange: TimeRange,
+  search?: string
 ): Promise<ProductEmission[]> {
   const { months } = timeRange;
 
   // Get previous period for comparison (QoQ if quarter, YoY if full year)
   const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
   const prevTimeRange = parseTimeRange(prevPeriod);
+
+  const searchTerm = search?.trim();
+  const currentParams: unknown[] = [year, months];
+  let searchClause = '';
+  if (searchTerm) {
+    currentParams.push(`%${searchTerm}%`);
+    searchClause = `AND product_id ILIKE $${currentParams.length}`;
+  }
 
   // Get current year data
   const currentQuery = `
@@ -46,11 +55,12 @@ export async function calculateProductEmissionsMetaEngitech(
     WHERE company_slug = 'meta_engitech_pune'
       AND year = $1
       AND CAST(month AS INTEGER) = ANY($2)
+      ${searchClause}
     GROUP BY product_id
     ORDER BY avg_intensity DESC
   `;
 
-  const currentResult = await pool.query(currentQuery, [year, months]);
+  const currentResult = await pool.query(currentQuery, currentParams);
 
   // Get previous year data
   const previousQuery = `
@@ -102,13 +112,22 @@ export async function calculateProductEmissionsShakambhari(
   pool: Pool,
   year: string,
   period: TimePeriod,
-  timeRange: TimeRange
+  timeRange: TimeRange,
+  search?: string
 ): Promise<ProductEmission[]> {
   const { months } = timeRange;
 
   // Get previous period for comparison (QoQ if quarter, YoY if full year)
   const { year: prevYear, period: prevPeriod } = getPreviousQuarter(year, period);
   const prevTimeRange = parseTimeRange(prevPeriod);
+
+  const searchTerm = search?.trim();
+  const currentParams: unknown[] = [year, months];
+  let searchClause = '';
+  if (searchTerm) {
+    currentParams.push(`%${searchTerm}%`);
+    searchClause = `AND (product_id ILIKE $${currentParams.length} OR product_name ILIKE $${currentParams.length})`;
+  }
 
   // Get current year data from pre-calculated emission_results_shakambhari
   const currentQuery = `
@@ -123,10 +142,11 @@ export async function calculateProductEmissionsShakambhari(
     WHERE company_slug = 'shakambhari'
       AND year = $1
       AND CAST(month AS INTEGER) = ANY($2)
+      ${searchClause}
     GROUP BY product_id, product_name
   `;
 
-  const currentResult = await pool.query(currentQuery, [year, months]);
+  const currentResult = await pool.query(currentQuery, currentParams);
 
   // Build product map from aggregated results
   const productMap = new Map<string, {
@@ -219,13 +239,14 @@ export async function getProductEmissions(
   company: string,
   year: string,
   period: TimePeriod,
-  timeRange: TimeRange
+  timeRange: TimeRange,
+  search?: string
 ): Promise<ProductEmissionsResponse> {
   const isMetaEngitech = company === 'meta_engitech_pune';
 
   const data = isMetaEngitech
-    ? await calculateProductEmissionsMetaEngitech(pool, year, period, timeRange)
-    : await calculateProductEmissionsShakambhari(pool, year, period, timeRange);
+    ? await calculateProductEmissionsMetaEngitech(pool, year, period, timeRange, search)
+    : await calculateProductEmissionsShakambhari(pool, year, period, timeRange, search);
 
   const avgIntensity =
     data.length > 0

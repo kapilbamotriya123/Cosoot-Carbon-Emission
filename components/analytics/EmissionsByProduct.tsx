@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,7 +13,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Loader2, ChevronDown, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { Loader2, ChevronDown, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, Search, X } from "lucide-react";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
+
+const SEARCH_DEBOUNCE_MS = 500;
 
 interface ProductEmission {
   productId: string;
@@ -48,6 +52,14 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [searchInput, setSearchInput] = useState("");
+  const debouncedSearch = useDebouncedValue(searchInput, SEARCH_DEBOUNCE_MS);
+  const isDebouncing = searchInput !== debouncedSearch;
+
+  // Reset to page 1 when search term changes
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch]);
 
   useEffect(() => {
     async function fetchData() {
@@ -55,9 +67,17 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/emissions/by-product?company=${company}&year=${year}&period=${period}&page=${page}&pageSize=${pageSize}`
-        );
+        const params = new URLSearchParams({
+          company,
+          year,
+          period,
+          page: String(page),
+          pageSize: String(pageSize),
+        });
+        const trimmed = debouncedSearch.trim();
+        if (trimmed) params.set("search", trimmed);
+
+        const response = await fetch(`/api/emissions/by-product?${params.toString()}`);
 
         if (!response.ok) {
           throw new Error("Failed to fetch emissions data");
@@ -66,7 +86,7 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
         const result = await response.json();
 
         if (!result.hasData) {
-          setError("No data available for selected period");
+          setError(trimmed ? `No products found matching "${trimmed}"` : "No data available for selected period");
           setData(null);
         } else {
           setData({
@@ -85,7 +105,7 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
     }
 
     fetchData();
-  }, [company, year, period, page, pageSize]);
+  }, [company, year, period, page, pageSize, debouncedSearch]);
 
   const toggleRow = (productId: string) => {
     const newExpanded = new Set(expandedRows);
@@ -97,7 +117,8 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
     setExpandedRows(newExpanded);
   };
 
-  if (loading) {
+  // Initial load (no data yet) — show full-card spinner
+  if (loading && !data) {
     return (
       <Card className="p-8 flex items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
@@ -105,13 +126,39 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
     );
   }
 
-  if (error || !data) {
+  // No data and not loading — error / empty state. Keep search bar reachable
+  // so user can refine their query.
+  if (!data) {
     return (
-      <Card className="p-8">
-        <div className="text-center text-muted-foreground">
-          {error || "No data available"}
-        </div>
-      </Card>
+      <div className="space-y-6">
+        <Card className="p-6">
+          <h2 className="text-lg font-semibold mb-4">Product Wise Emissions</h2>
+          <div className="mb-4 relative max-w-sm">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by product ID or name..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="pl-9 pr-9"
+            />
+            {isDebouncing || (loading && debouncedSearch.trim()) ? (
+              <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+            ) : searchInput ? (
+              <button
+                type="button"
+                onClick={() => setSearchInput("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            ) : null}
+          </div>
+          <div className="text-center py-8 text-muted-foreground">
+            {error || "No data available"}
+          </div>
+        </Card>
+      </div>
     );
   }
 
@@ -217,12 +264,36 @@ export function EmissionsByProduct({ company, year, period }: EmissionsByProduct
       {/* Table */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">Product Wise Emissions</h2>
+
+        {/* Search */}
+        <div className="mb-4 relative max-w-sm">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search by product ID or name..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="pl-9 pr-9"
+          />
+          {isDebouncing || (loading && debouncedSearch.trim()) ? (
+            <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+          ) : searchInput ? (
+            <button
+              type="button"
+              onClick={() => setSearchInput("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label="Clear search"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          ) : null}
+        </div>
+
         <div className="mb-4 text-sm text-muted-foreground">
           Avg. Emission Intensity: <span className="font-semibold text-foreground">{data.avgIntensity.toFixed(2)} tCO₂e/t</span>
           {" | "}
           Total Products: <span className="font-semibold text-foreground">{data.totalProducts}</span>
         </div>
-        <div className="overflow-auto max-h-[600px]">
+        <div className={`overflow-auto max-h-[600px] transition-opacity ${loading ? "opacity-50" : ""}`}>
           <Table>
             <TableHeader className="sticky top-0 bg-background">
               <TableRow>

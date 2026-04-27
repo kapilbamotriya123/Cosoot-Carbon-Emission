@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
       100,
       Math.max(1, parseInt(searchParams.get("pageSize") || "50"))
     );
+    const search = (searchParams.get("search") || "").trim().toLowerCase();
 
     if (!companySlug) {
       return NextResponse.json(
@@ -47,8 +48,18 @@ export async function GET(request: NextRequest) {
     const routingData = result.rows[0].data as RoutingData;
     const allProducts = routingData.products;
 
+    // Filter (productId or any work center the product passes through)
+    const filtered = search
+      ? allProducts.filter((p) => {
+          if (p.productId.toLowerCase().includes(search)) return true;
+          return p.rows.some(
+            (r) => r.workCenter && r.workCenter.toLowerCase().includes(search)
+          );
+        })
+      : allProducts;
+
     // Build list: productId + count of work center appearances (including duplicates)
-    const productList = allProducts.map((p) => ({
+    const productList = filtered.map((p) => ({
       productId: p.productId,
       workCenterCount: p.rows.filter((r) => r.workCenter).length,
     }));

@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     const period = searchParams.get('period') as TimePeriod | null;
     const page = parseInt(searchParams.get('page') || '1');
     const pageSize = parseInt(searchParams.get('pageSize') || '50');
+    const search = searchParams.get('search') || undefined;
 
     const { isValid } = validateCompany(company);
     if (!isValid) {
@@ -41,7 +42,7 @@ export async function GET(request: NextRequest) {
     const timePeriod = period || 'FULL_YEAR';
     const timeRange = parseTimeRange(timePeriod);
 
-    const result = await getProductEmissions(pool, company!, year, timePeriod, timeRange);
+    const result = await getProductEmissions(pool, company!, year, timePeriod, timeRange, search);
 
     // Pagination
     const startIndex = (page - 1) * pageSize;
