@@ -21,7 +21,15 @@ export interface ScopeEmissionsWithYoY {
 }
 
 /**
- * Calculate scope emissions for Meta Engitech
+ * Calculate scope emissions for Meta Engitech.
+ *
+ * Sources from emission_by_process_meta_engitech and computes absolute tCO₂e
+ * as Σ(intensity × production_mt) across work centers. Intensities alone are
+ * tCO₂e per tonne of production — they cannot be summed across rows.
+ *
+ * Known under-report: work centers with productionMT = 0 have their intensities
+ * forced to 0 upstream (lib/emissions/calculate.ts), so any energy/fuel they
+ * consumed is invisible here. See DECISIONS.md.
  */
 export async function calculateScopeEmissionsMetaEngitech(
   pool: Pool,
@@ -30,31 +38,22 @@ export async function calculateScopeEmissionsMetaEngitech(
 ): Promise<ScopeEmissions> {
   const { months } = timeRange;
 
-  // Query emission_by_product_meta_engitech for the selected months
   const query = `
     SELECT
-      scope1_intensity,
-      scope2_intensity
-    FROM emission_by_product_meta_engitech
+      COALESCE(SUM(scope1_intensity * production_mt), 0) AS scope1_tco2e,
+      COALESCE(SUM(scope2_intensity * production_mt), 0) AS scope2_tco2e
+    FROM emission_by_process_meta_engitech
     WHERE company_slug = 'meta_engitech_pune'
       AND year = $1
       AND CAST(month AS INTEGER) = ANY($2)
   `;
 
   const result = await pool.query(query, [year, months]);
-
-  // Sum all scope1 and scope2 intensities
-  let scope1Total = 0;
-  let scope2Total = 0;
-
-  result.rows.forEach((row) => {
-    scope1Total += parseFloat(row.scope1_intensity || '0');
-    scope2Total += parseFloat(row.scope2_intensity || '0');
-  });
+  const row = result.rows[0];
 
   return {
-    scope1: Number(scope1Total.toFixed(2)),
-    scope2: Number(scope2Total.toFixed(2)),
+    scope1: Number(parseFloat(row?.scope1_tco2e || '0').toFixed(2)),
+    scope2: Number(parseFloat(row?.scope2_tco2e || '0').toFixed(2)),
   };
 }
 
