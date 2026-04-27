@@ -76,9 +76,22 @@ export async function initializeSchema() {
       total_intensity NUMERIC NOT NULL DEFAULT 0,
       scope1_intensity NUMERIC NOT NULL DEFAULT 0,
       scope2_intensity NUMERIC NOT NULL DEFAULT 0,
+      electricity_tco2e NUMERIC NOT NULL DEFAULT 0,
+      lpg_tco2e NUMERIC NOT NULL DEFAULT 0,
+      diesel_tco2e NUMERIC NOT NULL DEFAULT 0,
+      scope1_tco2e NUMERIC NOT NULL DEFAULT 0,
+      scope2_tco2e NUMERIC NOT NULL DEFAULT 0,
       calculated_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(company_slug, year, month, work_center)
     );
+
+    -- Absolute tCO₂e columns (Option C migration). Computed from raw consumption,
+    -- not intensity × production, so they survive zero-production work centers.
+    ALTER TABLE emission_by_process_meta_engitech ADD COLUMN IF NOT EXISTS electricity_tco2e NUMERIC NOT NULL DEFAULT 0;
+    ALTER TABLE emission_by_process_meta_engitech ADD COLUMN IF NOT EXISTS lpg_tco2e         NUMERIC NOT NULL DEFAULT 0;
+    ALTER TABLE emission_by_process_meta_engitech ADD COLUMN IF NOT EXISTS diesel_tco2e      NUMERIC NOT NULL DEFAULT 0;
+    ALTER TABLE emission_by_process_meta_engitech ADD COLUMN IF NOT EXISTS scope1_tco2e      NUMERIC NOT NULL DEFAULT 0;
+    ALTER TABLE emission_by_process_meta_engitech ADD COLUMN IF NOT EXISTS scope2_tco2e      NUMERIC NOT NULL DEFAULT 0;
 
     CREATE TABLE IF NOT EXISTS emission_by_product_meta_engitech (
       id SERIAL PRIMARY KEY,

@@ -4,14 +4,19 @@ import type { WorkCenterEmission, ProductEmission, EmissionResults } from "./typ
 import type { MetaEngitechConstants } from "./constants-loader";
 
 /**
- * Calculate emission intensity for a single work center.
+ * Calculate emissions for a single work center.
  *
- * Each formula converts consumption per tonne of production into tCO₂/tonne:
- *   Electricity: (kWh / MT) × 0.598 / 1000
- *   LPG:         (kg / MT) × 47.3 × 63.1 / 1,000,000
- *   Diesel:      (L / MT) × 43 × 74.1 × 0.832 / 1,000,000
+ * Computes absolute tCO₂e first (independent of production), then derives
+ * intensity = absolute / production where production > 0. This ordering matters:
+ * if we computed intensity first and multiplied by production downstream, every
+ * zero-production WC would silently zero out its actual emissions.
  *
- * Returns 0 for any source where data is null or production is 0.
+ * Absolute formulas (tCO₂e for the month):
+ *   Electricity: kWh × 0.598 / 1000
+ *   LPG:         kg  × 47.3 × 63.1   / 1,000,000
+ *   Diesel:      L   × 43  × 74.1 × 0.832 / 1,000,000
+ *
+ * Intensity = absolute / productionMT (or 0 when productionMT = 0).
  */
 export function calculateWorkCenterEmission(
   workCenter: string,
@@ -20,40 +25,43 @@ export function calculateWorkCenterEmission(
 ): WorkCenterEmission {
   const production = wc.productionMT ?? 0;
 
-  // Can't calculate intensity without production
-  if (production === 0) {
-    return {
-      workCenter,
-      description: wc.description,
-      productionMT: 0,
-      electricityIntensity: 0,
-      lpgIntensity: 0,
-      dieselIntensity: 0,
-      totalIntensity: 0,
-      scope1Intensity: 0,
-      scope2Intensity: 0,
-    };
-  }
+  // Absolute tCO₂e — computed from raw consumption, independent of production.
+  const electricityTco2e = (wc.totalEnergyKWh ?? 0) * constants.electricity_ef;
+  const lpgTco2e =
+    ((wc.lpgConsumptionKg ?? 0) * constants.lpg_ncv * constants.lpg_ef) / 1_000_000;
+  const dieselTco2e =
+    ((wc.dieselConsumptionLtrs ?? 0) *
+      constants.diesel_ncv *
+      constants.diesel_ef *
+      constants.diesel_density) /
+    1_000_000;
 
-  const elec = ((wc.totalEnergyKWh ?? 0) / production) * constants.electricity_ef;
-  const lpg = ((wc.lpgConsumptionKg ?? 0) / production) * constants.lpg_ncv * constants.lpg_ef / 1_000_000;
-  const diesel =
-    ((wc.dieselConsumptionLtrs ?? 0) / production) * constants.diesel_ncv * constants.diesel_ef * constants.diesel_density / 1_000_000;
+  const scope1Tco2e = lpgTco2e + dieselTco2e;
+  const scope2Tco2e = electricityTco2e;
 
-  const scope1 = lpg + diesel;
-  const scope2 = elec;
-  const total = scope1 + scope2;
+  // Intensity (tCO₂e per tonne of production). Zero when no production.
+  const elecIntensity = production > 0 ? electricityTco2e / production : 0;
+  const lpgIntensity = production > 0 ? lpgTco2e / production : 0;
+  const dieselIntensity = production > 0 ? dieselTco2e / production : 0;
+  const scope1Intensity = lpgIntensity + dieselIntensity;
+  const scope2Intensity = elecIntensity;
+  const totalIntensity = scope1Intensity + scope2Intensity;
 
   return {
     workCenter,
     description: wc.description,
     productionMT: production,
-    electricityIntensity: elec,
-    lpgIntensity: lpg,
-    dieselIntensity: diesel,
-    totalIntensity: total,
-    scope1Intensity: scope1,
-    scope2Intensity: scope2,
+    electricityIntensity: elecIntensity,
+    lpgIntensity,
+    dieselIntensity,
+    totalIntensity,
+    scope1Intensity,
+    scope2Intensity,
+    electricityTco2e,
+    lpgTco2e,
+    dieselTco2e,
+    scope1Tco2e,
+    scope2Tco2e,
   };
 }
 

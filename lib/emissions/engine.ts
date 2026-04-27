@@ -87,20 +87,23 @@ async function writeByProcessResults(
       [companySlug, year, month]
     );
 
-    // Build multi-value INSERT
+    // Build multi-value INSERT (17 columns per row: 3 keys + 3 meta + 6 intensity + 5 absolute)
     const values: unknown[] = [];
     const placeholders: string[] = [];
     let idx = 1;
+    const cols = 17;
 
     for (const e of emissions) {
-      placeholders.push(
-        `($${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++}, $${idx++})`
-      );
+      const ph: string[] = [];
+      for (let i = 0; i < cols; i++) ph.push(`$${idx++}`);
+      placeholders.push(`(${ph.join(", ")})`);
       values.push(
         companySlug, year, month,
         e.workCenter, e.description, e.productionMT,
         e.electricityIntensity, e.lpgIntensity, e.dieselIntensity,
-        e.totalIntensity, e.scope1Intensity, e.scope2Intensity
+        e.totalIntensity, e.scope1Intensity, e.scope2Intensity,
+        e.electricityTco2e, e.lpgTco2e, e.dieselTco2e,
+        e.scope1Tco2e, e.scope2Tco2e
       );
     }
 
@@ -108,7 +111,9 @@ async function writeByProcessResults(
       `INSERT INTO emission_by_process_meta_engitech
         (company_slug, year, month, work_center, description, production_mt,
          electricity_intensity, lpg_intensity, diesel_intensity,
-         total_intensity, scope1_intensity, scope2_intensity)
+         total_intensity, scope1_intensity, scope2_intensity,
+         electricity_tco2e, lpg_tco2e, diesel_tco2e,
+         scope1_tco2e, scope2_tco2e)
        VALUES ${placeholders.join(", ")}`,
       values
     );

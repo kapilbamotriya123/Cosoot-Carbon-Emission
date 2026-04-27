@@ -23,13 +23,9 @@ export interface ScopeEmissionsWithYoY {
 /**
  * Calculate scope emissions for Meta Engitech.
  *
- * Sources from emission_by_process_meta_engitech and computes absolute tCO₂e
- * as Σ(intensity × production_mt) across work centers. Intensities alone are
- * tCO₂e per tonne of production — they cannot be summed across rows.
- *
- * Known under-report: work centers with productionMT = 0 have their intensities
- * forced to 0 upstream (lib/emissions/calculate.ts), so any energy/fuel they
- * consumed is invisible here. See DECISIONS.md.
+ * Sources from the absolute tCO₂e columns on emission_by_process_meta_engitech.
+ * These are computed from raw consumption (kWh × EF, etc.) at calc time, so they
+ * include emissions from work centers that produced zero output for the month.
  */
 export async function calculateScopeEmissionsMetaEngitech(
   pool: Pool,
@@ -40,8 +36,8 @@ export async function calculateScopeEmissionsMetaEngitech(
 
   const query = `
     SELECT
-      COALESCE(SUM(scope1_intensity * production_mt), 0) AS scope1_tco2e,
-      COALESCE(SUM(scope2_intensity * production_mt), 0) AS scope2_tco2e
+      COALESCE(SUM(scope1_tco2e), 0) AS scope1_tco2e,
+      COALESCE(SUM(scope2_tco2e), 0) AS scope2_tco2e
     FROM emission_by_process_meta_engitech
     WHERE company_slug = 'meta_engitech_pune'
       AND year = $1

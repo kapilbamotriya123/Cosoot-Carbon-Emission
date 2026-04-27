@@ -60,7 +60,7 @@ const COMPANY_PROFILES: Record<CompanySlug, CompanyProfile> = {
     electricityEFSource: "Mix",
 
     precursorWasteMultiplier: 1.1,
-    precursorSEEDirect: 1.89,
+    precursorSEEDirect: 1.809,
     precursorSEEDirectSource: "Default",
     precursorElecConsumption: 0.44,
     precursorElecConsumptionSource: "Default",

@@ -20,7 +20,7 @@ const TEMPLATES_DIR = path.join(process.cwd(), "lib", "reports", "templates");
 
 /** Maps company slug to its template file name. */
 const TEMPLATE_FILES: Record<CompanySlug, string> = {
-  meta_engitech_pune: "Report Sample ALTA.xlsx",
+  meta_engitech_pune: "Report Sample ALTA - METAENGITECH.xlsx",
   shakambhari: "Report Sample ALTA - shakambhari.xlsx",
 };
 

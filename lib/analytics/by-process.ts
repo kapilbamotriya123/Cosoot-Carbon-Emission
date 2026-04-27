@@ -41,12 +41,12 @@ export async function calculateProcessEmissionsMetaEngitech(
     searchClause = `AND (work_center ILIKE $${currentParams.length} OR description ILIKE $${currentParams.length})`;
   }
 
-  // Get current year data
+  // Get current year data — sum absolute tCO₂e columns (scope1 + scope2)
   const currentQuery = `
     SELECT
       work_center,
       description,
-      SUM(CAST(total_intensity AS NUMERIC)) as total_emissions
+      SUM(CAST(scope1_tco2e AS NUMERIC) + CAST(scope2_tco2e AS NUMERIC)) as total_emissions
     FROM emission_by_process_meta_engitech
     WHERE company_slug = 'meta_engitech_pune'
       AND year = $1
@@ -62,7 +62,7 @@ export async function calculateProcessEmissionsMetaEngitech(
   const previousQuery = `
     SELECT
       work_center,
-      SUM(CAST(total_intensity AS NUMERIC)) as total_emissions
+      SUM(CAST(scope1_tco2e AS NUMERIC) + CAST(scope2_tco2e AS NUMERIC)) as total_emissions
     FROM emission_by_process_meta_engitech
     WHERE company_slug = 'meta_engitech_pune'
       AND year = $1

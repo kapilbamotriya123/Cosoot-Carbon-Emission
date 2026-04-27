@@ -98,28 +98,52 @@ export const parseMetaEngitechPuneSales: SalesParser = async (
     throw new Error("No worksheet found in the uploaded file");
   }
 
-  // Build column map from header row (row 1).
-  // This file has two tables side by side (sales data in cols A-D, summary in cols G-H).
-  // Both tables have "Month" and "Qty in MT" headers. buildColumnMap takes the LAST
-  // occurrence, which would pick up the summary table columns. We need the FIRST occurrence,
-  // so we build the map manually here.
-  const headerRow = worksheet.getRow(1);
-  const colMap: Record<string, number> = {};
-  headerRow.eachCell((cell, colNumber) => {
-    const name = String(cell.value ?? "").trim().replace(/\s+/g, " ").toLowerCase();
-    if (name && !(name in colMap)) colMap[name] = colNumber; // first occurrence wins
-  });
-  const COL = resolveColumns(colMap, EXPECTED_HEADERS, {
+  // Locate the header row by scanning the first N rows. Client files sometimes
+  // have a title row, a "Table 1" label, blank rows, or hidden rows above the
+  // real headers — so we don't hard-code row 1. We pick the first row whose
+  // cells resolve to all four required columns (with aliases).
+  //
+  // Note: this file may have two tables side by side (sales in cols A-D, summary
+  // in cols G-H), both with "Month" and "Qty in MT" headers. Building the colMap
+  // with first-occurrence-wins keeps us pointed at the sales table.
+  const MAX_HEADER_SCAN_ROWS = 20;
+  const aliasOpts = {
     aliases: {
       quantityMT: ["Qty in MT", "Quantity in MT", "Qty MT", "Quantity MT"],
       customerCode: ["Customer Code", "Customer ID", "customer id"],
       material: ["Material ID", "Material Code", "material"],
     },
-  });
+  };
+
+  let COL: Record<string, number> | null = null;
+  let headerRowNum = -1;
+  const scanLimit = Math.min(MAX_HEADER_SCAN_ROWS, worksheet.rowCount);
+
+  for (let r = 1; r <= scanLimit; r++) {
+    const colMap: Record<string, number> = {};
+    worksheet.getRow(r).eachCell((cell, colNumber) => {
+      const name = String(cell.value ?? "").trim().replace(/\s+/g, " ").toLowerCase();
+      if (name && !(name in colMap)) colMap[name] = colNumber;
+    });
+    try {
+      COL = resolveColumns(colMap, EXPECTED_HEADERS, aliasOpts);
+      headerRowNum = r;
+      break;
+    } catch {
+      // Not the header row — keep scanning.
+    }
+  }
+
+  if (!COL || headerRowNum === -1) {
+    throw new Error(
+      `Could not locate the header row in the first ${scanLimit} rows. ` +
+        `Expected a row with columns: Month, customer code, Material, Qty in MT.`
+    );
+  }
 
   const records: SalesRecord[] = [];
 
-  for (let rowNum = 2; rowNum <= worksheet.rowCount; rowNum++) {
+  for (let rowNum = headerRowNum + 1; rowNum <= worksheet.rowCount; rowNum++) {
     const row = worksheet.getRow(rowNum);
 
     // Stop on empty row (no month value and no customer code)
